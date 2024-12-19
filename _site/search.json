@@ -4,41 +4,27 @@
     "href": "index.html",
     "title": "About Me",
     "section": "",
-    "text": "Hi, I’m Kristin Lloyd! I’m currently pursuing my M.S. in Data Science and Analytics at Georgetown University, where I’m building expertise in areas like statistical computing, climate change data science, and advanced analytics. Before that, I earned a Bachelor of Science in Applied Mathematics with a minor in Business Analytics from Towson University, graduating with honors and multiple awards."
+    "text": "Data Scientist | Social Impact Researcher | Analytics Specialist\nI’m currently pursuing my M.S. in Data Science and Analytics at Georgetown University, where I’m building expertise in areas like statistical computing, climate change data science, and advanced analytics. Before that, I earned a Bachelor of Science in Applied Mathematics with a minor in Business Analytics from Towson University, graduating with honors and multiple awards."
   },
   {
-    "objectID": "index.html#education",
-    "href": "index.html#education",
+    "objectID": "index.html#hi-im-kristin-lloyd",
+    "href": "index.html#hi-im-kristin-lloyd",
     "title": "About Me",
-    "section": "Education",
-    "text": "Education\n\nM.S. in Data Science and Analytics\nGeorgetown University, Washington D.C.\nExpected May 2026\n\nRelated Coursework: Data Science and Analytics, Probability Modeling/Statistical Computing, Data Science and Climate Change\nParticipated in the DataKind D.C. Hackathon, extracted unstructured paragraph data and transformed it into organized data frames using Python, enabling easier analysis and accessibility for company\n\n\n\nBachelor of Science in Applied Mathematics, Minor in Business Analytics\nTowson University, Towson, MD\nMay 2024\n\n3.7/4.0 GPA, Dean’s List and Tiger Scholarship Recipient\nDepartmental honors, Mary Hudson Scarborough Award for Excellence in Mathematics\nData Coordinator, Director of Finance on Executive Board for Alpha Omicron Pi Sorority\nWinner of the 2023 (1st place) and 2024 (3rd place) Towson University Data Analytics Competition"
+    "section": "",
+    "text": "Data Scientist | Social Impact Researcher | Analytics Specialist"
   },
   {
-    "objectID": "index.html#university-projects",
-    "href": "index.html#university-projects",
+    "objectID": "index.html#m.s.-in-data-science-and-analytics",
+    "href": "index.html#m.s.-in-data-science-and-analytics",
     "title": "About Me",
-    "section": "University Projects",
-    "text": "University Projects\n\nMaternal and Child Health/Wellness and Abortion Policy Associations\nGeorgetown University, Washington D.C.\nFall 2024\n\nAnalyzed the associations between abortion policies and maternal and child health/wellness outcomes. Collected, cleaned, and analyzed data through exploratory data analysis and statistical tests\n\n\n\nClimate Change Sentiment in the U.S. Senate\nGeorgetown University, Washington D.C.\nFall 2024\n\nDeveloped a sentiment analysis model to evaluate climate change sentiment in U.S. Senate\n\n\n\nDeath Penalty\nGeorgetown University, Washington D.C.\nFall 2024\n\nDeveloped a comprehensive project involving web scraping for data collection, data cleaning, exploratory data analysis, and the application of unsupervised and supervised learning techniques to analyze disparities in the death penalty\n\n\n\nCrime Analytics in Baltimore\nTowson University, Towson, MD\nSpring 2023 - Spring 2024\n\nPerformed data preparation on geospatial crime and mobility data using k-means clustering analysis, Principal Component Analysis (PCA), and linear regression analysis in Python\nPerformed chi-squared test on k-means clustering analysis to establish 99% confidence in treating the dataset as two distinct clusters\nPresented research to The Baltimore Banner\nWon 3rd place for student talk at Spring 2024 Meeting of the MD-DC-VA section of the Mathematical Association of America (MAA)\nPresented individual portion as an honors thesis"
+    "section": "M.S. in Data Science and Analytics",
+    "text": "M.S. in Data Science and Analytics\nGeorgetown University, Washington D.C.\nExpected May 2026\n\nRelated Coursework: Data Science and Analytics, Probability Modeling/Statistical Computing, Data Science and Climate Change\nParticipated in the DataKind D.C. Hackathon, extracted unstructured paragraph data and transformed it into organized data frames using Python"
   },
   {
-    "objectID": "index.html#professional-experience",
-    "href": "index.html#professional-experience",
+    "objectID": "index.html#bachelor-of-science-in-applied-mathematics-minor-in-business-analytics",
+    "href": "index.html#bachelor-of-science-in-applied-mathematics-minor-in-business-analytics",
     "title": "About Me",
-    "section": "Professional Experience",
-    "text": "Professional Experience\n\nUniversity Learning Assistant\nTowson University, Towson, MD\nFall 2023\n\nDeveloped customized learning materials to address common challenges faced by students\nCreated resource guides utilized by over 50 classmates, resulting in increased engagement during study sessions and improved understanding\n\n\n\nMathematical Biology Research Experience for Undergraduates (REU)\nTowson University, Towson, MD\nSummer 2023\n\nOptimized model code to verify microorganism propulsion speed, reducing error rate to below 2%\nPresented at first National Security Agency REU conference; sole speaker at the Division of Fluid Dynamics (DFD) Conference\nPoster presentation at Joint Mathematics Meetings 2024; contributed to paper for upcoming publication\n\n\n\nData Analyst Assistant\nTowson University, Towson, MD\nSpring 2023\n\nPreprocessed a high-volume survey dataset, executing advanced predictive and trend analysis in R to uncover critical statistical insights on social justice dynamics in Baltimore\n\n\n\nData Science / Special Projects Intern\nEmerging Technologies Center (ETC), Baltimore, MD\nFall 2022\n\nCollaborated with cross-functional teams to establish key performance indicators (KPIs) for technology startups\nDeveloped a predictive algorithm that processed data from over 100 technology startups, streamlining the selection process and enhancing decision-making"
-  },
-  {
-    "objectID": "index.html#skills",
-    "href": "index.html#skills",
-    "title": "About Me",
-    "section": "Skills",
-    "text": "Skills\n\nTechnical\n\nPython, R, SQL, GitHub\n\n\n\nData Analysis & Visualization Tools\n\nTableau, MS Excel Certification, ggplot2, seaborn, pandas, matplotlib\n\n\n\nMachine Learning & Statistical Modeling\n\nScikit-learn, DeepXDE, PyTorch\nK-means clustering, Principal Component Analysis (PCA), Linear Regression, Predictive Analytics\n\n\n\nSoftware & Environments\n\nVisual Studio Code, Jupyter, RStudio, Git\n\n\n\nMiscellaneous\n\nPublic speaking, exploratory data analysis, data cleansing, data storytelling, creating slide decks, creativity"
-  },
-  {
-    "objectID": "index.html#call-to-action",
-    "href": "index.html#call-to-action",
-    "title": "About Me",
-    "section": "Call to Action",
-    "text": "Call to Action\nThrough my projects, I leverage data science techniques to examine systemic inequities, uncover patterns of injustice, and advocate for meaningful change. By transforming raw data into compelling narratives, I aim to drive awareness and action around critical social issues. My work demonstrates how rigorous analysis and effective storytelling can be powerful tools for social impact.\nLet’s connect!\nLinkedIn | GitHub | Email: kristinnlloyd@gmail.com"
+    "section": "Bachelor of Science in Applied Mathematics, Minor in Business Analytics",
+    "text": "Bachelor of Science in Applied Mathematics, Minor in Business Analytics\nTowson University, Towson, MD\nMay 2024\n\n3.7/4.0 GPA, Dean’s List and Tiger Scholarship Recipient\nDepartmental honors, Mary Hudson Scarborough Award for Excellence in Mathematics\nData Coordinator, Director of Finance on Executive Board for Alpha Omicron Pi Sorority\nWinner of the 2023 (1st place) and 2024 (3rd place) Towson University Data Analytics Competition"
   }
 ]

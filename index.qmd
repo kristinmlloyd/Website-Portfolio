@@ -1,113 +1,119 @@
 ---
 title: "About Me"
+format:
+  html:
+    css: styles.css
 ---
 
-Hi, I’m Kristin Lloyd! I’m currently pursuing my M.S. in Data Science and Analytics at Georgetown University, where I’m building expertise in areas like statistical computing, climate change data science, and advanced analytics. Before that, I earned a Bachelor of Science in Applied Mathematics with a minor in Business Analytics from Towson University, graduating with honors and multiple awards.  
+::: {.hero-section}
+## Hi, I'm Kristin Lloyd! {.hero-title}
+::: {.hero-content}
+Data Scientist | Social Impact Researcher | Analytics Specialist
 
-![](images/me.png){width=200px}
+![](images/me.png){.profile-image width="200px"}
+:::
+:::
 
-## Education
+I'm currently pursuing my M.S. in Data Science and Analytics at Georgetown University, where I'm building expertise in areas like statistical computing, climate change data science, and advanced analytics. Before that, I earned a Bachelor of Science in Applied Mathematics with a minor in Business Analytics from Towson University, graduating with honors and multiple awards.
 
-### M.S. in Data Science and Analytics
-Georgetown University, Washington D.C.  
+# Education {.section-title}
+
+::: {.degree-box}
+## M.S. in Data Science and Analytics
+**Georgetown University, Washington D.C.**  
 *Expected May 2026*
 
 - Related Coursework: Data Science and Analytics, Probability Modeling/Statistical Computing, Data Science and Climate Change
-- Participated in the DataKind D.C. Hackathon, extracted unstructured paragraph data and transformed it into organized data frames using Python, enabling easier analysis and accessibility for company
+- Participated in the DataKind D.C. Hackathon, extracted unstructured paragraph data and transformed it into organized data frames using Python
+:::
 
-### Bachelor of Science in Applied Mathematics, Minor in Business Analytics
-Towson University, Towson, MD  
+::: {.degree-box}
+## Bachelor of Science in Applied Mathematics, Minor in Business Analytics
+**Towson University, Towson, MD**  
 *May 2024*
 
 - 3.7/4.0 GPA, Dean's List and Tiger Scholarship Recipient
 - Departmental honors, Mary Hudson Scarborough Award for Excellence in Mathematics
 - Data Coordinator, Director of Finance on Executive Board for Alpha Omicron Pi Sorority
 - Winner of the 2023 (1st place) and 2024 (3rd place) Towson University Data Analytics Competition
+:::
 
-## University Projects
+# Research Projects {.section-title}
 
+::: {.project-card}
 ### Maternal and Child Health/Wellness and Abortion Policy Associations
-Georgetown University, Washington D.C.  
-*Fall 2024*
+- Analyzed the associations between abortion policies and maternal and child health/wellness outcomes
+- Collected, cleaned, and analyzed data through exploratory data analysis and statistical tests
+- Tools: Python, Statistical Analysis, Data Visualization
+:::
 
--  Analyzed the associations between abortion policies and maternal and child health/wellness outcomes. Collected, cleaned, and analyzed data through exploratory data analysis and statistical tests
-
+::: {.project-card}
 ### Climate Change Sentiment in the U.S. Senate
-Georgetown University, Washington D.C.  
-*Fall 2024*
+- Developed sentiment analysis model to evaluate climate change discourse in U.S. Senate
+- Applied natural language processing techniques and machine learning algorithms
+- Tools: Python, NLP, Machine Learning
+:::
 
-- Developed a sentiment analysis model to evaluate climate change sentiment in U.S. Senate
+::: {.project-card}
+### Death Penalty Disparities Analysis
+- Developed comprehensive analysis using web scraping for data collection
+- Applied unsupervised and supervised learning techniques to analyze disparities
+- Tools: Python, NLP, Machine Learning, Web Scraping
+:::
 
-### Death Penalty 
-Georgetown University, Washington D.C.  
-*Fall 2024*
-
-- Developed a comprehensive project involving web scraping for data collection, data cleaning, exploratory data analysis, and the application of unsupervised and supervised learning techniques to analyze disparities in the death penalty
-
+::: {.project-card}
 ### Crime Analytics in Baltimore
-Towson University, Towson, MD  
-*Spring 2023 - Spring 2024*
+- Performed data preparation on geospatial crime and mobility data using k-means clustering
+- Applied PCA and linear regression analysis with 99% confidence in cluster results
+- Presented to The Baltimore Banner and won 3rd place at MAA conference
+- Tools: Python, K-means Clustering, PCA, Linear Regression
+:::
 
-- Performed data preparation on geospatial crime and mobility data using k-means clustering analysis, Principal Component Analysis (PCA), and linear regression analysis in Python
-- Performed chi-squared test on k-means clustering analysis to establish 99% confidence in treating the dataset as two distinct clusters
-- Presented research to The Baltimore Banner
-- Won 3rd place for student talk at Spring 2024 Meeting of the MD-DC-VA section of the Mathematical Association of America (MAA)
-- Presented individual portion as an honors thesis
+::: {.project-card}
+### Mathematical Biology Research (REU)
+- Optimized model code to verify microorganism propulsion speed with <2% error
+- Presented at NSA REU conference and Division of Fluid Dynamics Conference
+- Contributing author on upcoming publication
+- Tools: Deep Learning, Neural Networks
+:::
 
+# Professional Experience {.section-title}
 
-## Professional Experience
-
+::: {.grid}
+::: {.g-col-6 .project-card}
 ### University Learning Assistant
-Towson University, Towson, MD  
-*Fall 2023*
+- Developed customized learning materials for student challenges
+- Created resource guides used by 50+ classmates
+- Skills: Communication, Teaching, Resource Development
+:::
 
-- Developed customized learning materials to address common challenges faced by students
-- Created resource guides utilized by over 50 classmates, resulting in increased engagement during study sessions and improved understanding
-
-### Mathematical Biology Research Experience for Undergraduates (REU)
-Towson University, Towson, MD  
-*Summer 2023*
-
-- Optimized model code to verify microorganism propulsion speed, reducing error rate to below 2%
-- Presented at first National Security Agency REU conference; sole speaker at the Division of Fluid Dynamics (DFD) Conference
-- Poster presentation at Joint Mathematics Meetings 2024; contributed to paper for upcoming publication
-
+::: {.g-col-6 .project-card}
 ### Data Analyst Assistant
-Towson University, Towson, MD  
-*Spring 2023*
+- Analyzed social justice survey data using R
+- Performed predictive and trend analysis
+- Tools: R, Statistical Analysis, Data Visualization
+:::
 
-- Preprocessed a high-volume survey dataset, executing advanced predictive and trend analysis in R to uncover critical statistical insights on social justice dynamics in Baltimore
-
+::: {.g-col-6 .project-card}
 ### Data Science / Special Projects Intern
-Emerging Technologies Center (ETC), Baltimore, MD  
-*Fall 2022*
+- Established KPIs for technology startups
+- Developed predictive algorithm for startup selection
+- Tools: Predictive Modeling, Data Analysis
+:::
+:::
 
-- Collaborated with cross-functional teams to establish key performance indicators (KPIs) for technology startups
-- Developed a predictive algorithm that processed data from over 100 technology startups, streamlining the selection process and enhancing decision-making
+::: {.impact-section}
+# Making Data Matter {.impact-title}
+I am driven by the power of data to to examine systematic inequities, uncover patterns of injustice, and advocate for meaningful change. Through my work, I transform complex datasets into clear narratives that expose systemic inequities and patterns of injustice. My research portfolio reflects my commitment to tackling pressing societal challenges - from maternal health disparities to criminal justice reform. I believe in letting data tell its own story, maintaining objectivity while uncovering insights that can drive meaningful policy and social impact. Beyond my focus on social justice, I apply these same analytical skills to help businesses make smarter, data-driven decisions.
 
-## Skills
+:::
 
-### Technical
-- Python, R, SQL, GitHub
+::: {.connect-section}
+# Let's Connect! {.text-center}
 
-### Data Analysis & Visualization Tools
-- Tableau, MS Excel Certification, ggplot2, seaborn, pandas, matplotlib
-
-### Machine Learning & Statistical Modeling
-- Scikit-learn, DeepXDE, PyTorch
-- K-means clustering, Principal Component Analysis (PCA), Linear Regression, Predictive Analytics
-
-### Software & Environments
-- Visual Studio Code, Jupyter, RStudio, Git
-
-### Miscellaneous
-- Public speaking, exploratory data analysis, data cleansing, data storytelling, creating slide decks, creativity
-
-## Call to Action  
-
-Through my projects, I leverage data science techniques to examine systemic inequities, uncover patterns of injustice, and advocate for meaningful change. By transforming raw data into compelling narratives, I aim to drive awareness and action around critical social issues. My work demonstrates how rigorous analysis and effective storytelling can be powerful tools for social impact.
-
-Let's connect!
-
-[LinkedIn](https://www.linkedin.com/in/kristin-lloyd-ramseynj/) | [GitHub](https://github.com/kristinmlloyd) | Email: kristinnlloyd@gmail.com  
-
+::: {.social-links}
+[![](./images/linkedin.png){width="200px"}](https://www.linkedin.com/in/kristin-lloyd-ramseynj/)
+[![](./images/git.png){width="300px"}](https://github.com/kristinmlloyd)
+[![](./images/email.png){width="140px"}](mailto:kristinnlloyd@gmail.com)
+:::
+:::
