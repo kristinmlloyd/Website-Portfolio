@@ -1,0 +1,172 @@
+---
+title: "Conclusion"
+format:
+  html:
+    embed-resources: true
+    code-fold: true
+bibliography: references.bib
+---
+
+According to the National Conference of State Legislatures (NCSL), “using the best available research and data to guide decisions is the key to evidence-informed policymaking.”[@goodwin] This project examines pre-Dobbs data collected from official, reliable sources and evaluates it in the context of current abortion policies across U.S. states.
+
+Our analysis reveals a troubling trend: *states that implemented abortion bans, and restrictions were already linked to poor outcomes in overall health, maternal health and wellness, and child health— even before post-Dobbs abortion policies took effect.* Despite these alarming findings, a handful of states still opted to enact policies that restrict reproductive freedom and maternal health— policies that extensive research predicts will further exacerbate these already dire outcomes. [@Lantz_Michelmore_Moniz_Mmeje_Axinn_Spector-Bagdady], [@Madden_Trawick_Yee], [@Kheyfets2023]
+
+This project highlights the glaring absence of data-driven policymaking in many states when it comes to the topic of abortion. Furthermore, it challenges the anti-abortion movement’s fundamental notion of being "pro-life.” Based on these findings, states that uphold reproductive rights demonstrate significantly lower infant and maternal mortality rates, suggesting that they are, in fact, more aligned with the true essence of being "pro-life." This project’s results call for further research into these policies' repercussions, more transparent data, and heightened awareness surrounding the objective consequences of reproductive policy regardless of moral and ethical debate.
+
+## Implications
+
+This project highlights various implications and consequences of the implementation of restrictive abortion policies.
+
+### Exacerbated inequities and hardships
+
+Previous scholarly research has highlighted the profound direct and indirect consequences of restricted or prohibited abortion access. The consequences of such policies are ubiquitous and multifaceted, unilaterally reshaping a person’s life. , spanning diverse societal and personal dimensions. One of the most comprehensive explorations in this field is the Turnaway Study, a longitudinal study conducted by the University of California San Francisco’s ANSIRH (Advancing New Standards in Reproductive Health) that examines the impact of unwanted pregnancies and restricted abortion access on women's lives. With findings published in over 50 peer-reviewed papers, the study is widely recognized for its rigor and reliability. The most prominent takeaway from the study is that “receiving an abortion does not harm the health and wellbeing of women, but in fact, *being denied an abortion results in worse financial, health, and family outcomes.*”[@ANSIRH_2022] Specifically, the study finds that women denied abortion are:
+
+-   More likely to experience serious complications from the end of pregnancy, resulting in eclampsia and maternal mortality
+-   More likely to raise the child alone
+-   More likely to not be able to leave abusive partners
+-   More likely to suffer anxiety and loss of self-esteem in the short term after being denied an abortion
+-   More likely to experience poor physical health for years after the pregnancy, including chronic pain and gestational hypertension
+
+The impact extends to children as well. The Turnaway study also found that babies born from unwanted pregnancies are more likely to live in poverty and unstable conditions, and that children already in the family also face worsened economic and social outcomes. Furthermore, a 2023 study revealed that restricted abortion access corresponds to an 11% increase in foster care entries[@adkins2024], underscoring the cascading effects of unwanted pregnancies. Without adequate resources to raise a child, many women face untenable circumstances, straining an already overwhelmed foster care system and increasing the likelihood of children growing up in adverse conditions. These findings reveal that abortion restrictions jeopardize not only women's health and autonomy but also the safety and well-being of children.
+
+Additional research underscores the broader societal harm of restrictive abortion policies. For instance, abortion bans are linked to increases in maternal mortality rates, with a particularly devastating effect on Black women.[@Kheyfets2023] Studies project that such bans could lead to a 24% rise in overall maternal deaths[@spitzer2024], with a 33% increase among non-Hispanic Black women.[@Stevenson2021] Limits on clinic availability and early gestational restrictions alone could raise maternal mortality by 6–15% and up to 38%, respectively.[@Kheyfets2023]
+
+Our research further highlights that teen birth rates are highest in states with the most restrictive abortion policies and lowest in states with more protective ones. Abortion access is vital for teens aspiring to pursue education and careers before considering parenthood. As restrictive policies widen this gap, teen birth rates are expected to rise, disproportionately burdening restrictive states and compounding long-term economic and social inequities. Reduced workforce participation and career advancement opportunities for young women will inevitably hinder the nation’s economic growth and competitiveness.
+
+Compounding these challenges are the economic realities faced by women in states with restrictive abortion policies, which often fail to provide parental leave or job protections postpartum. These systemic shortcomings place immense strain on mothers, particularly single mothers and those recovering from pregnancy complications, pushing many into financial instability. The lack of benefits, coupled with the costs of raising a child, exacerbates poverty and widens economic disparities, with rippling effects across families, communities, and the nation as a whole.
+
+In sum, restrictive abortion policies do far more than limit access to medical care—they amplify inequities, destabilize families, and threaten the health, well-being, and economic future of countless women and children.
+
+### Travel
+
+The negative impacts of restrictive abortion policy post the Dobbs decision are reflected via the analysis of travel data.
+
+```{r, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(readr)
+library(ggplot2)
+library(networkD3)
+library(htmltools)
+library(usmap)
+library(sf)
+
+df <- read_csv("data/clean_data/merged_data.csv")
+# head(df)
+
+abortion_map_data <- df %>%
+  select(State, `percent_increase_in_clinician_provided_abortions_since_2020`) %>%
+  filter(!is.na(`percent_increase_in_clinician_provided_abortions_since_2020`)) %>%
+  mutate(
+    state = State,
+    change = `percent_increase_in_clinician_provided_abortions_since_2020`
+  )
+
+capitals_df <- data.frame(
+    city = c(
+        "Boise", "Pierre", "Des Moines", "Jefferson City", "Little Rock",
+        "Baton Rouge", "Austin", "Oklahoma City", "Jackson", "Montgomery",
+        "Tallahassee", "Nashville", "Frankfort", "Indianapolis", "Charleston"
+    ),
+    lon = c(
+        -116.200, -100.346, -93.603, -92.189, -92.289,
+        -91.187, -97.743, -97.503, -90.182, -86.279,
+        -84.280, -86.781, -84.878, -86.162, -81.633
+    ),
+    lat = c(
+        43.617, 44.367, 41.591, 38.579, 34.746,
+        30.457, 30.266, 35.482, 32.298, 32.377,
+        30.438, 36.162, 38.186, 39.768, 38.336
+    ),
+    state = c(
+        "Idaho", "South Dakota", "Iowa", "Missouri", "Arkansas",
+        "Louisiana", "Texas", "Oklahoma", "Mississippi", "Alabama",
+        "Florida", "Tennessee", "Kentucky", "Indiana", "West Virginia"
+    )
+)
+
+capitals_mapped <- usmap_transform(capitals_df, input_names = c("lon", "lat"))
+
+capitals_mapped <- capitals_mapped %>%
+    mutate(
+        x = st_coordinates(.)[, 1], # Extract x coordinates
+        y = st_coordinates(.)[, 2] # Extract y coordinates
+    )
+
+plot_usmap(data = abortion_map_data, values = "change") +
+    geom_point(
+        data = capitals_mapped,
+        aes(x = x, y = y),
+        shape = 8, 
+        size = 2, 
+        color = "red", 
+        stroke = 1
+    ) + 
+    scale_fill_gradient2(
+        name = "% Change",
+        low = "#ff6b6b",
+        mid = "#ffffff",
+        high = "#4dbd00",
+        midpoint = 0,
+        na.value = "gray80"
+    ) +
+    theme(
+        legend.position = "right",
+        plot.title = element_text(size = 14, hjust = 0.5),
+        plot.caption = element_text(size = 12, hjust = 0.5)
+    ) +
+    labs(title = "Change in Clinician-Provided Abortions Since 2020 by State", caption = "* indicate 'Most Restrictive' states")
+```
+
+This map shows the variation of clinician-provided abortions since 2020 across U.S. states. **States such as Wyoming and New Mexico have seen about a 300% increase in clinician-provided abortions.** Additionally, there appears to be a geographic pattern, where the most restrictive states (\*) are often adjacent to states showing increases in clinician-provided abortions, implying an increase in demand in neighboring states with more protective policies.
+
+We were also able to gather data on the flow of travel to access an abortion between each pairwise combination of states for the year 2023, and the plot below visualizations the magnitude and avenues of these travel trends.
+
+![](images/travel_sankey.png)
+
+The Sankey diagram depicts a complex web of interstate travel for abortion services, with lines connecting home states (left) to destination states (right). Texas appears to have the highest number of people traveling out of state for abortion-related services, as shown by the multiple thick lines flowing from Texas to various destinations. One interesting finding is that even though Florida is considered a restrictive state, there seems to be an abundance of people traveling there for services.
+
+These visualizations show that states with neighbors that have enacted abortion bans in the years since the Dobbs decision often experienced surges in the number of clinician-provided abortions since 2020. This suggests that in states with restrictive abortion policies, women with the means to do so travel to obtain abortions. While it is certainly positive that these women are able to obtain the care they need, the unfortunate reality of the situation is that this exacerbates underlying inequalities. Women without the means to travel for an abortion face forced births. As this project’s analysis has found, states with abortion bans in place frequently have less support systems and care in place for women in this position. The result is a twisted inequity: those with the least means are given the least support. This has the potential to initiate a malicious negative cycle, as women and children are negatively impacted in a ripple effect, from financial means to mental health. Ultimately, while it is not within the scope of this paper, it is not unlikely that this has negative impacts on the state as a whole.
+
+## Limitations
+
+### Challenges in Maternal Mortality Data
+
+Very little data is available regarding maternal mortality by state, mainly due to the variation in maternal mortality committees across states. According to the CDC, “Maternal mortality review committees (MMRCs) are multidisciplinary groups that convene at the state or local level to comprehensively review deaths that occur during or within 1 year of the end of pregnancy”[@CDCMMRC] and their practices, methodology, and amount of resources vary by state. MMRCs are responsible for collecting, reviewing, and analyzing maternal mortality data and often report this data to the CDC. They also are accountable for investigating maternal deaths to determine causes and contributing factors and recommend interventions to prevent future deaths. The effectiveness of MMRCs is critical to ensuring that accurate, transparent data is accessible at the national level. This data is essential for informing public health responses, raising awareness, and improving medical practices to better address maternal mortality.
+
+However, not all states prioritize their MMRCs equally, which leads to inconsistent and, in some cases, under-representative reporting of maternal deaths and complications. This issue became especially clear in November 2024, when Georgia disbanded its MMRC entirely, dismissing all members after “confidential information” was “inappropriately leaked to the public.”[@Yurkanin_2024] The information in question revealed details of two preventable maternal deaths where doctors hesitated to provide life-saving care due to Georgia’s restrictive abortion laws.
+
+The disbanding of Georgia’s MMRC highlights the fragility of maternal mortality data and the outsized control states have over both women’s access to abortion and efforts to preserve maternal health. In the current polarized landscape of abortion policy, this raises serious concerns about the integrity and accessibility of maternal mortality data moving forward. Without reliable data and robust investigative processes, public health efforts to address maternal mortality and disparities will suffer, leaving critical gaps in understanding and action at a time when they are most needed.
+
+### Time Frame
+
+When this project began, it had been just over two years since the Dobbs decision. It would have been insightful to look at the effect of Dobbs on our variables (maternal, infant, and overall health and maternal wellness). Still, too little time has passed for us to be able to gather data on the impact of state-level abortion policies on these conditions. Though this will be valuable insight, it is inherently limited by the fact that a substantial amount of time will have to have passed for a true effect to settle in.
+
+Additionally, for feasibility purposes, the majority of numerical data on our variables of interest were taken from the year 2022 or the most recent year since. That being said, the association of abortion policy levels with maternal, infant, and overall health and maternal wellness conditions were only compared to the state values from one year. There always exists the possibility of random variation or anomalies in different years. Thus, we cannot be sure that the data from the most recent year before the Dobbs decision is holistically representative of the true conditions in each state. We must recognize that a state's point values in one year are not the true population representation of its outcomes. Future research should look into quantifying representative metrics of the overall conditions in each state for a more well-rounded and reliable comparison to abortion policy level.
+
+### Missing Datasets
+
+There is a substantial amount of missing data in the realm of maternal health and abortions, which limits our ability to paint a holistic and meaningful story of the true consequences related to varying and restrictive abortion policies. We were unable to gather data regarding miscarriages, pregnancy complications, and unsafe abortions as a result of or linked to the inability to obtain an abortion. All of these variables provide valuable and critical insight into the true conditions regarding the link between reproductive rights and women’s health. Initially, we sought to explore whether miscarriage rates varied by state, how unsafe abortion rates evolved over time, illegal abortion rates, and data on women whose lives were endangered by the inability to access safe abortion services. However, these datasets either do not exist or are difficult to locate, as we encountered significant challenges in finding trustworthy sources.
+
+An analysis of these conditions could have significantly bolstered this project’s impact, but many elements might be responsible for this absence of information. These types of conditions are very complex to track– for example, miscarriages and illegal abortions often go unreported because they can happen in private without doctor interaction. Furthermore, stringent regulations surround all research done on pregnant women. However, the absence of these data sets is telling in and of itself and is an issue for women’s health and public health on the whole regardless of political perspective or affiliation.
+
+## Future research
+
+This project provides an important foundation for understanding the relationship between abortion policies implemented after the Dobbs decision and the baseline conditions in states before the Supreme Court ruling. However, it also raises important questions and invites further exploration to deepen and expand upon the insights drawn from this initial work.
+
+First, the methods employed in this project should be enhanced to yield more nuanced and impactful findings. Incorporating additional statistical techniques, exploring advanced methodologies, and integrating machine learning models could enable comprehensive predictive analyses and offer stronger validation of observed disparities across states. Moreover, as previously discussed, including more longitudinal data would allow future research to better capture trends over time, offering a clearer understanding of how evolving state conditions align with changes in abortion policy. Continued research should aim to include a broader range of conditions and indicators with indirect links to the effects of abortion policy, enhancing the depth and comprehensiveness of this project’s insights. A particularly imperative angle that deserves more attention is further research on the racial and ethnic disparities of maternal health and wellness, and how gaps will continue to widen as a result of varying abortion policies. We performed preliminary analysis on infant and maternal mortality among white and Black women across all states in the U.S., and the results of the t-test provided statistically significant evidence to suggest that there is a difference in deaths between the races for both indicators. The accompanying visualization verifies that both infant mortality and maternal mortality are greater among Black women than white.
+
+![](images/IM_racialdisparity.png) ![](images/MM_racialdisparity.png)
+
+Socioeconomic status is another characteristic that may cause disparities in the effects of abortion policy, and warrants further investigation. Understanding these disproportionate effects is crucial for guiding targeted interventions and support to the most vulnerable groups.
+
+A critical next step is the development of a centralized, comprehensive database containing data on a wide range of factors related to abortion and maternity. Data availability and inconsistency were significant limitations of this project, and the creation of a unified and accessible resource would not only address these challenges but also promote broader research efforts. Such a database would improve data usability and transparency, fostering better surveillance and deeper insights into maternal health trends.
+
+Finally, in the years ahead, research should assess the long-term effects of post-Dobbs abortion policies on maternal and societal conditions. This work will require time to allow for meaningful changes to emerge and be measured, but it is vital for assessing the full impact of these policies and shaping informed responses in the future.
+
+## Summary
+
+The goal of this project was to present an accurate and objective representation of the context in which states' implement abortion policy decisions, hoping to raise awareness about the lack of data-driven policymaking and inspire advocacy to address and mitigate its potential consequences. We hope that this research opens doors to further exploration and future steps towards a more equitable and human-rights-based approach to reproductive rights and abortion policy in the United States.
+
+## Acknowledgements
+
+We would like to thank Dr. Purna Gamage for her kindness, guidance, and insight throughout this project. It can be daunting to approach such a contentious and personal topic, and this project would not have been possible without her support.

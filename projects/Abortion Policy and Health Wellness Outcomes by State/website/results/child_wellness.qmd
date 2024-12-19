@@ -1,0 +1,94 @@
+---
+title: "Child Wellness"
+format: 
+  html:
+    embed-resources: true
+    code-fold: true
+editor: visual
+---
+
+## Children in Foster Care by Abortion Policy
+
+```{r, warning=FALSE, message=FALSE}
+library(tidyverse)
+library(readr)
+df <- read_csv("../data/clean_data/merged_data.csv", show_col_types = FALSE)
+df <- df[!is.na(df$abortion_policies), ]
+
+
+# Reorder the factor levels
+df$abortion_policies <- factor(df$abortion_policies, 
+                              levels = c("most protective", "very protective", 
+                                         "protective", "some restrictions/protections", 
+                                         "restrictive", "very restrictive", "most restrictive"))
+
+# Boxplot for Foster Care Rates by Abortion Policy
+ggplot(df, aes(x = abortion_policies, y = foster_children_per_capita, fill=abortion_policies)) +
+  geom_boxplot() +
+  theme_minimal() +
+  theme(axis.text.x = element_text(size = 8, angle = 45, hjust = 1),
+        axis.title.y = element_text(size = 10)) + 
+  scale_fill_manual(values = c("#1c7416", "#68bb59", "#acdf87", "#fab733", "#ff6242", "#ff0000", "#c61a09")) +
+  labs(x = "Abortion Policies", 
+       y = "Foster Children per Capita",
+       fill = "State Abortion Policy Level",
+       title = "Foster Care Rates by Abortion Policy") +
+  theme(plot.title = element_text(size = 20, hjust = 0.5))
+```
+
+The box plot suggests that with the most protective policies tend to show a lower range of foster care rates, while those with the most restrictive policies exhibit a higher median and a more clustered distribution. However, states within the "protective" category display the widest range of foster care rates, including extreme outliers. These variations suggest that there may be underlying socioeconomic or policy-related factors influencing foster care rates in states with different abortion policy categories.
+
+To assess whether there's a statistically significant association between abortion policy categories and foster care rates per capita, a Kruskal-Wallis test was performed.
+
+### Kruskal-Wallis Test
+
+**Null Hypothesis (H*o* ):** The medians of foster care rates per capita are the same across all abortion policy categories.
+
+**Alternative Hypothesis (H*a*)**: At least one abortion policy category has a significantly different median foster care rate per capita.
+
+```{r}
+# Kruskal-Wallis test
+kruskal.test(foster_children_per_capita ~ abortion_policies, data = df)
+
+```
+
+**The Kruskal-Wallis test for foster care rates per capita by abortion policy categories resulted in a p-value of 0.2022** which exceeds the significance threshold of 0.05, thus, we fail to reject the null hypothesis. This indicates that there is no statistically significant evidence to conclude that foster care rates differ across abortion policy categories. While the boxplot suggests possible patterns, the lack of statistical significance implies that **the observed differences may not be meaningful when assessed in the context of this test.**
+
+## Overall School System Ranking by Abortion Policy
+
+```{r}
+# Boxplot for Public School Rankins by Abortion Policy
+ggplot(df, aes(x = abortion_policies, y = overall_school_rank, fill=abortion_policies)) +
+  geom_boxplot() +
+  theme_minimal() +
+  theme(axis.text.x = element_text(size = 8, angle = 45, hjust = 1),
+        axis.title.y = element_text(size = 10)) + 
+  scale_fill_manual(values = c("#1c7416", "#68bb59", "#acdf87", "#fab733", "#ff6242", "#ff0000", "#c61a09")) +
+  labs(x = "Abortion Policies", 
+       y = "Overall School Ranking",
+       fill = "State Abortion Policy Level",
+       title = "Public School System Rankings by Abortion Policy") +
+  theme(plot.title = element_text(size = 15, hjust = 0.5))
+```
+
+The box plot illustrates the distribution of overall school system rankings across states with different abortion policy categories. States with the most protective policies generally exhibit better school systems, while states with the most restrictive policies show poorer rankings. Outliers are observed across several categories, particularly in the "most restrictive" and "very protective" groups, which highlight variability in school rankings within these categories.
+
+To evaluate whether these observed differences in school system rankings are statistically significant across the abortion policy categories, a Kruskal-Wallis test is performed. 
+
+### Kruskal-Wallis Test
+
+**Null Hypothesis (H*o*):** The medians of school rankings are the same across all abortion policy categories.
+
+**Alternative Hypothesis (H*a*)** At least one abortion policy category is associated with a significantly different median school ranking.
+
+```{r}
+# Kruskal-Wallis test
+kruskal.test(overall_school_rank ~ abortion_policies, data = df)
+
+```
+
+**The Kruskal-Wallis test yielded a p-value of 0.4072, which is not statistically significant.** As such, we fail to reject the null hypothesis and there is insufficient evidence to conclude that the medians of school rankings differ across abortion policy categories. In other words, **the data does not support a significant association between abortion policy categories and differences in the median school rankings for states**.
+
+## Conclusions
+
+Though neither the foster care rates per capita nor the school rankings showed statistically significant differences across abortion policy categories in the Kruskal-Wallis tests, the observed boxplot patterns do warrant further investigation. Future studies could use outcomes such as access to pediatric healthcare, child-focused social services, and education funding as key variables to better understand how state-level policies influence child wellness and to provide a more comprehensive view of systemic disparities.

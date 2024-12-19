@@ -1,0 +1,111 @@
+---
+title: "Statistical Methods and Analysis"
+format:
+  html:
+    embed-resources: true
+bibliography: references.bib
+---
+
+## Data Methods
+
+### Data collection
+
+Our data was compiled from a variety of reliable sources:
+
+-   Official government data repositories
+    -   *Center for Disease Control (CDC), U.S. Department of Labor, U.S. Bureau of Labor Statistics*
+-   Peer-reviewed research and policy organizations
+    -   *Guttmacher Institute, KFF, Bipartisan Policy Center, Commonwealth Fund*
+-   Peer-reviewed academic journals
+    -   *Obstetrics & Gynecology, JAMA, Demography, American Journal of Public Health*
+
+Some of this data came from direct dataset downloads, while others (particularly policy data) had to be manually inputted for reasons including the fact that the information was written out in a paragraph or the data was only available visualized on a map. The manual and tedious extraction of this information, however, ensured accuracy in our reporting of the data from our sources.
+
+Our dataset contains four types of data:
+
+1.  **Continuous Numerical** → These are numerical variables that can take any value within a range and are not restricted to specific categories or ranks. In this dataset, these values are always greater than 0 and represent measurable quantities, such as percentages, prices, or counts. Examples of continuous numerical variables in our dataset are any that deal with a rate (maternal or infant mortality rates, birth rates) or percentages (the percentage of women who went without care due to cost, etc.).
+
+2.  **Ordered, Ranked Numerical** → These are numerical variables that represent a ranking or order among the states. The values range from 1 to 50, where 1 represents the best ranking and 50 represents the worst ranking. Each number corresponds to a unique state and reflects its relative position, but the intervals between ranks may not hold meaningful quantitative differences. Any variable with the word “rank” in the variable name is of this data type (such as overall health ranking).
+
+3.  **Binary Categorical** → These are categorical variables with only two possible values, denoted as 0 (failure or absence of condition) and 1 (success or presence of condition). This data type is used for representing various policy variables
+
+4.  **Multinomial Categorical** → These are categorical variables with more than two possible values, represented as strings. Each value denotes a distinct category without any inherent order, such as different policy types, state names, or descriptive labels. The only variables of this type are State (with a unique categorical string name for each state) and abortion policy (with seven levels: most protective, very protective, protective, some restrictions/protections, restrictive, very restrictive, most restrictive).
+
+### Data cleaning
+
+We performed extensive cleaning on the data from the variety of sources. Some important tasks we performed to ensure consistency were:
+
+-   *Standardizing state names* → for example, the variations in representation of District of Columbia such as “Washington, D.C.” or “D.C.” were renamed to “District of Columbia” for merging abilities
+-   *Checking data types* → some data sources represented their quantities as string percentages, so we removed the percentage symbol, changed the value types to numeric, and divided them by 100)
+-   *Manipulating binary variables* → we modified all binary policy variables to be denoted with 0 and 1 for failure/absence and success/presence, respectively, in order to be able to use these variables in statistical hypothesis testing and analysis using methods such as Fisher’s Exact Test and Exact Logistic Regression
+-   *Dealing with NA values* → we decided to leave NA values blank instead of filling with estimates so that we were not analyzing misleading data about a state’s true conditions
+
+### Data merging
+
+We merged all datasets on the common key of the state name. Our final dataset contains 52 rows (one row for each of the 50 states, the District of Columbia, and the U.S. total) and 102 columns. The variables are listed below:
+
+-   State
+-   Parental leave policy
+-   Parental leave job protection policy
+-   Number of weeks of parental leave mandated by state policy
+-   Percentage of employed women (2022)
+-   Average infant child care price (2018 and 2023)
+-   Average infant child care price as share of family income (2018)
+-   State overall health ranking
+-   Healthcare coverage, access, and affordability ranking
+-   Healthcare quality and prevention ranking
+-   Health outcomes ranking
+-   Maternal mortality rate (2018-2022)
+    -   Total and by ethnicity
+-   All cause mortality rate per 100,000 women (2022)
+-   Birth rate (2021-2022)
+-   Teen birth rate (2022)
+-   Infant mortality rate (2017 - 2022)
+    -   Total and by ethnicity
+-   Percent of pregnancies ending in birth 2017
+-   Percent of pregnancies ending in abortion 2017
+-   Percent of births financed by medicaid 2022
+-   Women aged 18-44 who went without care because of cost
+-   Percentage of uninsured women (2022)
+-   Percent women ages 18-64 who report fair or poor health 2022
+-   Percent women with postpartum depression 2021
+-   Percent women who received a postpartum depression screening 2021
+-   Percent women experiencing intimate partner violence 2021
+-   Percent uninsured women during pregnancy 2021
+-   Number of obstetricians and gynecologists employed (2023)
+-   Increase in clinician provided abortions since 2020
+-   Abortion clinics per 100,000 women ages 15 44 2022
+-   Maternity care workforce per 100,000 women ages 15 44
+-   Abortion policy level
+    -   and various subpolicies regarding abortion and maternal care
+-   Percentage of women with a Bachelor's degree or higher
+-   Overall public school ranking
+-   Number of children in foster care per capita
+
+## Statistical methods & models
+
+To analyze the association between various health and wellness conditions in each state in 2022 or earlier and the eventual implemented level of abortion policy post Dobbs decision, we used four hypothesis testing methods. Our variable of interest (the abortion policy level) is a multinomial categorical variable, but it has many limiting characteristics that violate assumptions for many common baseline methods, such as ANOVA and Chi-square. The sample sizes (the count of observations in each level of abortion policy) were very uneven, and some sample sizes were extremely small (with a total count of 2), which violates the assumptions of some methods. In particular, this violates Chi-square’s assumption that the expected count frequency for each variable combination is at least 5. This also violates ANOVA’s assumptions of homoscedasticity and the normality of residuals, because one abortion policy level was composed of two states, while there were sixteen states with very restrictive abortion policies. Therefore, we made sure to deploy statistical tests that were appropriate for our small and uneven data. These tests and their use cases are described below.
+
+For assessing the association between **numerical variables** and abortion policy level:
+
+-   **Permutation-based ANOVA test**
+    -   This is a non-parametric, robust alternative to traditional ANOVA that evaluates differences in means between levels of a categorical variable without requiring the assumptions of normality or homogeneity of variances.
+    -   *Null hypothesis* → the means across all levels of abortion policy are equal.
+    -   *Alternative hypothesis* → At least one group mean is significantly different from the rest.
+-   **Kruskal-Wallis**
+    -   This is a non-parametric statistical test used to determine whether there are significant differences between the medians of two or more independent groups by comparing the ranks of data across groups to test for differences rather than relying on raw data values. This test also permits data that does not meet the assumptions for ANOVA.
+    -   *Null hypothesis* → The medians across all levels of abortion policy are equal.
+    -   *Alternative hypothesis* → At least one group median is significantly different from the rest.
+
+For assessing the association between **binary variables** and abortion policy level:
+
+-   **Fisher's Exact Test**
+    -   This is a statistical test used to determine whether there is a significant association between two categorical variables in a contingency table. It is an appropriate alternative to the Chi-square test when sample size assumption, which states that the expected frequencies in all contingency table cells must be greater than 5, is violated. Our data naturally violates this assumption, making Fisher’s Exact Test a suitable method for assessing differences among our small abortion policy levels.
+    -   *Null hypothesis* → There is no association between the binary variable and the abortion policy.
+    -   *Alternative hypothesis* → There is an association between the binary variable and the abortion policy
+-   **Exact Logistic Regression**
+    -   This is a statistical method used to model the relationship between a binary outcome (dependent variable) and an independent variable, particularly when traditional logistic regression assumptions are violated. When sample sizes are very small, traditional logistic regression may produce unreliable results due to large standard errors. This test calculates exact p-values for parameter estimates rather than relying on asymptotic approximations.
+    -   *Null hypothesis* → The abortion policy has no effect on the probability of the binary outcome
+    -   *Alternative hypothesis* → At least one level of abortion policy significantly affects the probability of the binary outcome
+
+Relevant and insightful data visualizations were also provided alongside these tests to illuminate the characteristics of the data and provide additional information on the differences among abortion policy levels. Please see the Results section for our statistical testing outcomes.

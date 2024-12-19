@@ -1,0 +1,47 @@
+project:
+  type: website
+  output-dir: _site
+
+website:
+  title: "DSAN 5100"
+  favicon: "images/gu-logo.png"
+  navbar:
+    search: true
+    left:
+      - href: index.qmd
+        text: Introduction
+      - href: statistical_analysis.qmd
+        text: Statistical Methods
+      - text: Results
+        menu: 
+          - href: results/overall_health.qmd
+            text: Overall Health
+          - href: results/maternal_health.qmd
+            text: Maternal Health
+          - href: results/maternal_wellness.qmd
+            text: Maternal Wellness
+          - href: results/child_health.qmd
+            text: Child Health
+          - href: results/child_wellness.qmd
+            text: Child Wellness
+      - href: findings.qmd
+        text: Conclusion
+      - href: bibliography.qmd
+        text: Bibliography
+      - href: appendix.qmd
+        text: Appendix
+
+    right:
+      - icon: github
+        href: "https://github.com/EB-Sam/5100_project.git"
+
+format:
+  html:
+    theme: lumen
+    css: styles.css
+    page-layout: full
+    toc: true
+    toc-location: left
+    toc-depth: 4
+
+editor: visual

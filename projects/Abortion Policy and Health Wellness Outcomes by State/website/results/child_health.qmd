@@ -1,0 +1,182 @@
+---
+title: "Child Health"
+format: 
+  html:
+    embed-resources: true
+    code-fold: true
+editor: visual
+---
+
+## Infant Mortality by Abortion Policy
+
+```{r, warning=FALSE, message=FALSE}
+library(tidyverse)
+df <- read_csv("../data/clean_data/merged_data.csv", show_col_types = FALSE)
+df <- df[!is.na(df$abortion_policies), ]
+df_test <- df[df$State != "US", ]
+df$abortion_policies <- factor(df$abortion_policies, 
+                              levels = c("most protective", "very protective", 
+                                         "protective", "some restriction /protections", "restrictive", "very restrictive", "most restrictive"))
+
+# Box plot for Infant Mortality Rate
+ggplot(df, aes(x = abortion_policies, y = infant_mortality_2021, fill=abortion_policies)) +
+  geom_boxplot() +
+  theme_minimal() +
+  theme(axis.text.x = element_text(size = 8, angle = 45, hjust = 1),
+        axis.title.y = element_text(size = 10)) + 
+  scale_fill_manual(values = c("#1c7416", "#68bb59", "#acdf87", "#fab733", "#ff6242", "#ff0000", "#c61a09")) +
+  labs(x = "Abortion Policies", 
+       y = "Infant Morality rate per 1,000",
+       fill = "State Abortion Policy Level",
+       title = "Infant Mortality Rate by Abortion Policy") +
+  theme(plot.title = element_text(size = 20, hjust = 0.5))
+```
+
+The box plot shows the distribution of infant mortality rates across different abortion policy categories. **States with the most protective policies tend to have the lowest infant mortality rates, while states with the most restrictive policies display higher rates, with a wider range and some extreme outliers.** The median values for the intermediate categories (e.g., "protective" or "restrictive") suggest a gradual increase in infant mortality rates as abortion policies become more restrictive.
+
+```{r}
+
+df_filtered <- df %>%
+  filter(!is.na(`infant_mortality_2021`)) %>%
+  bind_rows(tibble(
+    State = "US Average",  # Removed c() since only adding one value
+    `infant_mortality_2021` = 5.4,
+    abortion_policies = "US Average"  # Removed "most restrictive" since only adding US Average
+  ))
+
+policy_levels <- c(
+  "most protective",
+  "very protective", 
+  "protective",
+  "some restrictions/protections",
+  "restrictive",
+  "very restrictive",
+  "most restrictive",
+  "US Average"
+)
+
+df_filtered$abortion_policies <- factor(df_filtered$abortion_policies, 
+                                      levels = policy_levels)
+
+ggplot(df_filtered, 
+       aes(y = reorder(State, `infant_mortality_2021`),
+           x = `infant_mortality_2021`,
+           fill = abortion_policies)) +
+  geom_bar(stat = "identity", width = 0.7) +
+  scale_fill_manual(
+    values = c(
+      "most protective" = "#1c7416",
+      "very protective" = "#68bb59",
+      "protective" = "#acdf87",
+      "some restrictions/protections" = "#fab733",
+      "restrictive" = "#ff6242",
+      "very restrictive" = "#ff0000",
+      "most restrictive" = "#c61a09",
+      "US Average" = "#006eff"
+    ),
+    breaks = policy_levels
+  ) +
+  theme_minimal() +
+  labs(
+    title = "Infant Mortality Rate by State (2021)",  # Made title more concise
+    x = "Deaths per 1,000 Live Births",  # Corrected units
+    y = "",
+    fill = "State Abortion Policy Level",
+  ) +
+  theme(
+    plot.title = element_text(hjust = 0.5, size = 12),
+    axis.title.x = element_text(size = 10),
+    axis.text.y = element_text(size = 8),
+    axis.text.x = element_text(size = 8),
+    legend.position = "right",
+    legend.title = element_text(size = 9),
+    legend.text = element_text(size = 8),
+    panel.grid.major.y = element_blank(),
+    panel.grid.minor = element_blank(),
+    plot.background = element_rect(fill = "white", color = NA),
+    panel.background = element_rect(fill = "white", color = NA)
+  ) +
+  scale_x_continuous(
+    limits = c(0, 15),
+    breaks = seq(0, 15, by = 5),  # Changed to increments of 5 for better readability
+    expand = expansion(mult = c(0, 0.1))
+  )
+
+```
+
+In the box plot, notable outliers were observed, particularly for states categorized under the most restrictive abortion policies, and these patterns become even more apparent in this bar plot highlighting state-level infant mortality rates. For instance, Mississippi, stands out as an extreme case, with an infant mortality rate significantly exceeding the national average (represented in blue). Similarly, states like Alabama and West Virginia, also under more restrictive policy categories, show elevated rates compared to states with the most protective policies, like Vermont and Oregon. This visualization provides a clearer breakdown of observed trends, allowing us to pinpoint specific states driving the differences seen in the earlier boxplot.
+
+While these visuals suggests a potential relationship between states with restrictive abortion policy and infant mortality rates, to confirm whether this observed trend is statistically significant, formal hypothesis testing is necessary.
+
+### Kruskal-Wallis Test
+
+**Null Hypothesis (H*o*):** The medians of infant mortality rates among states are the same across all abortion policy categories.
+
+**Alternative Hypothesis (H*a*)**: At least one abortion policy category among states is associated with a significantly different median infant mortality rate.
+
+```{r, warning = FALSE}
+# Kruskal-Wallis test
+kruskal.test(infant_mortality_2021 ~ abortion_policies, data = df)
+
+```
+
+The **Kruskal-Wallis test yielded a statistically significant p-value of 0.009246,** indicating strong evidence to reject the null hypothesis, suggesting that there are significant differences in infant mortality rates among at least one of the abortion policy groups. In other words, the data supports the presence of a relationship between abortion policy strictness and infant mortality rates across U.S. states.
+
+To further confirm the results and assess group differences using a parametric approach, we performed a one-way ANOVA and these findings will help solidify whether these differences are consistent across statistical methods
+
+### ANOVA Permutation Test
+
+**Null Hypothesis (H*o*):** The mean infant mortality rate is the same across all abortion policy levels.
+
+**Alternative Hypothesis (H*a*)**: The mean infant mortality rate is different in at least one of the abortion policy levels.
+
+```{r}
+# Permutation Test
+N <- 10000 
+
+# Observed ANOVA F-statistic
+observed_anova <- aov(infant_mortality_2021 ~ abortion_policies, data = df)
+observed_F <- summary(observed_anova)[[1]][["F value"]][1]
+
+# Permutation loop
+set.seed(1234) 
+perm_F <- numeric(N)
+
+for (i in 1:N) {
+  # Permute the response variable
+  permuted_data <- df
+  permuted_data$infant_mortality_2021 <- sample(permuted_data$infant_mortality_2021)
+  
+  # Perform ANOVA on permuted data
+  perm_anova <- aov(infant_mortality_2021 ~ abortion_policies, data = permuted_data)
+  perm_F[i] <- summary(perm_anova)[[1]][["F value"]][1]
+}
+
+# Calculate p-value
+p_value <- mean(perm_F >= observed_F)
+
+cat("Observed F-statistic:", observed_F, "\n")
+cat("Permutation Test p-value:", p_value, "\n")
+
+# Plot the permutation F-statistics
+hist(perm_F, 
+     breaks = 30, 
+     main = "Permutation Distribution of F-statistic", 
+     xlab = "F-statistic", 
+     col = "palegreen4",  
+     border = "white")    
+
+# F-statistic line 
+abline(v = observed_F, 
+       col = "red",       
+       lwd = 2, 
+       lty = 2)
+```
+
+The **ANOVA permutation test resulted in a p-value of 0.0048,** which further supports rejecting the null hypothesis. This indicates strong evidence that at least one of the groups defined by abortion policy categories has a significantly different mean infant mortality rate. The observed F-statistic (3.827105), marked by the red dashed line, lies in the extreme tail of the distribution, reinforcing the statistical significance of the results. These findings align with the results of the Kruskal-Wallis test and provide additional evidence that differences in infant mortality rates are associated with abortion policy categories.
+
+### Conclusions
+
+Both the Kruskal-Wallis test and the ANOVA permutation test confirm a statistically significant relationship between states with restrictive abortion policies and infant mortality rates, suggesting that policy differences may influence broader health outcomes. The consistency of these results across non-parametric (Kruskal-Wallis) and parametric (ANOVA) methods strengthens the validity of the findings, demonstrating that the relationship holds under different statistical assumptions.
+
+States with the most restrictive abortion policies already experience higher infant mortality rates compared to states with less restrictive policies, highlighting the potential for these disparities to worsen as more states adopt increasingly restrictive abortion policies following the Dobbs decision. These findings underscore how existing inequities in infant health outcomes are deeply tied to systemic challenges related to healthcare access, reflecting a broader trend of disadvantage in states with restrictive reproductive health environments.

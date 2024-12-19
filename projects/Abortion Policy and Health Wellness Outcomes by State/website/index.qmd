@@ -1,0 +1,177 @@
+---
+title: "Data vs. Dogma: Maternal Wellness Conditions and Abortion Policy per State"
+author: Courtney Green, Josh Lin, Kristin Lloyd, Viviana Luccioli, Sam Sofman
+format:
+  html:
+    embed-resources: true
+    code-fold: true
+    mermaid:
+      theme: dark
+bibliography: references.bib
+---
+
+## Problem & Objectives
+
+**\
+**Abortion is one of the most divisive and consequential political issues in the United States. In 1973, the landmark Supreme Court ruling *Roe v. Wade* established the constitutional right to abortion nationwide. However, in 2022, the Court overturned this precedent in the *Dobbs v. Jackson Women’s Health Organization* decision, which shifted the power to regulate abortion to individual state governments. This ruling has led to a patchwork of abortion laws, with restrictions and protections varying dramatically across the country. As a result, abortion has emerged as a pivotal and polarizing voting issue. A KFF study found it to be the top concern for women under 30 heading into the 2024 presidential election. [@KFFVoting] Public opinion surveys, including a 2022 Pew Research study, reveal that a majority of Americans continue to support the right to abortion, even across diverse demographics. [@adkins2024association]
+
+The United States faces a critical lack of data transparency surrounding abortion and maternal health—a challenge that has become even more urgent in the fragmented post-Dobbs landscape. While ethical debates often dominate discussions about abortion, they frequently overshadow critical empirical evidence. The absence of comprehensive, standardized data leaves policymakers and advocates without the tools necessary to address the disproportionate burden placed on marginalized communities. Furthermore, the inconsistency of resources across state regulations not only perpetuates disparities in maternal health outcomes but also obstructs meaningful, data-driven policymaking. Without immediate efforts to close this data gap, the inequities in healthcare access and maternal wellness will deepen, with devastating consequences for the nation’s more vulnerable populations. 
+
+The bar char and map below visualize the distribution of the level of protectiveness or restrictiveness in state-level abortion policies across the country.  
+
+```{r, warning = FALSE, message = FALSE}
+library(tidyverse)
+library(readr)
+library(ggplot2)
+library(usmap)
+library(sf)
+
+policy_travel <- read.csv("data/clean_data/policy_travel_jlin.csv")
+policy_travel$X <- NULL
+
+# Create policy_distribution by grouping and counting states by abortion_policies
+policy_distribution <- policy_travel %>%
+  group_by(abortion_policies) %>%
+  summarise(State_Count = n()) %>%
+  ungroup() %>%
+  mutate(abortion_policies = factor(abortion_policies, levels = c("most protective", "very protective", "protective", "some restrictions/protections", "restrictive", "very restrictive", "most restrictive")))
+
+# Plot abortion policies across US states
+ggplot(policy_distribution, aes(x = abortion_policies, y = State_Count, fill = abortion_policies)) +
+    geom_bar(stat = "identity", color = "black", width = 0.7) +
+    geom_text(
+        aes(label = State_Count),
+        hjust = 1.1,
+        size = 6,
+        color = "black"
+    ) +
+    scale_fill_manual(
+        values = c(
+            "most restrictive" = "#c61a09",
+            "very restrictive" = "#ff0000",
+            "restrictive" = "#ff6242",
+            "some restrictions/protections" = "#fab733",
+            "protective" = "#acdf87",
+            "very protective" = "#68bb59",
+            "most protective" = "#1c7416"
+        )
+    ) +
+    labs(
+        title = "Abortion Policies Across U.S. States (2023)",
+        subtitle = "States categorized by level of policy restrictiveness",
+        x = NULL, 
+        y = NULL, 
+        fill = "Policy Level"
+    ) +
+    theme_minimal() +
+    theme(
+        plot.title = element_text(size = 14, hjust = 0.5),
+        plot.subtitle = element_text(size = 12, hjust = 0.5),
+        axis.title.x = element_blank(),
+        axis.text.x = element_blank(),
+        axis.ticks.x = element_blank(),
+        axis.title.y = element_text(size = 12),
+        axis.text.y = element_text(size = 12),
+        legend.title = element_text(size = 12),
+        legend.text = element_text(size = 10),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank()
+    ) +
+    coord_flip()
+```
+
+This plot indicates that there are many **more restrictive states than protective states,** with a total of 27 states having restrictive policies compared to 18 states with protective policies. This imbalance is particularly evident in the 'most restrictive' category, which alone accounts for 16 states.
+
+```{r}
+
+policy_travel <- policy_travel %>%
+    mutate(State = tolower(State))
+
+policy_travel <- policy_travel %>%
+    mutate(State = tolower(State))
+
+policy_levels <- c(
+    "most protective",
+    "very protective",
+    "protective",
+    "some restrictions/protections",
+    "restrictive",
+    "very restrictive",
+    "most restrictive"
+)
+
+# Map policy levels to a numeric scale
+policy_travel <- policy_travel %>%
+    mutate(policy_score = factor(abortion_policies, levels = policy_levels, labels = 1:length(policy_levels))) %>%
+    mutate(policy_score = as.numeric(as.character(policy_score)))
+
+states_map <- map_data("state")
+
+# Merge the dataset with the map data
+map_data <- states_map %>%
+    left_join(policy_travel, by = c("region" = "State"))
+
+# Plot for Abortion Policies by State
+ggplot(map_data, aes(long, lat, group = group, fill = policy_score)) +
+    geom_polygon(color = "black", linewidth = 0.3) +
+    coord_fixed(1.3) +
+    theme_minimal() +
+    scale_fill_gradientn(
+        colors = c("#1c7416", "#68bb59", "#acdf87", "#fab733", "#ff6242", "#ff0000", "#c61a09"),
+        breaks = c(1, 4, 7),
+        labels = c("Most (+)", "Some (+/-)", "Most (-)"),
+        na.value = "gray80",
+        guide = guide_colorbar(
+            barwidth = 15,
+            barheight = 1,
+            title.position = "top",
+            title.hjust = 0.5
+        )
+    ) +
+    labs(
+        title = "Abortion Policies by State (USA) 2023",
+        subtitle = "States categorized by level of restrictiveness",
+        fill = "Policy Restrictiveness"
+    ) +
+    theme(
+        plot.title = element_text(size = 14, hjust = 0.5),
+        plot.subtitle = element_text(size = 12, hjust = 0.5),
+        legend.title = element_text(size = 12, hjust = 0.5),
+        legend.text = element_text(size = 10, angle = 45, vjust = 1, hjust = 1),
+        legend.position = "bottom",
+        axis.title = element_blank(),
+        axis.text = element_blank(),
+        axis.ticks = element_blank(),
+        panel.grid = element_blank()
+    )
+```
+
+The map provides a geographic visualization of abortion policies across U.S. states in 2023. One of the most striking details of this map is how it shows a geographic clustering of similar policies. **Specifically, states with similar policies tend to be closer to each other.** For example, the Southeast and most of central U.S. are colored red to darker red, indicating more restrictive policies.
+
+## Motivation & Case Studies
+
+Since the reversal of Roe v. Wade in 2022, numerous stories have emerged illustrating the devastating impact of abortion bans on women's and children’s health. In 2023, 18-year-old Nevaeh Crain, six months pregnant, experienced a miscarriage that ultimately claimed her life due to delays in medical care caused by Texas’s restrictive abortion laws [@Etienne_2024]. Despite visiting three emergency rooms with severe symptoms, including abdominal pain, fever, and heavy bleeding, Crain was repeatedly sent home because her baby’s heartbeat was still detectable. Under Texas law, doctors were unable to intervene until fetal demise could be definitively confirmed, even as her condition rapidly worsened. Crain developed sepsis, a life-threatening response to infection, and her condition progressed to disseminated intravascular coagulation (DIC), causing internal bleeding. By the time medical staff confirmed the fetus was no longer viable, it was too late. Crain died in the intensive care unit, hours after black blood poured from her mouth and nose—a devastating outcome medical experts later said could have been prevented with timely intervention[@Etienne_2024].  Similarly, in Georgia, Amber Thurman died after complications from a legal medication abortion were left untreated due to the state’s restrictive abortion laws [@surana2024abortion]. She needed a routine dilation and curettage (D&C) to remove retained fetal tissue, but doctors delayed the procedure for over 20 hours, fearing prosecution under the 2022 abortion ban. Like Crain, Thurman’s condition rapidly worsened as she developed sepsis, and despite clear signs she was dying–including low blood pressure, organ failure, and infection–doctors hesitated to act. By the time they operated, it was too late, and Thurman died during surgery, leaving behind her 6-year-old son  [@surana2024abortion]. A review committee later deemed her death “preventable,” citing the delay in care as a critical factor. 
+
+These broader trends are tragically reflected in the individual stories of Naveah Crain and Amber Thurman, whose preventable deaths exemplify the real-world consequences of restrictive reproductive laws. A study by Stevenson (2021) projected a 7% increase in maternal mortality in the first year following widespread abortion bans, with the rate rising to 23% in the subsequent year, highlighting the immediate and severe health risks associated with restrictive abortion policies [@Stevenson2021]. Notably, vulnerable populations, including racial minorities and those with low socioeconomic status, are disproportionately affected. Moreover, the repercussions of restrictive abortion laws extend far beyond direct maternal health outcomes. Adkins et al. found that states that implemented TRAP (Targeted Regulation of Abortion Providers) laws–which impose specific regulatory requirements on abortion providers that are stricter than those for other medical procedures of a similar nature–saw an 11% increase in children placed in the foster care system [@adkins2024association]. In tandem, Wallace et al. found that each additional TRAP law corresponded to a 3.4% increase in the likelihood that women fall victim to domestic partner violence [@wallace2024states]. These findings demonstrate the far-reaching consequences of abortion policies, which exacerbate vulnerabilities for children, women, and their families well beyond the immediate health impacts. 
+
+## Research Questions
+
+This research project takes a data-driven approach to provide *objective* insight into the underlying conditions associated with abortion and reproductive rights before the Dobbs decision. By examining these relationships, we aim to better understand the factors that may have informed varying levels of abortion policy strictness. To achieve this, we gathered comprehensive data on maternal, child, and overall health outcomes, along with maternal wellness indicators, across states in the most recent year prior to the Dobbs decision with available data. Additionally, we distinguished states based on their level of abortion policy strictness in 2023, using a classification scheme with seven levels created by KFF. Using R Studio, we employed data visualization and statistical testing to address our central research question: *What is the association between health and wellness conditions in a state prior to the Dobbs decision, and their abortion policy implemented after the ruling?*
+
+This project aspires to provide a concrete, evidence-based understanding of the relationship between maternal health and abortion policy. By grounding the policy discourse in women’s lived experiences and measurable health outcomes, this research advocates for greater accountability and oversight in the development of abortion policies. It underscores the need for evidence-based decision-making that transcends political and personal ideologies on a subject so deeply impactful to women’s health and rights.\
+
+**Data science question:** *What is the association between health and wellness conditions in a state prior to the Dobbs decision and their abortion policy implemented after the ruling?*
+
+**Subquestions:**
+
+1.  What is the association between prior maternal health outcomes and abortion policy? 
+
+2.  What is the association between prior infant health outcomes and abortion policy?
+
+3.  What is the association between prior overall health outcomes and abortion policy?
+
+4.  What is the association between prior maternal wellness conditions and abortion policy?
+
+The diagram below provides an overview of the structure underlying each of these subquestions and the variables investigated. Please refer to our Results section for the completed analyses. 
+
+![](images/diagram.png)

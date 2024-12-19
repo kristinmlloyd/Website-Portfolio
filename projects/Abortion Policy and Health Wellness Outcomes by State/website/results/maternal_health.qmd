@@ -1,0 +1,553 @@
+---
+title: "Maternal Health"
+format: 
+  html:
+    embed-resources: true
+    code-fold: true
+editor: visual
+---
+
+## Maternal Morality by Abortion Policy
+
+```{r, warning=FALSE, message=FALSE}
+library(tidyverse)
+library(dplyr)
+df <- read_csv("../data/clean_data/merged_data.csv", show_col_types = FALSE)
+df <- df[!is.na(df$abortion_policies), ]
+df_test <- df[df$State != "US", ]
+
+df_filtered <- df %>%
+  filter(!is.na(`maternal_mortality_rates_2020_2022_per_100,000_live births`)) %>%
+  bind_rows(tibble(
+    State = c("US Average", "Tennessee"),
+    `maternal_mortality_rates_2020_2022_per_100,000_live births` = c(23.2, 51.1),
+    abortion_policies = c("US Average", "most restrictive") 
+  ))
+
+policy_levels <- c(
+  "most protective",
+  "very protective", 
+  "protective",
+  "some restrictions/protections",
+  "restrictive",
+  "very restrictive",
+  "most restrictive",
+  "US Average"
+)
+
+df_filtered$abortion_policies <- factor(df_filtered$abortion_policies, 
+                                      levels = policy_levels)
+
+ggplot(df_filtered, 
+       aes(y = reorder(State, `maternal_mortality_rates_2020_2022_per_100,000_live births`),
+           x = `maternal_mortality_rates_2020_2022_per_100,000_live births`,
+           fill = abortion_policies)) +
+  geom_bar(stat = "identity", width = 0.7) +
+  scale_fill_manual(
+    values = c(
+      "most protective" = "#1c7416",
+      "very protective" = "#68bb59",
+      "protective" = "#acdf87",
+      "some restrictions/protections" = "#fab733",
+      "restrictive" = "#ff6242",
+      "very restrictive" = "#ff0000",
+      "most restrictive" = "#c61a09",
+      "US Average" = "#006eff"
+    ),
+    breaks = policy_levels
+  ) +
+  theme_minimal() +
+  labs(
+    title = "Maternal Mortality Rates (2020-2022) per 100,000 Live Births by State",
+    x = "Maternal Mortality Rate per 100,000 Live Births",
+    y = "",
+    fill = "State Abortion Policy Level",
+  ) +
+  theme(
+    plot.title = element_text(hjust = 0.5, size = 12),
+    axis.title.x = element_text(size = 10),
+    axis.text.y = element_text(size = 8),
+    axis.text.x = element_text(size = 8),
+    legend.position = "right",
+    legend.title = element_text(size = 9),
+    legend.text = element_text(size = 8),
+    panel.grid.major.y = element_blank(),
+    panel.grid.minor = element_blank(),
+    plot.background = element_rect(fill = "white", color = NA),
+    panel.background = element_rect(fill = "white", color = NA)
+  ) +
+  scale_x_continuous(
+    limits = c(0, 55),  
+    breaks = seq(0, 55, by = 10),
+    expand = expansion(mult = c(0, 0.1))
+  )
+
+```
+
+### Kruskal-Wallis Test
+
+**Null Hypothesis (H*o*):** The median maternal mortality rates are the same across all abortion policy levels.
+
+**Alternative Hypothesis (H*a*)**: At least one abortion policy level has a significantly different median maternal mortality rate compared to the others.
+
+```{r, message=FALSE, warning=FALSE}
+# Order Abortion Policy categories
+df$abortion_policies <- factor(df$abortion_policies, 
+                              levels = c("most protective", "very protective", 
+                                         "protective", "some restrictions/protections", 
+                                         "restrictive", "very restrictive", "most restrictive"))
+
+# Boxplot Visualization 
+ggplot(df, aes(x = abortion_policies, y = `maternal_mortality_rates_2020_2022_per_100,000_live births`, fill=abortion_policies)) +
+  geom_boxplot() +
+  theme_minimal() +
+  theme(axis.text.x = element_text(size = 8, angle = 45, hjust = 1),
+        axis.title.y = element_text(size = 10)) + 
+  scale_fill_manual(values = c("#1c7416", "#68bb59", "#acdf87", "#fab733", "#ff6242", "#ff0000", "#c61a09")) +
+  labs(x = "Abortion Policies", 
+       y = "Maternal Morality rate per 100,000",
+       fill = "State Abortion Policy Level",
+       title = "Maternal Mortality Rate 2020-2022 by State Abortion Policy") +
+  theme(plot.title = element_text(size = 15, hjust = 0.4))
+```
+
+This box plot reveals that maternal mortality rates are significantly lower in states with "most protective" and "very protective" abortion policies, with smaller interquartile ranges indicating more consistent and favorable outcomes. Conversely, as abortion policies become more restrictive, maternal mortality rates show a stark increase, with the "most restrictive" states exhibiting the highest medians and the greatest variability.
+
+To evaluate if this observed trend is statistically significant, a Kruskal-Wallis Test is performed.
+
+```{r}
+# Kruskal-Wallis test
+kruskal.test(`maternal_mortality_rates_2020_2022_per_100,000_live births` ~ abortion_policies, data = df)
+```
+
+**The Kruskal-Wallis test yields a p-value of 0.009736, indicating sufficient evidence to reject the null hypothesis and conclude that maternal mortality rates significantly differ across at least one abortion policy group.** This statistical result aligns with the trends observed in the box plot: maternal mortality rates are highest and most variable in states with the "most restrictive" abortion policies and vice versa. These findings underscore the disparity in maternal health conditions observed in states with restrictive abortion policies, highlighting the systemic challenges faced by women in these environments with limited reproductive rights.
+
+To further confirm these findings, we will perform a permutation test on the ANOVA mean differences:
+
+### Anova Permutation Test
+
+**Null Hypothesis (H*o*):** The mean maternal mortality rates are the same across all abortion policy levels.
+
+**Alternative Hypothesis (H*a*)**: At least one abortion policy level has a significantly different mean maternal mortality rate compared to the others.
+
+```{r, warning=FALSE, message=FALSE}
+ggplot(df, aes(x = abortion_policies, y = `maternal_mortality_rates_2020_2022_per_100,000_live births`, fill = abortion_policies)) + stat_summary(fun = mean, geom = "bar", position = "dodge") + theme_minimal() + scale_fill_manual(values = c("#1c7416", "#68bb59", "#acdf87", "#fab733", "#ff6242", "#ff0000", "#c61a09")) + theme(axis.text.x = element_text(size = 8, angle = 45, hjust = 1), plot.title = element_text(size = 12, hjust = 0.5)) + labs(x = "Abortion Policies", y = "Mean Maternal Mortality Rate per 100,000", fill = "State Abortion Policy Level", title = "Mean Maternal Mortality Rate 2020-2022 by State Abortion Policy")
+
+```
+
+The bar chart demonstrates that states with the most protective abortion policies exhibit the lowest mean maternal mortality rates per 100,000 live births, while states with the most restrictive policies have the highest mean rates, further highlighting a potential relationship between the level of abortion policy restrictiveness and maternal health outcomes.
+
+To further complement the Kruskal-Wallis Test and explore whether these observed differences in means were statistically significant, an ANOVA Permutation Test was conducted to provide additional insight into the statistical reliability of these findings.
+
+```{r}
+# Permutation Test
+N <- 10000 
+
+# Observed ANOVA F-statistic
+observed_anova <- aov(`maternal_mortality_rates_2020_2022_per_100,000_live births` ~ abortion_policies, data = df)
+observed_F <- summary(observed_anova)[[1]][["F value"]][1]
+
+# Permutation loop
+set.seed(1234) 
+perm_F <- numeric(N)
+
+for (i in 1:N) {
+  # Permute the response variable
+  permuted_data <- df
+  permuted_data$`maternal_mortality_rates_2020_2022_per_100,000_live births` <- sample(permuted_data$`maternal_mortality_rates_2020_2022_per_100,000_live births`)
+  
+  # Perform ANOVA on permuted data
+  perm_anova <- aov(`maternal_mortality_rates_2020_2022_per_100,000_live births` ~ abortion_policies, data = permuted_data)
+  perm_F[i] <- summary(perm_anova)[[1]][["F value"]][1]
+}
+
+# Calculate p-value
+p_value <- mean(perm_F >= observed_F)
+
+cat("Observed F-statistic:", observed_F, "\n")
+cat("Permutation Test p-value:", p_value, "\n")
+
+# Plot the permutation F-statistics
+hist(perm_F, 
+     breaks = 30, 
+     main = "Permutation Distribution of F-statistic", 
+     xlab = "F-statistic", 
+     col = "palegreen4",  
+     border = "white")    
+
+# F-statistic line 
+abline(v = observed_F, 
+       col = "red",       
+       lwd = 2, 
+       lty = 2)
+```
+
+**The permutation test yields a statistically significant p-value of 0.0067, confirming that the observed F-statistic of 3.595385 lies well beyond the bulk of the null distribution, providing strong evidence to support the conclusion that there is a true mean difference in maternal mortality rates across the abortion policy groups.** The observed value's position far to the right of the null distribution reinforces the conclusion that these differences are not due to random chance, highlighting a meaningful relationship between abortion policy restrictiveness and maternal mortality rates.
+
+### Implications
+
+Abortions play a critical role in maternal health and preventing mortality in situations where they are medically necessary to save the mother’s life. Restricting or banning abortions increases the risk of maternal mortality, as women may be denied access to life-saving interventions in cases of complicated or life-threatening pregnancies. It is reasonable to anticipate that maternal mortality rates will climb further post-Dobbs, as states with restrictive abortion policies were already associated with higher maternal mortality rates (data is from 2020-2022). These states have historically demonstrated limited access to necessary reproductive healthcare, and further restrictions will likely exacerbate the systemic challenges that contribute to preventable maternal deaths.
+
+Additionally, such restrictions force women, including those who are too young, facing serious health risks, or lacking financial resources or adequate health insurance, to carry pregnancies to term. These factors, which are all associated with higher maternal mortality risks, create compounded challenges for women forced into unwanted or unsafe pregnancies. By implementing restrictive abortion policies, despite data showing higher maternal mortality rates, states are effectively creating conditions that increase preventable deaths among women. This raises significant ethical and public health concerns about the systemic disregard for maternal well-being in these policy decisions.
+
+## Women who Went Without Care due to Cost by Abortion Policy
+
+### Kruskal-Wallis Test
+
+**Null Hypothesis (H*o*):** The median percentage of women who went without care because of cost is the same across all abortion policy groups.
+
+**Alternative Hypothesis (H*a*)**: At least one abortion policy group has a significantly different median percentage of women who went without care because of cost compared to the others.
+
+```{r, warning=FALSE}
+# Box plot visualization
+ggplot(df, aes(x = abortion_policies, y = women_18_44_who_went_without_care_because_of_cost, fill=abortion_policies)) +
+  geom_boxplot() +
+  theme_minimal() +
+  theme(axis.text.x = element_text(size = 8, angle = 45, hjust = 1),
+        axis.title.y = element_text(size = 10)) + 
+  scale_fill_manual(values = c("#1c7416", "#68bb59", "#acdf87", "#fab733", "#ff6242", "#ff0000", "#c61a09")) +
+  labs(x = "Abortion Policies", 
+       y = "% Women Without Care per 100,000",
+       fill = "State Abortion Policy Level",
+       title = "Percentage of Women who went Without Care due to Cost by State Abortion Policy") +
+  theme(plot.title = element_text(size = 10, hjust = 0.5))
+```
+
+The box plot reveals that states with "most protective" abortion policies tend to have the lowest median percentage of women who went without care due to cost, with a smaller interquartile range indicating more consistent outcomes. As policies become more restrictive, the median percentage increases, with "most restrictive" states exhibiting the highest medians and the greatest variability, suggesting that more restrictive abortion policies may correlate with a higher percentage of women facing financial barriers to accessing healthcare.
+
+```{r, warning=FALSE}
+# Kruskal-Wallis test
+kruskal.test(women_18_44_who_went_without_care_because_of_cost ~ abortion_policies, data = df)
+```
+
+**The Kruskal-Wallis test yielded a p-value of 0.02916, providing statistically significant evidence to reject the null hypothesis.** This indicates that the median percentage of women who went without care due to cost is not equal across at least one of the abortion policy groups. While the box plot highlights the overall trend, the Kruskal-Wallis results confirm that the observed differences in medians are unlikely to be due to random variation, further emphasizing the relationship between restrictive abortion policies and financial barriers to healthcare access.
+
+To explore the difference in means, we will perform an ANOVA permutation test:
+
+### ANOVA Permutation Test
+
+**Null Hypothesis (H*o*):** The mean percentage of women who went without care because of cost is the same across all abortion policy groups.
+
+**Alternative Hypothesis (H*a*)**: At least one abortion policy group has a significantly different mean percentage of women who went without care because of cost compared to the others.
+
+```{r, warning=FALSE, message=FALSE}
+ggplot(df, aes(x = abortion_policies, y = women_18_44_who_went_without_care_because_of_cost, fill = abortion_policies)) + stat_summary(fun = mean, geom = "bar", position = "dodge") + theme_minimal() + scale_fill_manual(values = c("#1c7416", "#68bb59", "#acdf87", "#fab733", "#ff6242", "#ff0000", "#c61a09")) + theme(axis.text.x = element_text(size = 8, angle = 45, hjust = 1), plot.title = element_text(size = 12, hjust = 0.5)) + labs(x = "Abortion Policies", y = "Mean Women who Went Without Care", fill = "State Abortion Policy Level", title = "Mean Women who Went Without Care by State Abortion Policy")
+
+```
+
+The bar chart indicates that states with more protective abortion policies have the lowest mean percentages of women who went without care due to cost, while states with more restrictive policies exhibit higher mean percentages. This reiterates the broader disparity in healthcare access, suggesting that restrictive abortion policies may be associated with environments where financial barriers to care are more prevalent.
+
+TO explore this observed difference of means further, an ANOVA Permutation Test is performed.
+
+```{r}
+# Permutation Test
+N <- 10000 
+
+# Observed ANOVA F-statistic
+observed_anova <- aov(women_18_44_who_went_without_care_because_of_cost ~ abortion_policies, data = df)
+observed_F <- summary(observed_anova)[[1]][["F value"]][1]
+
+# Permutation loop
+set.seed(1234) 
+perm_F <- numeric(N)
+
+for (i in 1:N) {
+  # Permute the response variable
+  permuted_data <- df
+  permuted_data$women_18_44_who_went_without_care_because_of_cost <- sample(permuted_data$women_18_44_who_went_without_care_because_of_cost)
+  
+  # Perform ANOVA on permuted data
+  perm_anova <- aov(women_18_44_who_went_without_care_because_of_cost ~ abortion_policies, data = permuted_data)
+  perm_F[i] <- summary(perm_anova)[[1]][["F value"]][1]
+}
+
+# Calculate p-value
+p_value <- mean(perm_F >= observed_F)
+
+cat("Observed F-statistic:", observed_F, "\n")
+cat("Permutation Test p-value:", p_value, "\n")
+
+# Plot the permutation F-statistics
+hist(perm_F, 
+     breaks = 30, 
+     main = "Permutation Distribution of F-statistic", 
+     xlab = "F-statistic", 
+     col = "palegreen4",  
+     border = "white")    
+
+# F-statistic line 
+abline(v = observed_F, 
+       col = "red",       
+       lwd = 2, 
+       lty = 2)
+```
+
+**The permutation test yields a p-value of 0.0496, which is right at the significance level of 0.05, indicating that the likelihood of observing an F-statistic as extreme as 2.33 under the null hypothesis is relatively low.** While the evidence is sufficient to reject the null hypothesis at the chosen alpha level, the p-value being so close to the threshold suggests only moderate evidence for a true difference in the mean percentage of women who went without care due to cost across states with differing abortion policy levels
+
+### Implications
+
+**These findings underscore a troubling reality: in states with restrictive abortion bans, significant barriers to maternal care already exist, particularly due to financial constraints, thus, the implementation of restrictive abortion policies is likely to exacerbate these pre-existing issues, as such measures can indirectly affect the overall availability and quality of maternal healthcare resources.** This includes increased pressure on already strained healthcare systems, reduced funding for maternal health programs, and a potential deterrent effect on providers offering comprehensive reproductive care. Together, these factors could worsen disparities, leaving more women unable to access the care they need during pregnancy, childbirth, and postpartum, particularly in underserved communities which reinforces the interconnectedness of abortion policy, maternal health, and systemic inequities in healthcare access.
+
+## Uninsured Women During Pregnancy by Abortion Policy
+
+### Kruskal-Wallis Test
+
+**Null Hypothesis (H*o*):** The median percentage of uninsured women during pregnancy is the same across all abortion policy groups.
+
+**Alternative Hypothesis (H*a*)**: The median percentage of uninsured women during pregnancy is different in at least one of the abortion policy groups.
+
+```{r, warning=FALSE}
+# Box plot visualization
+ggplot(df, aes(x = abortion_policies, y = percent_uninsured_women_during_pregnancy_2021, fill=abortion_policies)) +
+  geom_boxplot() +
+  theme_minimal() +
+  theme(axis.text.x = element_text(size = 8, angle = 45, hjust = 1),
+        axis.title.y = element_text(size = 10)) + 
+  scale_fill_manual(values = c("#1c7416", "#68bb59", "#acdf87", "#fab733", "#ff6242", "#ff0000", "#c61a09")) +
+  labs(x = "Abortion Policies", 
+       y = "% Women Uninsured (2021)",
+       fill = "State Abortion Policy Level",
+       title = "Percentage of Women Uninsured During Pregnancy in 2021 by State Abortion Policy") +
+  theme(plot.title = element_text(size = 10, hjust = 0.3))
+```
+
+This box plot indicates that states with "most protective" abortion policies have the lowest median percentage of women uninsured during pregnancy in 2021, with minimal variability. As abortion policies become more restrictive, the median percentage of uninsured women increases, with "very restrictive" and "most restrictive" states showing significantly higher medians and greater variability. This suggests that restrictive abortion policies may correlate with a lack of access to insurance coverage during pregnancy, potentially exacerbating barriers to prenatal care.
+
+To explore this observed association further, a Kruskal-Wallis test is performed.
+
+```{r, warning=FALSE}
+# Kruskal-Wallis test
+kruskal.test(percent_uninsured_women_during_pregnancy_2021 ~ abortion_policies, data = df)
+```
+
+The Kruskal-Wallis test yields a p-value of 0.03475, providing significant evidence to reject the null hypothesis in favor of the alternative. This indicates that the median percentage of uninsured women during pregnancy differs among at least one of the abortion policy level groups. Interestingly, for the "most restrictive" policy level, the median and range drop significantly compared to the "very restrictive" group. This deviation could reflect unique policy or demographic factors in those states. However, the broader trend suggests that more restrictive abortion policies may align with higher uninsured rates during pregnancy.
+
+To further validate the significance of these findings, we will now perform an ANOVA permutation test.
+
+### ANOVA Permutation Test
+
+**Null Hypothesis (H*o*):** The mean percentage of uninsured women during pregnancy is the same across all abortion policy groups.
+
+**Alternative Hypothesis (H*a*)**: The mean percentage of uninsured women during pregnancy is different in at least one of the abortion policy groups.
+
+```{r, warning=FALSE, message=FALSE}
+ggplot(df, aes(x = abortion_policies, y = percent_uninsured_women_during_pregnancy_2021, fill = abortion_policies)) + stat_summary(fun = mean, geom = "bar", position = "dodge") + theme_minimal() + scale_fill_manual(values = c("#1c7416", "#68bb59", "#acdf87", "#fab733", "#ff6242", "#ff0000", "#c61a09")) + theme(axis.text.x = element_text(size = 8, angle = 45, hjust = 1), plot.title = element_text(size = 10, hjust = 0.4)) + labs(x = "Abortion Policies", y = "Mean Women Uninsured During Pregnancy", fill = "State Abortion Policy Level", title = "Mean Women Uninsured During Pregnancy in 2021 by State Abortion Policy")
+
+```
+
+The bar chart shows that states with more protective abortion policies have the lowest mean percentage of uninsured women during pregnancy, as abortion policies become more restrictive, the mean percentage of uninsured women generally increases, peaking at the "very restrictive" level before dropping at the "most restrictive" level.
+
+To strengthen the evidence for statistical significance,an ANOVA Permutation Test is performed.
+
+```{r}
+# Permutation Test
+N <- 10000 
+
+# Observed ANOVA F-statistic
+observed_anova <- aov(percent_uninsured_women_during_pregnancy_2021 ~ abortion_policies, data = df)
+observed_F <- summary(observed_anova)[[1]][["F value"]][1]
+
+# Permutation loop
+set.seed(1234) 
+perm_F <- numeric(N)
+
+for (i in 1:N) {
+  # Permute the response variable
+  permuted_data <- df
+  permuted_data$percent_uninsured_women_during_pregnancy_2021 <- sample(permuted_data$percent_uninsured_women_during_pregnancy_2021)
+  
+  # Perform ANOVA on permuted data
+  perm_anova <- aov(percent_uninsured_women_during_pregnancy_2021 ~ abortion_policies, data = permuted_data)
+  perm_F[i] <- summary(perm_anova)[[1]][["F value"]][1]
+}
+
+# Calculate p-value
+p_value <- mean(perm_F >= observed_F)
+
+cat("Observed F-statistic:", observed_F, "\n")
+cat("Permutation Test p-value:", p_value, "\n")
+
+# Plot the permutation F-statistics
+hist(perm_F, 
+     breaks = 30, 
+     main = "Permutation Distribution of F-statistic", 
+     xlab = "F-statistic", 
+     col = "palegreen4",  
+     border = "white")    
+
+# F-statistic line 
+abline(v = observed_F, 
+       col = "red",       
+       lwd = 2, 
+       lty = 2)
+```
+
+The permutation test yields a p-value of 0.0252, providing statistically significant evidence to support differences in the percentage of uninsured women during pregnancy across at least one abortion policy level. This p-value strengthens the findings from the Kruskal-Wallis test, further validating the existence of disparities linked to abortion policy restrictiveness.
+
+### Implications
+
+**Restrictive abortion policies correlate with higher uninsured rates among pregnant women, exposing disparities in healthcare systems that already struggle to provide adequate maternal care.** THis ultimately suggests that further tightening will worsen gaps in coverage and maternal health outcomes, especially in states with limited resources. Increasingly restrictive policies may contribute to increased maternal mortality and morbidity by limiting access to affordable prenatal care, leading to delayed or inadequate treatment. Additionally, healthcare providers may be less inclined to practice in these states, further reducing access to quality care. Over time, these conditions could place growing financial strain on households and healthcare systems, deepening existing inequities.
+
+## Teen Birth Rate by Abortion Policy
+
+### Kruskal-Wallis Test
+
+**Null Hypothesis (H*o*):** The median teen birth rate (per 1,000 population, ages 15–19) is the same across all abortion policy groups.
+
+**Alternative Hypothesis (H*a*)**: The median teen birth rate (per 1,000 population, ages 15–19) differs in at least one of the abortion policy groups.
+
+```{r, warning=FALSE, message=FALSE}
+# Boxplot visualization
+ggplot(df, aes(x = abortion_policies, y = `teen_birth_rate_per_1,000_population_ages_15_19_2022`, fill=abortion_policies)) +
+  geom_boxplot() +
+  theme_minimal() +
+  theme(axis.text.x = element_text(size = 8, angle = 45, hjust = 1),
+        axis.title.y = element_text(size = 10)) + 
+  scale_fill_manual(values = c("#1c7416", "#68bb59", "#acdf87", "#fab733", "#ff6242", "#ff0000", "#c61a09")) +
+  labs(x = "Abortion Policies", 
+       y = "Teen Birth Rate per 100,000",
+       fill = "State Abortion Policy Level",
+       title = "Teen Birth Rate by State Abortion Policy") +
+  theme(plot.title = element_text(size = 18, hjust = 0.5))
+```
+
+The box plot illustrates a clear trend where states with more protective abortion policies tend to have lower median teen birth rates, while states with more restrictive policies show higher median teen birth rates. Additionally, as policies become more restrictive, the spread and variability of teen birth rates increase, particularly in the most restrictive category. This suggests that restrictive abortion policies may be indicative of broader socio-economic and health disparities contributing to higher teen birth rates.
+
+```{r}
+# Kruskal-Wallis test
+kruskal.test(`teen_birth_rate_per_1,000_population_ages_15_19_2022` ~ abortion_policies, data = df)
+```
+
+**The Kruskal-Wallis test yields a statistically significant p-value of 0.0002706, providing strong evidence to reject the null hypothesis in favor of the alternative.** This suggests that the median teen birth rate significantly differs across at least one of the abortion policy categories with the variability observed in the box plot aligns with this finding, indicating that states with more restrictive abortion policies tend to have higher median teen birth rates compared to states with more protective policies.
+
+To complement the Kruskal-Wallis test and further evaluate the significance of these differences, an ANOVA permutation test was performed.
+
+### ANOVA Permutation Test
+
+**Null Hypothesis (H*o*):** The mean teen birth rate (per 1,000 population, ages 15–19) is the same across all abortion policy groups.
+
+**Alternative Hypothesis (H*a*)**: The mean teen birth rate (per 1,000 population, ages 15–19) differs in at least one of the abortion policy groups.
+
+```{r, warning=FALSE, message=FALSE}
+ggplot(df, aes(x = abortion_policies, y =`teen_birth_rate_per_1,000_population_ages_15_19_2022`, fill = abortion_policies)) + stat_summary(fun = mean, geom = "bar", position = "dodge") + theme_minimal() + scale_fill_manual(values = c("#1c7416", "#68bb59", "#acdf87", "#fab733", "#ff6242", "#ff0000", "#c61a09")) + theme(axis.text.x = element_text(size = 8, angle = 45, hjust = 1), plot.title = element_text(size = 15, hjust = 0.4)) + labs(x = "Abortion Policies", y = "Mean Teen Birth Rate per 100,000", fill = "State Abortion Policy Level", title = "Mean Teen Birth Rate by State Abortion Policy")
+
+```
+
+The bar chart illustrates that states with more protective abortion policies tend to have the lowest mean teen birth rates, while states with more restrictive abortion policies exhibit progressively higher mean teen birth rates with the highest birth rate observed in states with the "most restrictive" policies. This suggests an association between more restrictive abortion policies and higher teen birth rates.
+
+```{r}
+# Permutation Test
+N <- 100000 
+
+# Observed ANOVA F-statistic
+observed_anova <- aov(`teen_birth_rate_per_1,000_population_ages_15_19_2022` ~ abortion_policies, data = df)
+observed_F <- summary(observed_anova)[[1]][["F value"]][1]
+
+# Permutation loop
+set.seed(1234) 
+perm_F <- numeric(N)
+
+for (i in 1:N) {
+  # Permute the response variable
+  permuted_data <- df
+  permuted_data$`teen_birth_rate_per_1,000_population_ages_15_19_2022` <- sample(permuted_data$`teen_birth_rate_per_1,000_population_ages_15_19_2022`)
+  
+  # Perform ANOVA on permuted data
+  perm_anova <- aov(`teen_birth_rate_per_1,000_population_ages_15_19_2022` ~ abortion_policies, data = permuted_data)
+  perm_F[i] <- summary(perm_anova)[[1]][["F value"]][1]
+}
+
+# Calculate p-value
+p_value <- mean(perm_F >= observed_F)
+
+cat("Observed F-statistic:", observed_F, "\n")
+cat("Permutation Test p-value:", p_value, "\n")
+
+# Plot the permutation F-statistics
+hist(perm_F, 
+     breaks = 30, 
+     main = "Permutation Distribution of F-statistic", 
+     xlab = "F-statistic", 
+     col = "palegreen4",  
+     border = "white")    
+
+# F-statistic line 
+abline(v = observed_F, 
+       col = "red",       
+       lwd = 2, 
+       lty = 2)
+
+```
+
+**The permutation test's extremely small p-value, 1e-05, provides compelling statistical evidence to reject the null hypothesis, suggesting that the mean teen birth rate differs significantly across the different levels of state abortion policies.** The observed F-statistic lies far in the tail of the permutation distribution, reinforcing the conclusion that the observed differences in mean teen birth rates among the policy groups are unlikely to have occurred by chance. This supports the notion of a strong association between state abortion policy levels and variations in teen birth rates.
+
+### Implications
+
+These findings highlight that more restrictive abortion policies correlate with higher teen birth rates, potentially forcing adolescents into parenthood without adequate support, imposing long-term financial and emotional burdens on young families, as well as strain on healthcare and social services. While we have not examined related factors like comprehensive sex education, these results raise questions about whether states with more restrictive abortion policies also fail to invest enough in preventive measures and support systems, prompting a need for more research and evidence-based policy interventions.
+
+## Change in Clinician-Provided Abortions Since 2020 by Sate
+
+```{r, warning=FALSE, message=FALSE}
+library(usmap)
+abortion_map_data <- df %>%
+  select(State, `percent_increase_in_clinician_provided_abortions_since_2020`) %>%
+  filter(!is.na(`percent_increase_in_clinician_provided_abortions_since_2020`)) %>%
+  mutate(
+    state = State,
+    change = `percent_increase_in_clinician_provided_abortions_since_2020`
+  ) 
+
+plot_usmap(data = abortion_map_data, values = "change") +
+  scale_fill_gradient2(
+    name = "% Change",
+    low = "#ff6b6b",   
+    mid = "#ffffff",    
+    high = "#4dbd00",  
+    midpoint = 0,
+    na.value = "gray80"  
+  ) +
+  theme(
+    legend.position = "right",
+    plot.title = element_text(size = 14, hjust = 0.5)
+  ) +
+  labs(title = "Change in Clinician-Provided Abortions Since 2020 by State")
+
+```
+
+### Kruskal-Wallis Test
+
+**Null Hypothesis (H*o*):** The median percentage increase in clinician-provided abortions since 2020 is the same across all abortion policy levels.
+
+**Alternative Hypothesis (H*a*)**: The median percentage increase in clinician-provided abortions since 2020 differs in at least one abortion policy level group.
+
+```{r, warning=FALSE, message=FALSE, fig.width= 10}
+# Boxplot visualization
+ggplot(df, aes(x = abortion_policies, y = `percent_increase_in_clinician_provided_abortions_since_2020`, fill=abortion_policies)) +
+  geom_boxplot() +
+  theme_minimal() +
+  theme(axis.text.x = element_text(size = 8, angle = 45, hjust = 1),
+        axis.title.y = element_text(size = 10)) + 
+  scale_fill_manual(values = c("#1c7416", "#68bb59", "#acdf87", "#fab733", "#ff6242", "#ff0000", "#c61a09")) +
+  labs(x = "Abortion Policies", 
+       y = "% Increase in Clinician Provided Abortions since 2020",
+       fill = "State Abortion Policy Level",
+       title = "Percent Increase in Clinician Provided Abortions since 2020 by State Abortion Policy") +
+  theme(plot.title = element_text(size = 13, hjust = 0.5))
+```
+
+This box plot show that states labeled as “restrictive” exhibit the largest median percentage increase in clinician-provided abortions since 2020, along with a wide range of values whereas states with policies at the extremes—either the "most protective" or the "most restrictive" tend to cluster at lower percentage increases. The more protective categories have relatively stable, modest increases, while the most restrictive categories show lower median increases after a point, possibly indicating fewer opportunities for clinician-provided services. This pattern suggests that the relationship between abortion policy strictness and changes in clinician-provided abortion services is not linear, with mid-level restrictive states experiencing the greatest relative growth.
+
+```{r}
+# Kruskal-Wallis test
+kruskal.test(`percent_increase_in_clinician_provided_abortions_since_2020` ~ abortion_policies, data = df)
+```
+
+**The Kruskal-Wallis test produces a p-value of 0.3324, which is not statistically significant, therefore failing to reject the null hypothesis that the median percent increase in clinician-provided abortions since 2020 is the same across all abortion policy groups.** In other words, these data do not provide evidence that differences in policy strictness are associated with meaningful differences in clinician-provided abortion rate increases.
+
+### Implications
+
+These results, or lack thereof, demonstrate that whatever policy distinctions exist did not translate into measurable changes in the metric we tested. It may suggest that this variable isn’t sensitive to policy variations, other factors overshadow policy influence, or it was included without a clear rationale. Without evidence of a meaningful relationship, focusing research efforts elsewhere might be more productive.
+
+## Conclusion
+
+Evidently, maternal health outcomes differ by abortion policy level, where protective policies often align with lower maternal mortality rates, fewer uninsured pregnant women, and lower teen birth rates. This suggests that states with supportive abortion policies coincide with better access to essential healthcare services and resources for women. By contrast, restrictive policies correlate with higher maternal mortality and teen birth rates, plus more uninsured pregnant women. This association implies that states limiting abortion access may also limit other forms of care, leaving women without adequate prenatal and postnatal support. In practice, this can force both adolescents and adults into parenthood under challenging conditions, with potential long-term social and economic consequences.

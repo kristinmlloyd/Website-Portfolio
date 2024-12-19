@@ -1,0 +1,10 @@
+---
+title: "Bibliography"
+bibliography: references.bib  
+format: 
+    html:
+      embed-resources: true
+nocite: |
+  @*  
+csl: apa.csl 
+---

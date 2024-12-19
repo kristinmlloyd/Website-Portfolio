@@ -1,0 +1,7 @@
+Method,Total Executions,Botched Executions,Botched Execution Rate
+Hanging,"2,721",85,3.21
+Electrocution,4374,84,1.92
+Lethal Gas,593,32,5.4
+Lethal Injection,1054,75,7.12
+Firing Squad,34,0,0
+All Methods,8776,276,3.15
