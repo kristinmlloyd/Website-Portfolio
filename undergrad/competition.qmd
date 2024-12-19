@@ -1,0 +1,43 @@
+# Data Analytics Competitions {.section-title}
+
+::: {.competition-card}
+### First Place - Towson University Data Analytics Competition 2023
+*Towson University, Towson, MD | Spring 2023*
+
+::: {.competition-content}
+[Add your summary of the competition and what you did to win]
+- Key achievement point 1
+- Key achievement point 2
+- Tools/Techniques used
+
+![](images/2023_award.png){.award-image width="300px" style="border-radius: 8px;"}
+:::
+
+::: {.presentation-section}
+### Project Presentation
+<iframe src="./presentations/2023_competition.pdf" width="100%" height="500px" style="border: none;"></iframe>
+
+[Download Presentation](./presentations/2023_competition.pdf){.download-btn}
+:::
+:::
+
+::: {.competition-card}
+### Third Place - Towson University Data Analytics Competition 2024  
+*Towson University, Towson, MD | Spring 2024*
+
+::: {.competition-content}
+[Add your summary of the competition and what you did]
+- Key achievement point 1
+- Key achievement point 2
+- Tools/Techniques used
+
+![](images/2024_award.png){.award-image width="300px" style="border-radius: 8px;"}
+:::
+
+::: {.presentation-section}
+### Project Presentation
+<iframe src="./presentations/2024_competition.pdf" width="100%" height="500px" style="border: none;"></iframe>
+
+[Download Presentation](./presentations/2024_competition.pdf){.download-btn}
+:::
+:::

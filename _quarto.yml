@@ -7,12 +7,16 @@ project:
   resources:
     - projects/dsan-5000/_site
     - projects/Abortion Policy and Health Wellness Outcomes by State/website/_site
+    - certifications-awards   # Add this line
+    - images
 
 website:
   title: "Portfolio"
   favicon: "images/gu-logo.png"
   navbar:
     left:
+      - href: undergrad/competition.qmd       # Add this line
+        text: Competitions
       - href: index.qmd
         text: Home
       - text: "Projects"

@@ -18,7 +18,7 @@
     "href": "index.html#m.s.-in-data-science-and-analytics",
     "title": "About Me",
     "section": "M.S. in Data Science and Analytics",
-    "text": "M.S. in Data Science and Analytics\nGeorgetown University, Washington D.C.\nExpected May 2026\n\nRelated Coursework: Data Science and Analytics, Probability Modeling/Statistical Computing, Data Science and Climate Change\nParticipated in the DataKind D.C. Hackathon, extracted unstructured paragraph data and transformed it into organized data frames using Python"
+    "text": "M.S. in Data Science and Analytics\nGeorgetown University, Washington D.C.\nExpected May 2026\n\nRelated Coursework: Data Science and Analytics, Probability Modeling/Statistical Computing, Data Science and Climate Change\nOn the leadership committee for Georgetown Women in Data Science\nParticipant in the DataKind D.C. Hackathon"
   },
   {
     "objectID": "index.html#bachelor-of-science-in-applied-mathematics-minor-in-business-analytics",
@@ -26,5 +26,12 @@
     "title": "About Me",
     "section": "Bachelor of Science in Applied Mathematics, Minor in Business Analytics",
     "text": "Bachelor of Science in Applied Mathematics, Minor in Business Analytics\nTowson University, Towson, MD\nMay 2024\n\n3.7/4.0 GPA, Dean’s List and Tiger Scholarship Recipient\nDepartmental honors, Mary Hudson Scarborough Award for Excellence in Mathematics\nData Coordinator, Director of Finance on Executive Board for Alpha Omicron Pi Sorority\nWinner of the 2023 (1st place) and 2024 (3rd place) Towson University Data Analytics Competition"
+  },
+  {
+    "objectID": "undergrad/competition.html",
+    "href": "undergrad/competition.html",
+    "title": "Data Analytics Competitions",
+    "section": "",
+    "text": "Data Analytics Competitions\n\n\nFirst Place - Towson University Data Analytics Competition 2023\nTowson University, Towson, MD | Spring 2023\n\n[Add your summary of the competition and what you did to win] - Key achievement point 1 - Key achievement point 2 - Tools/Techniques used\n\n\n\n\nProject Presentation\n\n\nDownload Presentation\n\n\n\n\nThird Place - Towson University Data Analytics Competition 2024\nTowson University, Towson, MD | Spring 2024\n\n[Add your summary of the competition and what you did] - Key achievement point 1 - Key achievement point 2 - Tools/Techniques used\n\n\n\n\nProject Presentation\n\n\nDownload Presentation"
   }
 ]

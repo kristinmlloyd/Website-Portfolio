@@ -24,7 +24,8 @@ I'm currently pursuing my M.S. in Data Science and Analytics at Georgetown Unive
 *Expected May 2026*
 
 - Related Coursework: Data Science and Analytics, Probability Modeling/Statistical Computing, Data Science and Climate Change
-- Participated in the DataKind D.C. Hackathon, extracted unstructured paragraph data and transformed it into organized data frames using Python
+- On the leadership committee for Georgetown Women in Data Science
+- Participant in the DataKind D.C. Hackathon
 :::
 
 ::: {.degree-box}
