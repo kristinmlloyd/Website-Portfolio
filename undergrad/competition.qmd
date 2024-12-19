@@ -5,34 +5,32 @@
 *Towson University, Towson, MD | Spring 2023*
 
 ::: {.competition-content}
-[Add your summary of the competition and what you did to win]
-- Key achievement point 1
-- Key achievement point 2
-- Tools/Techniques used
+Conducted market analysis for DAP, a leading construction adhesives company, uncovering key competitive insights that led to actionable recommendations. Through analysis of sales data and digital presence, identified critical market opportunities in the professional product segment.
 
-![](../images/first1.png){.award-image width="300px" style="border-radius: 8px;"}
-![](../images/first2.png){.award-image width="300px" style="border-radius: 8px;"}
+- Tools: Excel, Data Analysis, Market Research, Competitive Analysis
+
+![](../images/first1.png){.award-image width="500px" style="border-radius: 8px;"}
+![](../images/first2.png){.award-image width="500px" style="border-radius: 8px;"}
 :::
 
 ::: {.presentation-section}
 ### Project Presentation
-<iframe src="../images/LloydVisualization.pdf" width="100%" height="500px" style="border: none;"></iframe>
+<iframe src="../images/LloydAsare.pdf" width="100%" height="500px" style="border: none;"></iframe>
 
-[Download Presentation](../images/LloydVisualization.pdf){.download-btn}
+[Download Presentation](../images/LloydAsare.pdf){.download-btn}
 :::
 :::
 
 ::: {.competition-card}
-### Third Place - Towson University Data Analytics Competition 2024  
+### Third Place - Towson University Data Analytics Competition 2024
 *Towson University, Towson, MD | Spring 2024*
 
 ::: {.competition-content}
-[Add your summary of the competition and what you did]
-- Key achievement point 1
-- Key achievement point 2
-- Tools/Techniques used
+Conducted market analysis for DAP, a leading construction adhesives company, uncovering key competitive insights that led to actionable recommendations. Through analysis of sales data and digital presence, identified critical market opportunities in the professional product segment.
 
-![](../images/first1.png){.award-image width="300px" style="border-radius: 8px;"}
+- Tools: Excel, Data Analysis, Market Research, Competitive Analysis
+
+![](../images/3rd.png){.award-image width="1000px" style="border-radius: 8px;"}
 :::
 
 ::: {.presentation-section}
