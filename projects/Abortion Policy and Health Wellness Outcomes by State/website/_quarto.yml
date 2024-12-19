@@ -1,5 +1,8 @@
 project:
   type: website
+  resources:
+    - data/clean_data
+    - images
   output-dir: _site
 
 website:

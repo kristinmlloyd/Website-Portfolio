@@ -68,10 +68,11 @@ protection_policy_columns <- c("protections_to_enter_a_clinic", "shield_law_prot
 
 </iframe>
 
+
 [Project Presentation Download](images/presentation_slides.pdf)
 
 ## Data Download
 
 The data used for this analysis is available for download in CSV format. Please click the link below to access the dataset.
 
--   [Merged Dataset](data/clean_data/merged_data.csv)
+-   [Merged Dataset](data/clean_data/merged_data.csv){.external download="merged_data.csv"}

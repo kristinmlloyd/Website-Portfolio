@@ -1,0 +1,25 @@
+---
+title: "LLM usage log"
+---
+
+LLM tools were used in the following way for the tasks below
+
+## Brainstorming
+
+* LLM tools were used to provide feedback on my project plan
+
+## Writing: 
+
+* Proofreading
+* Literature review summarization 
+* Turning my speech-to-text into paragraphs
+
+## Code: 
+
+* I used LLMs to help me understand how to webscrape the type of data I needed, such as setting up drivers and locating elements. The LLM also helped me generate code snippets and troubleshoot errors. 
+* I created maps by merging shapefile data with my datasets and using geopandas for visualization. I leveraged an LLM to learn geospatial data handling and colormap customization.
+* I used an LLM to understand how to structure API calls for Census data, handle FIPS codes, and efficiently loop through multiple years to create a demographics dataset for specific counties.
+* Ran into some problems coding t-SNE and PCA, utilized LLM's to debug.
+* Ran into some problems coding Random Forest and Decision Trees, utilized LLM's to debug.
+* Leveraged LLM's to make certain plots look more enticing.
+* Leveraged LLM's to help me create citations

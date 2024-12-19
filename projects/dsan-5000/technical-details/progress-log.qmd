@@ -1,0 +1,37 @@
+---
+title: "Progress log"
+---
+
+## Idea Generation
+- Came up with the project concept. Initially, I wanted to focus on disparities in sentencing but decided to focus on the death penalty due to a lot of available data.
+
+## Project Planning
+- Outlined my project, objectives, and methodologies for the project.
+- Identified key research questions and goals.
+
+## Data Collection
+- Located relevant websites with useful data.
+- Scraped online data tables using web scraping tools and techniques.
+
+## Data Cleaning
+- Processed and cleaned raw data to handle inconsistencies, missing values, and errors.
+- Prepared the data for analysis by standardizing formats
+
+## Exploratory Data Analysis (EDA)
+- Conducted EDA to understand patterns and trends in the data.
+- Developed a narrative highlighting the relationship between race, geography, and death penalty cases.
+
+## Unsupervised Learning
+- Applied clustering techniques (K-means and hierarchical clustering) 
+
+## Supervised Learning
+- Built predictive models (random forest and decision trees) to determine if someone recieved a death penalty sentence based on features like state, race, gender, crime type, and year.
+
+## Report
+- Highlighted key takeaways and implications of the analysis.
+
+## References
+- Added references and in text citations
+
+## Images
+- Added cute images for story telling on each page

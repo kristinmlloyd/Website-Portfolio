@@ -93,7 +93,7 @@ div.csl-indent {
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-2486e1f0a3ee9ee1fc393803a1361cdb.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-5462d0dc975739fea4b7814f85fabdb2.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-ed27da4cc5166ecd7aed0178833e54f4.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -123,9 +123,10 @@ div.csl-indent {
 }</script>
 
 
+<link rel="stylesheet" href="../../styles.css">
 </head>
 
-<body class="nav-fixed">
+<body class="floating nav-fixed">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -193,11 +194,10 @@ div.csl-indent {
     </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
 <!-- sidebar -->
-<!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active">
     <h2 id="toc-title">On this page</h2>
    
   <ul>
@@ -218,9 +218,13 @@ div.csl-indent {
   </ul></li>
   </ul>
 </nav>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content column-page-right" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
@@ -229,7 +233,7 @@ div.csl-indent {
 
 
 
-<div class="quarto-title-meta">
+<div class="quarto-title-meta column-page-right">
 
     
   
@@ -7715,7 +7719,7 @@ Successful: 201
 Failed: 0</code></pre>
 </div>
 </div>
-<p><span class="citation" data-cites="gpt4o_code_gen"><sup><a href="#ref-gpt4o_code_gen" role="doc-biblioref">1</a></sup></span></p>
+<p><span class="citation" data-cites="gpt4o_code_gen">(<a href="#ref-gpt4o_code_gen" role="doc-biblioref"><span>“The Following Code Cell Was Generated Primarily via GPT-4o, OpenAI, Chat.openai.com.”</span> n.d.</a>)</span></p>
 <div id="cell-15" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>FIELDS_2 <span class="op">=</span> {</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"State"</span>: <span class="st">"//div[contains(@class, 'data-section')]//p[starts-with(normalize-space(.), 'State:')]"</span>,</span>
@@ -8606,7 +8610,7 @@ Successful: 20
 Failed: 0</code></pre>
 </div>
 </div>
-<p><span class="citation" data-cites="innocence_project"><sup><a href="#ref-innocence_project" role="doc-biblioref">2</a></sup></span></p>
+<p><span class="citation" data-cites="innocence_project">(<a href="#ref-innocence_project" role="doc-biblioref">Innocence Project 2024</a>)</span></p>
 </section>
 <section id="webscraping-petitions" class="level2">
 <h2 class="anchored" data-anchor-id="webscraping-petitions">Webscraping Petitions</h2>
@@ -8777,7 +8781,7 @@ Processed: carlos-trevino-in-texas
 31  UPDATE 9/16/2020: This execution has been stay...  </code></pre>
 </div>
 </div>
-<p><span class="citation" data-cites="action_network_petition"><sup><a href="#ref-action_network_petition" role="doc-biblioref">3</a></sup></span></p>
+<p><span class="citation" data-cites="action_network_petition">(<a href="#ref-action_network_petition" role="doc-biblioref">Action Network 2024</a>)</span></p>
 <div id="cell-25" class="cell" data-execution_count="22">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>df.to_csv(<span class="st">"../../data/raw-data/petitions_descriptions.csv"</span>, index<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -8849,7 +8853,7 @@ Processed: carlos-trevino-in-texas
 </div>
 </div>
 </div>
-<p><span class="citation" data-cites="wiki_capital_punishment"><sup><a href="#ref-wiki_capital_punishment" role="doc-biblioref">4</a></sup></span></p>
+<p><span class="citation" data-cites="wiki_capital_punishment">(<a href="#ref-wiki_capital_punishment" role="doc-biblioref">Wikipedia contributors 2024</a>)</span></p>
 </section>
 </section>
 <section id="summary" class="level1">
@@ -8901,48 +8905,48 @@ Processed: carlos-trevino-in-texas
 </section>
 </section>
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body" data-entry-spacing="0" data-line-spacing="2" role="list">
-<div id="ref-gpt4o_code_gen" class="csl-entry" role="listitem">
-<div class="csl-left-margin">1. </div><div class="csl-right-inline">The following code cell was generated primarily via GPT-4o, OpenAI, chat.openai.com.</div>
-</div>
-<div id="ref-innocence_project" class="csl-entry" role="listitem">
-<div class="csl-left-margin">2. </div><div class="csl-right-inline">Innocence Project. <a href="https://innocenceproject.org/all-cases/page/2/?sortColumn=title&amp;sortOrder=asc">All cases - the innocence project</a>. (2024).</div>
-</div>
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
 <div id="ref-action_network_petition" class="csl-entry" role="listitem">
-<div class="csl-left-margin">3. </div><div class="csl-right-inline">Action Network. <a href="https://actionnetwork.org/petitions/tell-congress-abolish-the-federal-death-penalty/">Tell congress: Abolish the federal death penalty</a>. (2024).</div>
-</div>
-<div id="ref-wiki_capital_punishment" class="csl-entry" role="listitem">
-<div class="csl-left-margin">4. </div><div class="csl-right-inline">Wikipedia contributors. <a href="https://en.wikipedia.org/wiki/Capital_punishment_in_the_United_States">Capital punishment in the united states</a>. (2024).</div>
-</div>
-<div id="ref-gpt4o" class="csl-entry" role="listitem">
-<div class="csl-left-margin">5. </div><div class="csl-right-inline">ChatGPT, version-4o, OpenAI, nov-01, 2024, chat.openai.com.</div>
-</div>
-<div id="ref-dpic_executions" class="csl-entry" role="listitem">
-<div class="csl-left-margin">6. </div><div class="csl-right-inline">Death Penalty Information Center. <a href="https://deathpenaltyinfo.org/database/executions">Execution database</a>. (2024).</div>
-</div>
-<div id="ref-gss_data" class="csl-entry" role="listitem">
-<div class="csl-left-margin">7. </div><div class="csl-right-inline">NORC at the University of Chicago. <a href="https://gss.norc.org/us/en/gss/get-the-data.html">Get the data - general social survey</a>. (2024).</div>
-</div>
-<div id="ref-mcadams1998racial" class="csl-entry" role="listitem">
-<div class="csl-left-margin">8. </div><div class="csl-right-inline">McAdams, J. C. <a href="https://doi.org/10.2307/1192433">Racial disparity and the death penalty</a>. <em>Law and Contemporary Problems</em> <strong>61</strong>, 153–170 (1998).</div>
-</div>
-<div id="ref-bbc_death_penalty_2020" class="csl-entry" role="listitem">
-<div class="csl-left-margin">9. </div><div class="csl-right-inline">BBC News. <a href="https://www.bbc.com/news/world-us-canada-55236260">Death penalty: US executes brandon bernard despite clemency plea</a>. (2020).</div>
-</div>
-<div id="ref-census_garm" class="csl-entry" role="listitem">
-<div class="csl-left-margin">10. </div><div class="csl-right-inline">Bureau, U. S. C. <a href="https://www2.census.gov/geo/pdfs/reference/GARM/Ch4GARM.pdf">Geographic areas reference manual: Chapter 4</a>. (2024).</div>
-</div>
-<div id="ref-pmc_2782848" class="csl-entry" role="listitem">
-<div class="csl-left-margin">11. </div><div class="csl-right-inline">Unknown, A. <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC2782848/">Assessing the race crime and ethnicity crime relationship in a sample of serious adolescent delinquents</a>. <em>Public Library of Science (PLoS)</em> <strong>10</strong>, 1–10 (2009).</div>
-</div>
-<div id="ref-statista_murder_race" class="csl-entry" role="listitem">
-<div class="csl-left-margin">12. </div><div class="csl-right-inline">Department, S. R. <a href="https://www.statista.com/statistics/1466623/murder-offenders-in-the-us-by-race/">Murder offenders in the u.s. By race</a>. (2024).</div>
+Action Network. 2024. <span>“Tell Congress: Abolish the Federal Death Penalty.”</span> Action Network. <a href="https://actionnetwork.org/petitions/tell-congress-abolish-the-federal-death-penalty/">https://actionnetwork.org/petitions/tell-congress-abolish-the-federal-death-penalty/</a>.
 </div>
 <div id="ref-Baumgartner2020" class="csl-entry" role="listitem">
-<div class="csl-left-margin">13. </div><div class="csl-right-inline">Baumgartner, F. R., Box-Steffensmeier, J. M., Campbell, B. W., Caron, C. &amp; Sherman, H. <a href="https://doi.org/10.1371/journal.pone.0240401">Learning to kill: Why a small handful of counties generates the bulk of US death sentences</a>. <em>PLoS One</em> <strong>15</strong>, e0240401 (2020).</div>
+Baumgartner, Frank R., Janet M. Box-Steffensmeier, Benjamin W. Campbell, Christian Caron, and Hailey Sherman. 2020. <span>“Learning to Kill: Why a Small Handful of Counties Generates the Bulk of US Death Sentences.”</span> <em>PLoS One</em> 15 (10): e0240401. <a href="https://doi.org/10.1371/journal.pone.0240401">https://doi.org/10.1371/journal.pone.0240401</a>.
+</div>
+<div id="ref-bbc_death_penalty_2020" class="csl-entry" role="listitem">
+BBC News. 2020. <span>“Death Penalty: US Executes Brandon Bernard Despite Clemency Plea.”</span> <a href="https://www.bbc.com/news/world-us-canada-55236260">https://www.bbc.com/news/world-us-canada-55236260</a>.
+</div>
+<div id="ref-census_garm" class="csl-entry" role="listitem">
+Bureau, U. S. Census. 2024. <span>“Geographic Areas Reference Manual: Chapter 4.”</span> <a href="https://www2.census.gov/geo/pdfs/reference/GARM/Ch4GARM.pdf">https://www2.census.gov/geo/pdfs/reference/GARM/Ch4GARM.pdf</a>.
 </div>
 <div id="ref-DeathPenaltyInfo2024" class="csl-entry" role="listitem">
-<div class="csl-left-margin">14. </div><div class="csl-right-inline">Center, D. P. I. <a href="https://deathpenaltyinfo.org/research/analysis/reports/in-depth/the-death-penalty-in-black-and-white-who-lives-who-dies-who-decides">The death penalty in black and white: Who lives, who dies, who decides</a>. (2024).</div>
+Center, Death Penalty Information. 2024. <span>“The Death Penalty in Black and White: Who Lives, Who Dies, Who Decides.”</span> <a href="https://deathpenaltyinfo.org/research/analysis/reports/in-depth/the-death-penalty-in-black-and-white-who-lives-who-dies-who-decides">https://deathpenaltyinfo.org/research/analysis/reports/in-depth/the-death-penalty-in-black-and-white-who-lives-who-dies-who-decides</a>.
+</div>
+<div id="ref-gpt4o" class="csl-entry" role="listitem">
+<span>“ChatGPT, Version-4o, OpenAI, Nov-01, 2024, Chat.openai.com.”</span> n.d.
+</div>
+<div id="ref-dpic_executions" class="csl-entry" role="listitem">
+Death Penalty Information Center. 2024. <span>“Execution Database.”</span> Death Penalty Information Center. <a href="https://deathpenaltyinfo.org/database/executions">https://deathpenaltyinfo.org/database/executions</a>.
+</div>
+<div id="ref-statista_murder_race" class="csl-entry" role="listitem">
+Department, Statista Research. 2024. <span>“Murder Offenders in the u.s. By Race.”</span> <a href="https://www.statista.com/statistics/1466623/murder-offenders-in-the-us-by-race/">https://www.statista.com/statistics/1466623/murder-offenders-in-the-us-by-race/</a>.
+</div>
+<div id="ref-innocence_project" class="csl-entry" role="listitem">
+Innocence Project. 2024. <span>“All Cases - the Innocence Project.”</span> Innocence Project. <a href="https://innocenceproject.org/all-cases/page/2/?sortColumn=title&amp;sortOrder=asc">https://innocenceproject.org/all-cases/page/2/?sortColumn=title&amp;sortOrder=asc</a>.
+</div>
+<div id="ref-mcadams1998racial" class="csl-entry" role="listitem">
+McAdams, John C. 1998. <span>“Racial Disparity and the Death Penalty.”</span> <em>Law and Contemporary Problems</em> 61 (4): 153–70. <a href="https://doi.org/10.2307/1192433">https://doi.org/10.2307/1192433</a>.
+</div>
+<div id="ref-gss_data" class="csl-entry" role="listitem">
+NORC at the University of Chicago. 2024. <span>“Get the Data - General Social Survey.”</span> National Opinion Research Center. <a href="https://gss.norc.org/us/en/gss/get-the-data.html">https://gss.norc.org/us/en/gss/get-the-data.html</a>.
+</div>
+<div id="ref-gpt4o_code_gen" class="csl-entry" role="listitem">
+<span>“The Following Code Cell Was Generated Primarily via GPT-4o, OpenAI, Chat.openai.com.”</span> n.d.
+</div>
+<div id="ref-pmc_2782848" class="csl-entry" role="listitem">
+Unknown, Author(s). 2009. <span>“Assessing the Race Crime and Ethnicity Crime Relationship in a Sample of Serious Adolescent Delinquents.”</span> <em>Public Library of Science (PLoS)</em> 10 (5): 1–10. <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC2782848/">https://pmc.ncbi.nlm.nih.gov/articles/PMC2782848/</a>.
+</div>
+<div id="ref-wiki_capital_punishment" class="csl-entry" role="listitem">
+Wikipedia contributors. 2024. <span>“Capital Punishment in the United States.”</span> Wikipedia, The Free Encyclopedia. <a href="https://en.wikipedia.org/wiki/Capital_punishment_in_the_United_States">https://en.wikipedia.org/wiki/Capital_punishment_in_the_United_States</a>.
 </div>
 </div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
