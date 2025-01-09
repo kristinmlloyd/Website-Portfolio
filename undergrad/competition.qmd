@@ -5,9 +5,9 @@
 *Towson University, Towson, MD | Spring 2023*
 
 ::: {.competition-content}
-Conducted market analysis for DAP, a leading construction adhesives company, uncovering key competitive insights that led to actionable recommendations. Through analysis of sales data and digital presence, identified critical market opportunities in the professional product segment.
+Analyzed employee utilization rates at SC&H Group, revealing insights into resource allocation and operational efficiency, and providing strategic recommendations to optimize utilization rates.
 
-- Tools: Excel, Data Analysis, Market Research, Competitive Analysis
+- Tools: Excel, Data Analysis, Strategic Planning, Visualization (Canva)
 
 ![](../images/first1.png){.award-image width="500px" style="border-radius: 8px;"}
 ![](../images/first2.png){.award-image width="500px" style="border-radius: 8px;"}
@@ -28,7 +28,7 @@ Conducted market analysis for DAP, a leading construction adhesives company, unc
 ::: {.competition-content}
 Conducted market analysis for DAP, a leading construction adhesives company, uncovering key competitive insights that led to actionable recommendations. Through analysis of sales data and digital presence, identified critical market opportunities in the professional product segment.
 
-- Tools: Excel, Data Analysis, Market Research, Competitive Analysis
+- Tools: Excel, Data Analysis, Market Research, Competitive Analysis, Visualization (Canva)
 
 ![](../images/3rd.png){.award-image width="1000px" style="border-radius: 8px;"}
 :::

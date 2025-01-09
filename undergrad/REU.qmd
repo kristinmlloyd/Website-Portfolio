@@ -1,0 +1,22 @@
+# Research Experience for Undergraduates (REU) {.section-title}
+
+::: {.competition-card}
+### Mathematical Biology REU
+*University Name, Location | Summer 2024*
+
+::: {.competition-content}
+Conducted mathematical modeling research in biology, focusing on [specific topic or system, e.g., predator-prey dynamics or disease modeling]. Developed and analyzed mathematical models to explore [specific outcomes or insights], providing key findings that contributed to a deeper understanding of [area of application].
+
+- **Tools:** MATLAB, Python, Differential Equations, Data Analysis, Visualization (Matplotlib)
+
+![](../images/reu1.png){.award-image width="500px" style="border-radius: 8px;"}
+![](../images/reu2.jpeg){.award-image width="500px" style="border-radius: 8px;"}
+:::
+
+::: {.presentation-section}
+### Research Presentation
+<iframe src="../images/deeplearning.pdf" width="100%" height="500px" style="border: none;"></iframe>
+
+[Download Presentation](../presentations/REU_Presentation.pdf){.download-btn}
+:::
+:::
