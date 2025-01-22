@@ -1,0 +1,53 @@
+State,abortion_policies,abortion_related_legislative_actions_introduced_2023,medicaid_expansion_status,total_abortion_ban,week_ban_6,week_ban_12,week_ban_15,week_ban_18_to_23,week_ban_24_to_26,no_gestational_ban,state_constitution_excludes_abortion_rights,waiting_period_after_counseling,waiting_period_after_required_in_person_counseling,forced_ultrasound,state_medicaid_coverage_ban,private_insurance_coverage_ban,medication_abortion_in_person_requirement,mailing_abortion_pills_banned,medically_unnecessary_clinic_regulations,parental_consent_required_for_minors_abortion,parental_notice_required_for_a_minors_abortion,only_physicians_can_provide_abortions,state_constitution_protects_abortion_rights,state_medicaid_funds_cover_abortion,private_health_plans_required_to_cover_abortion,healthcare_professionals_besides_physicians_provide_abortions,state_fund_for_abortion_care,protections_to_enter_a_clinic,shield_law_protecting_providers,patient_reproductive_health_data_privacy,prenatal_and_postpartum_home_visits_2017,infant_care_parenting_education_2017,postpartum_visit_2017
+Alabama,most restrictive,22,0,1,0,0,0,0,0,0,1,1,0,1,1,0,1,0,1,1,0,1,0,0,0,0,0,0,0,0,0,1,1
+Alaska,protective,26,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,0,0,0,1,0,1
+Arizona,very restrictive,58,1,0,0,0,1,0,0,0,0,1,1,1,1,0,1,1,1,1,0,1,0,0,0,0,0,0,1,0,0,0,1
+Arkansas,most restrictive,68,1,1,0,0,0,0,0,0,0,1,1,1,1,0,1,0,1,1,0,1,0,0,0,0,0,0,0,0,1,1,1
+California,very protective,167,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1
+Colorado,protective,47,1,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,1,0,1,1,0,0,0,1
+Connecticut,protective,63,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,1,0,0,1,0,1,0,1
+Delaware,some restrictions/protections,26,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,1,1
+District of Colombia,protective,,1,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,1,1,1
+Florida,most restrictive,99,0,0,1,0,0,0,0,0,0,1,1,1,1,0,1,1,1,1,1,1,0,0,0,0,0,0,0,0,,,
+Georgia,very restrictive,115,0,0,1,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,1,1,1
+Hawaii,protective,87,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,0,1,0,0,1,1
+Idaho,most restrictive,35,1,1,0,0,0,0,0,0,0,1,0,0,1,1,0,0,0,1,0,1,0,0,0,0,0,0,0,0,1,0,1
+Illinois,protective,245,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,1,1,1,0,1
+Indiana,most restrictive,77,1,1,0,0,0,0,0,0,0,1,1,1,1,1,1,0,1,1,0,1,0,0,0,0,0,0,0,0,1,0,1
+Iowa,most restrictive,108,1,0,1,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,1,0,1
+Kansas,restrictive,142,0,0,0,0,0,1,0,0,0,0,0,0,1,1,0,0,0,1,0,1,0,0,0,0,0,1,0,0,,,
+Kentucky,most restrictive,125,1,1,0,0,0,0,0,0,0,1,1,1,1,1,1,0,1,1,0,1,0,0,0,0,0,0,0,0,0,1,1
+Louisiana,most restrictive,52,1,1,0,0,0,0,0,0,1,1,1,1,1,0,1,0,1,1,0,1,0,0,0,0,0,0,0,0,,,
+Maine,protective,66,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,1,1,0,0,0,1
+Maryland,very protective,73,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,1,0,0,1,1,1,0,1,1,0,0,0,1
+Massachusetts,protective,188,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,1,1,1,1,1,0,1,0,1
+Michigan,very protective,188,1,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,1,0,0,1,0,1,1,0,1,1,1
+Minnesota,very protective,226,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,0,1,0,1,1,1
+Mississippi,most restrictive,85,0,1,0,0,0,0,0,0,0,1,1,1,1,0,1,0,1,1,0,1,0,0,0,0,0,0,0,0,1,1,1
+Missouri,most restrictive,152,1,1,0,0,0,0,0,0,0,1,1,0,1,1,1,0,1,1,1,1,0,0,0,0,0,0,0,0,1,0,1
+Montana,protective,127,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,1,0,1,0,0,1,0,1
+Nebraska,very restrictive,41,1,0,0,1,0,0,0,0,0,1,0,0,1,1,1,0,1,1,0,1,0,0,0,0,0,0,0,0,1,0,1
+Nevada,some restrictions/protections,86,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,1,0,0,1,0
+New Hampshire,some restrictions/protections,61,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,1,0,1,0,0,1,0,1
+New Jersey,very protective,275,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,1,0,1,1,1
+New Mexico,very protective,30,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,0,1,0,1,0,1
+New York,very protective,361,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,0,1,0,1
+North Carolina,restrictive,163,1,0,0,1,0,0,0,0,0,1,1,0,1,0,0,0,1,1,0,0,0,0,0,1,0,1,1,0,,,
+North Dakota,restrictive,39,1,0,0,0,0,0,1,0,0,1,0,0,1,1,1,0,1,1,0,1,0,0,0,0,0,0,0,0,1,1,1
+Ohio,some restrictions/protections,67,1,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,1,1,0,0,1,0,0,1,0,0,0,0,1,0,1
+Oklahoma,most restrictive,103,1,1,0,0,0,0,0,0,0,1,0,0,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,1,1,1
+Oregon,most protective,61,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,0,,,
+Pennsylvania,restrictive,160,1,0,0,0,0,0,1,0,0,1,0,0,1,0,0,0,1,1,0,1,0,0,0,0,0,0,1,0,,,
+Rhode Island,some restrictions/protections,101,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,1,0,0,0,1,0,1,0,0,1,0,,,
+South Carolina,most restrictive,154,0,0,1,0,0,0,0,0,0,1,0,1,1,0,1,0,1,1,0,1,0,0,0,0,0,0,0,0,,,
+South Dakota,most restrictive,30,0,1,0,0,0,0,0,0,0,1,1,0,1,0,1,0,1,0,1,1,0,0,0,0,0,0,0,0,1,0,1
+Tennessee,most restrictive,166,0,1,0,0,0,0,0,0,1,1,1,1,1,0,1,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,1
+Texas,most restrictive,247,1,1,0,0,0,0,0,0,0,1,1,1,1,1,1,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,1
+Utah,very restrictive,54,1,0,0,0,0,1,0,0,0,1,1,0,1,1,1,0,1,1,1,1,0,0,0,0,0,0,0,0,,,
+Vermont,most protective,51,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,1,1,0,1,0,1
+Virginia,restrictive,137,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,1,1,0,0,0,0,1,0,0,0,0,1,1,1
+Washington,protective,121,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,1,1,1,1,1,1
+West Virginia,most restrictive,143,0,1,0,0,0,0,0,0,1,1,0,0,1,0,1,0,1,0,1,1,0,0,0,0,0,0,0,0,1,0,1
+Wisconsin,restrictive,112,0,0,0,0,0,1,0,0,0,1,1,1,1,0,1,0,1,1,0,1,0,0,0,0,0,1,0,0,,,
+Wyoming,restrictive,33,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,,,
+US,,5463,40,13,4,2,1,4,17,10,4,24,15,13,32,10,19,3,24,27,16,26,4,17,10,24,4,17,22,3,30,17,39
