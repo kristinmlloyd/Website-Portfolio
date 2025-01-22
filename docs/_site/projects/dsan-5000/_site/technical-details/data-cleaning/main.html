@@ -1,0 +1,2936 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.32">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Data Cleaning – DSAN-5000: Project</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../assets/gu-logo.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-2486e1f0a3ee9ee1fc393803a1361cdb.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-ed27da4cc5166ecd7aed0178833e54f4.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">DSAN-5000: Project</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../report/report.html"> 
+<span class="menu-text">Report</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-technical-details" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Technical details</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-technical-details">    
+        <li>
+    <a class="dropdown-item" href="../../technical-details/data-collection/main.html">
+ <span class="dropdown-text">Data-collection</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../technical-details/data-cleaning/main.html">
+ <span class="dropdown-text">Data-cleaning</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../technical-details/eda/main.html">
+ <span class="dropdown-text">Exploratory Data Analysis</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../technical-details/unsupervised-learning/main.html">
+ <span class="dropdown-text">Unsupervised Learning</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../technical-details/supervised-learning/main.html">
+ <span class="dropdown-text">Supervised Learning</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../technical-details/llm-usage-log.html">
+ <span class="dropdown-text">LLM usage Log</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../technical-details/progress-log.html">
+ <span class="dropdown-text">Progress Log</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#methods" id="toc-methods" class="nav-link" data-scroll-target="#methods">Methods</a>
+  <ul class="collapse">
+  <li><a href="#key-data-processing-steps" id="toc-key-data-processing-steps" class="nav-link" data-scroll-target="#key-data-processing-steps">Key Data Processing Steps</a>
+  <ul class="collapse">
+  <li><a href="#standardization" id="toc-standardization" class="nav-link" data-scroll-target="#standardization">Standardization</a></li>
+  <li><a href="#data-transformation" id="toc-data-transformation" class="nav-link" data-scroll-target="#data-transformation">Data Transformation</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#code" id="toc-code" class="nav-link" data-scroll-target="#code">Code</a>
+  <ul class="collapse">
+  <li><a href="#innocence-project---death-penalty-exonerations" id="toc-innocence-project---death-penalty-exonerations" class="nav-link" data-scroll-target="#innocence-project---death-penalty-exonerations">Innocence Project - Death Penalty Exonerations</a></li>
+  <li><a href="#innocence-project---all-exonerations" id="toc-innocence-project---all-exonerations" class="nav-link" data-scroll-target="#innocence-project---all-exonerations">Innocence Project - All Exonerations</a></li>
+  <li><a href="#upcoming-executions" id="toc-upcoming-executions" class="nav-link" data-scroll-target="#upcoming-executions">Upcoming Executions</a></li>
+  <li><a href="#death-penalty-beliefs" id="toc-death-penalty-beliefs" class="nav-link" data-scroll-target="#death-penalty-beliefs">Death Penalty Beliefs</a></li>
+  <li><a href="#death-penalty-petitions" id="toc-death-penalty-petitions" class="nav-link" data-scroll-target="#death-penalty-petitions">Death Penalty Petitions</a></li>
+  <li><a href="#states-withwithout-death-penalty" id="toc-states-withwithout-death-penalty" class="nav-link" data-scroll-target="#states-withwithout-death-penalty">States with/without Death Penalty</a></li>
+  <li><a href="#sentence-outcomes" id="toc-sentence-outcomes" class="nav-link" data-scroll-target="#sentence-outcomes">Sentence Outcomes</a></li>
+  <li><a href="#sentences" id="toc-sentences" class="nav-link" data-scroll-target="#sentences">Sentences</a></li>
+  <li><a href="#counties" id="toc-counties" class="nav-link" data-scroll-target="#counties">Counties</a></li>
+  <li><a href="#all-executions" id="toc-all-executions" class="nav-link" data-scroll-target="#all-executions">All Executions</a></li>
+  </ul></li>
+  <li><a href="#summary-and-interpretation" id="toc-summary-and-interpretation" class="nav-link" data-scroll-target="#summary-and-interpretation">Summary and Interpretation</a>
+  <ul class="collapse">
+  <li><a href="#overview" id="toc-overview" class="nav-link" data-scroll-target="#overview">Overview</a></li>
+  <li><a href="#datasets-processed" id="toc-datasets-processed" class="nav-link" data-scroll-target="#datasets-processed">Datasets Processed</a>
+  <ul class="collapse">
+  <li><a href="#innocence-project-data" id="toc-innocence-project-data" class="nav-link" data-scroll-target="#innocence-project-data">Innocence Project Data</a></li>
+  <li><a href="#execution-records" id="toc-execution-records" class="nav-link" data-scroll-target="#execution-records">Execution Records</a></li>
+  <li><a href="#public-opinion-policy" id="toc-public-opinion-policy" class="nav-link" data-scroll-target="#public-opinion-policy">Public Opinion &amp; Policy</a></li>
+  <li><a href="#geographic-data" id="toc-geographic-data" class="nav-link" data-scroll-target="#geographic-data">Geographic Data</a></li>
+  </ul></li>
+  </ul></li>
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+    </div>
+<!-- main -->
+<main class="content column-page-right" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Data Cleaning</h1>
+</div>
+
+
+
+<div class="quarto-title-meta column-page-right">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p><img src="../../assets/broom.png" class="img-fluid" data-align="left" width="75"></p>
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
+<p>The death penalty has been a deeply debated topic in the United States, sparking conversations about justice, fairness, and its impact on society. This project takes a closer look at the death penalty by analyzing detailed data from multiple sources, including information about exonerees, scheduled executions, public opinions, and state policies. By organizing and exploring this data, the goal is to uncover patterns, highlight disparities, and better understand how the death penalty is applied. The project offers a fresh perspective on an issue that continues to shape the nation’s justice system and public discourse.</p>
+</section>
+<section id="methods" class="level1">
+<h1>Methods</h1>
+<section id="key-data-processing-steps" class="level2">
+<h2 class="anchored" data-anchor-id="key-data-processing-steps">Key Data Processing Steps</h2>
+<section id="standardization" class="level3">
+<h3 class="anchored" data-anchor-id="standardization">Standardization</h3>
+<ul>
+<li>Converted column names to lowercase with underscores</li>
+<li>Standardized date formats by splitting into month/day/year</li>
+<li>Created binary indicators (0/1) for yes/no fields</li>
+<li>Removed unnecessary information</li>
+</ul>
+</section>
+<section id="data-transformation" class="level3">
+<h3 class="anchored" data-anchor-id="data-transformation">Data Transformation</h3>
+<ul>
+<li>Split multi-value fields (charges, convictions, contributing causes) into binary columns</li>
+<li>Cleaned and formatted text data from petitions</li>
+</ul>
+</section>
+</section>
+</section>
+<section id="code" class="level1">
+<h1>Code</h1>
+<div id="cell-7" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="innocence-project---death-penalty-exonerations" class="level3">
+<h3 class="anchored" data-anchor-id="innocence-project---death-penalty-exonerations">Innocence Project - Death Penalty Exonerations</h3>
+<div id="cell-9" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>death_penalty_df <span class="op">=</span> pd.read_csv(<span class="st">"../../data/raw-data/innocence-project-death-penalty-cases.csv"</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>death_penalty_df.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="4">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Name</th>
+<th data-quarto-table-cell-role="th">URL</th>
+<th data-quarto-table-cell-role="th">Time Served</th>
+<th data-quarto-table-cell-role="th">State</th>
+<th data-quarto-table-cell-role="th">Charge</th>
+<th data-quarto-table-cell-role="th">Conviction</th>
+<th data-quarto-table-cell-role="th">Sentence</th>
+<th data-quarto-table-cell-role="th">Incident Date</th>
+<th data-quarto-table-cell-role="th">Conviction Date</th>
+<th data-quarto-table-cell-role="th">Exoneration Date</th>
+<th data-quarto-table-cell-role="th">Accused Pleaded Guilty</th>
+<th data-quarto-table-cell-role="th">Contributing Causes of Conviction</th>
+<th data-quarto-table-cell-role="th">Death Penalty Case</th>
+<th data-quarto-table-cell-role="th">Race of Exoneree</th>
+<th data-quarto-table-cell-role="th">Race of Victim</th>
+<th data-quarto-table-cell-role="th">Status</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>Clemente Aguirre-Jarquin</td>
+<td>https://innocenceproject.org/cases/clemente-ag...</td>
+<td>NaN</td>
+<td>Florida</td>
+<td>Murder, Burglary</td>
+<td>First-degree Murder, Burglary</td>
+<td>Death</td>
+<td>06/17/2004</td>
+<td>02/28/2006</td>
+<td>11/05/2018</td>
+<td>No</td>
+<td>Unvalidated or Improper Forensic Science</td>
+<td>Yes</td>
+<td>Latinx</td>
+<td>Caucasian</td>
+<td>Exonerated by DNA</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>Kirk Bloodsworth</td>
+<td>https://innocenceproject.org/cases/kirk-bloods...</td>
+<td>8 years</td>
+<td>Maryland</td>
+<td>Murder, Sexual Assault, Rape</td>
+<td>First-degree Murder, Sexual Assault, Rape</td>
+<td>Death</td>
+<td>06/25/1984</td>
+<td>03/08/1985</td>
+<td>06/28/1993</td>
+<td>No</td>
+<td>Eyewitness Misidentification, Government Misco...</td>
+<td>Yes</td>
+<td>Caucasian</td>
+<td>Caucasian</td>
+<td>Exonerated by DNA</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>Kennedy Brewer</td>
+<td>https://innocenceproject.org/cases/kennedy-bre...</td>
+<td>15 years</td>
+<td>Mississippi</td>
+<td>Capital Murder, Sexual Battery</td>
+<td>Capital Murder, Sexual Battery</td>
+<td>Death</td>
+<td>05/03/1992</td>
+<td>03/24/1995</td>
+<td>02/15/2008</td>
+<td>No</td>
+<td>Government Misconduct, Unvalidated or Improper...</td>
+<td>Yes</td>
+<td>African American</td>
+<td>African American</td>
+<td>Exonerated by DNA</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>Rolando Cruz</td>
+<td>https://innocenceproject.org/cases/rolando-cruz/</td>
+<td>10 years</td>
+<td>Illinois</td>
+<td>Rape, Murder, Kidnapping, Home Invasion</td>
+<td>Murder, Rape, Aggravated Kidnapping (2 cts.), ...</td>
+<td>Death</td>
+<td>02/25/1983</td>
+<td>02/22/1985</td>
+<td>11/03/1995</td>
+<td>No</td>
+<td>False Confessions or Admissions, Government Mi...</td>
+<td>Yes</td>
+<td>Latinx</td>
+<td>Caucasian</td>
+<td>Exonerated by DNA</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>Michael Blair</td>
+<td>https://innocenceproject.org/cases/michael-blair/</td>
+<td>14 years</td>
+<td>Texas</td>
+<td>Capital Murder</td>
+<td>Capital Murder</td>
+<td>Death</td>
+<td>09/04/1993</td>
+<td>09/28/1994</td>
+<td>08/25/2008</td>
+<td>No</td>
+<td>Eyewitness Misidentification, Unvalidated or I...</td>
+<td>Yes</td>
+<td>Asian American</td>
+<td>Caucasian</td>
+<td>Exonerated by DNA</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>I am going to drop the URL column because it is unnecessary information.</p>
+<div id="cell-11" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="st">'URL'</span> <span class="kw">in</span> death_penalty_df.columns:</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    death_penalty_df.drop(columns<span class="op">=</span>[<span class="st">'URL'</span>], inplace<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>I will rename all the columns to lowercase and replace spaces with underscores. This ensures all columns will be in the same format, ensures easy readability, and speeds up the process going forward.</p>
+<div id="cell-13" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>death_penalty_df.columns <span class="op">=</span> death_penalty_df.columns.<span class="bu">str</span>.lower().<span class="bu">str</span>.replace(<span class="st">' '</span>, <span class="st">'_'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>I changed accused_pleaded_guilty and death_penalty case into binary columns, they were formatted as yes/no.</p>
+<div id="cell-15" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>binary_columns <span class="op">=</span> [<span class="st">'accused_pleaded_guilty'</span>, <span class="st">'death_penalty_case'</span>]</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> column <span class="kw">in</span> binary_columns:</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    death_penalty_df[column] <span class="op">=</span> death_penalty_df[column].<span class="bu">apply</span>(<span class="kw">lambda</span> x: <span class="dv">1</span> <span class="cf">if</span> <span class="bu">str</span>(x).lower() <span class="kw">in</span> [<span class="st">'yes'</span>, <span class="st">'y'</span>, <span class="st">'true'</span>, <span class="st">'1'</span>] <span class="cf">else</span> <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>I removed, “years” from the time_served column.</p>
+<div id="cell-17" class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>death_penalty_df[<span class="st">'time_served'</span>] <span class="op">=</span> death_penalty_df[<span class="st">'time_served'</span>].astype(<span class="bu">str</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>death_penalty_df[<span class="st">'time_served'</span>] <span class="op">=</span> death_penalty_df[<span class="st">'time_served'</span>].<span class="bu">str</span>.extract(<span class="vs">r'(\d+)'</span>).astype(<span class="bu">float</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>I separated incident date, conviction date, and exoneration date into month, day, and year.</p>
+<div id="cell-19" class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> date_column <span class="kw">in</span> [<span class="st">'incident_date'</span>, <span class="st">'conviction_date'</span>, <span class="st">'exoneration_date'</span>]:</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> date_column <span class="kw">in</span> death_penalty_df.columns:</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>        death_penalty_df[[<span class="ss">f"</span><span class="sc">{</span>date_column<span class="sc">}</span><span class="ss">_month"</span>, <span class="ss">f"</span><span class="sc">{</span>date_column<span class="sc">}</span><span class="ss">_day"</span>, <span class="ss">f"</span><span class="sc">{</span>date_column<span class="sc">}</span><span class="ss">_year"</span>]] <span class="op">=</span> (</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>            death_penalty_df[date_column].<span class="bu">str</span>.split(<span class="st">'/'</span>, expand<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>        death_penalty_df.drop(columns<span class="op">=</span>[date_column], inplace<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-20" class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Split the 'Charge' column into individual charges </span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>charge_dummies <span class="op">=</span> death_penalty_df[<span class="st">'charge'</span>].<span class="bu">str</span>.get_dummies(sep<span class="op">=</span><span class="st">', '</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>col_counts <span class="op">=</span> {}</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>new_col_names <span class="op">=</span> []</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> col <span class="kw">in</span> charge_dummies.columns:</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> col <span class="kw">in</span> col_counts:</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>        col_counts[col] <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>        new_name <span class="op">=</span> <span class="ss">f"</span><span class="sc">{</span>col<span class="sc">}</span><span class="ss">_</span><span class="sc">{</span>col_counts[col]<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>        col_counts[col] <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>        new_name <span class="op">=</span> col</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>    new_col_names.append(new_name)</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>charge_dummies.columns <span class="op">=</span> new_col_names</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>death_penalty_df <span class="op">=</span> pd.concat([death_penalty_df, charge_dummies], axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>death_penalty_df <span class="op">=</span> death_penalty_df.drop(columns<span class="op">=</span>[<span class="st">'etc.'</span>], errors<span class="op">=</span><span class="st">'ignore'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-21" class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Split the 'Conviction' column into individual charges </span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>conviction_dummies <span class="op">=</span> death_penalty_df[<span class="st">'conviction'</span>].<span class="bu">str</span>.get_dummies(sep<span class="op">=</span><span class="st">', '</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>col_counts <span class="op">=</span> {}</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>new_col_names <span class="op">=</span> []</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> col <span class="kw">in</span> conviction_dummies.columns:</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> col <span class="kw">in</span> col_counts:</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>        col_counts[col] <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>        new_name <span class="op">=</span> <span class="ss">f"</span><span class="sc">{</span>col<span class="sc">}</span><span class="ss">_</span><span class="sc">{</span>col_counts[col]<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>        col_counts[col] <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>        new_name <span class="op">=</span> col</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>    new_col_names.append(new_name)</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>conviction_dummies.columns <span class="op">=</span> new_col_names</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>death_penalty_df <span class="op">=</span> pd.concat([death_penalty_df, conviction_dummies], axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>death_penalty_df <span class="op">=</span> death_penalty_df.drop(columns<span class="op">=</span>[<span class="st">'etc.'</span>], errors<span class="op">=</span><span class="st">'ignore'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-22" class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Split the 'Contributing Causes of Conviction' column into individual causes </span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>causes_dummies <span class="op">=</span> death_penalty_df[<span class="st">'contributing_causes_of_conviction'</span>].<span class="bu">str</span>.get_dummies(sep<span class="op">=</span><span class="st">', '</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>col_counts <span class="op">=</span> {}</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>new_col_names <span class="op">=</span> []</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> col <span class="kw">in</span> causes_dummies.columns:</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> col <span class="kw">in</span> col_counts:</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>        col_counts[col] <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>        new_name <span class="op">=</span> <span class="ss">f"</span><span class="sc">{</span>col<span class="sc">}</span><span class="ss">_</span><span class="sc">{</span>col_counts[col]<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>        col_counts[col] <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>        new_name <span class="op">=</span> col</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>    new_col_names.append(new_name)</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>causes_dummies.columns <span class="op">=</span> new_col_names</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>death_penalty_df <span class="op">=</span> pd.concat([death_penalty_df, causes_dummies], axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>death_penalty_df <span class="op">=</span> death_penalty_df.drop(columns<span class="op">=</span>[<span class="st">'etc.'</span>], errors<span class="op">=</span><span class="st">'ignore'</span>)</span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">New columns created for Contributing Causes:"</span>)</span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(causes_dummies.columns.tolist())</span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Value counts for each cause:"</span>)</span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> col <span class="kw">in</span> causes_dummies.columns:</span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>    count <span class="op">=</span> causes_dummies[col].<span class="bu">sum</span>()</span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> count <span class="op">&gt;</span> <span class="dv">0</span>:  </span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>col<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>count<span class="sc">}</span><span class="ss"> cases"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+New columns created for Contributing Causes:
+['Eyewitness Misidentification', 'False Confessions or Admissions', 'Government Misconduct', 'Inadequate Defense', 'Informants', 'Unvalidated or Improper Forensic Science']
+
+Value counts for each cause:
+Eyewitness Misidentification: 9 cases
+False Confessions or Admissions: 11 cases
+Government Misconduct: 9 cases
+Inadequate Defense: 3 cases
+Informants: 5 cases
+Unvalidated or Improper Forensic Science: 15 cases</code></pre>
+</div>
+</div>
+<p>I am renaming the new columns to match format.</p>
+<div id="cell-24" class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>death_penalty_df.columns <span class="op">=</span> death_penalty_df.columns.<span class="bu">str</span>.lower().<span class="bu">str</span>.replace(<span class="st">' '</span>, <span class="st">'_'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>It is important to check the dataframe head before converting back to a CSV, to make sure it is in good shape.</p>
+<div id="cell-26" class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>death_penalty_df.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="15">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">name</th>
+<th data-quarto-table-cell-role="th">time_served</th>
+<th data-quarto-table-cell-role="th">state</th>
+<th data-quarto-table-cell-role="th">charge</th>
+<th data-quarto-table-cell-role="th">conviction</th>
+<th data-quarto-table-cell-role="th">sentence</th>
+<th data-quarto-table-cell-role="th">accused_pleaded_guilty</th>
+<th data-quarto-table-cell-role="th">contributing_causes_of_conviction</th>
+<th data-quarto-table-cell-role="th">death_penalty_case</th>
+<th data-quarto-table-cell-role="th">race_of_exoneree</th>
+<th data-quarto-table-cell-role="th">...</th>
+<th data-quarto-table-cell-role="th">government_misconduct</th>
+<th data-quarto-table-cell-role="th">inadequate_defense</th>
+<th data-quarto-table-cell-role="th">informants</th>
+<th data-quarto-table-cell-role="th">unvalidated_or_improper_forensic_science</th>
+<th data-quarto-table-cell-role="th">eyewitness_misidentification</th>
+<th data-quarto-table-cell-role="th">false_confessions_or_admissions</th>
+<th data-quarto-table-cell-role="th">government_misconduct</th>
+<th data-quarto-table-cell-role="th">inadequate_defense</th>
+<th data-quarto-table-cell-role="th">informants</th>
+<th data-quarto-table-cell-role="th">unvalidated_or_improper_forensic_science</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>Clemente Aguirre-Jarquin</td>
+<td>NaN</td>
+<td>Florida</td>
+<td>Murder, Burglary</td>
+<td>First-degree Murder, Burglary</td>
+<td>Death</td>
+<td>0</td>
+<td>Unvalidated or Improper Forensic Science</td>
+<td>1</td>
+<td>Latinx</td>
+<td>...</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>Kirk Bloodsworth</td>
+<td>8.0</td>
+<td>Maryland</td>
+<td>Murder, Sexual Assault, Rape</td>
+<td>First-degree Murder, Sexual Assault, Rape</td>
+<td>Death</td>
+<td>0</td>
+<td>Eyewitness Misidentification, Government Misco...</td>
+<td>1</td>
+<td>Caucasian</td>
+<td>...</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>Kennedy Brewer</td>
+<td>15.0</td>
+<td>Mississippi</td>
+<td>Capital Murder, Sexual Battery</td>
+<td>Capital Murder, Sexual Battery</td>
+<td>Death</td>
+<td>0</td>
+<td>Government Misconduct, Unvalidated or Improper...</td>
+<td>1</td>
+<td>African American</td>
+<td>...</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>Rolando Cruz</td>
+<td>10.0</td>
+<td>Illinois</td>
+<td>Rape, Murder, Kidnapping, Home Invasion</td>
+<td>Murder, Rape, Aggravated Kidnapping (2 cts.), ...</td>
+<td>Death</td>
+<td>0</td>
+<td>False Confessions or Admissions, Government Mi...</td>
+<td>1</td>
+<td>Latinx</td>
+<td>...</td>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>Michael Blair</td>
+<td>14.0</td>
+<td>Texas</td>
+<td>Capital Murder</td>
+<td>Capital Murder</td>
+<td>Death</td>
+<td>0</td>
+<td>Eyewitness Misidentification, Unvalidated or I...</td>
+<td>1</td>
+<td>Asian American</td>
+<td>...</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+
+<p>5 rows × 66 columns</p>
+</div>
+</div>
+</div>
+<div id="cell-27" class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>output_path <span class="op">=</span> <span class="st">"../../data/processed-data/innocence-project-death-penalty-cases_cleaned.csv"</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>death_penalty_df.to_csv(output_path, index<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"File saved successfully to </span><span class="sc">{</span>output_path<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>File saved successfully to ../../data/processed-data/innocence-project-death-penalty-cases_cleaned.csv</code></pre>
+</div>
+</div>
+<p><img src="../../assets/2.png" class="img-fluid" data-align="center" width="965"></p>
+</section>
+<section id="innocence-project---all-exonerations" class="level3">
+<h3 class="anchored" data-anchor-id="innocence-project---all-exonerations">Innocence Project - All Exonerations</h3>
+<div id="cell-30" class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>all_cases_df <span class="op">=</span> pd.read_csv(<span class="st">"../../data/raw-data/innocence-project-all-cases.csv"</span>)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>all_cases_df.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="17">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Name</th>
+<th data-quarto-table-cell-role="th">URL</th>
+<th data-quarto-table-cell-role="th">Time Served</th>
+<th data-quarto-table-cell-role="th">State</th>
+<th data-quarto-table-cell-role="th">Charge</th>
+<th data-quarto-table-cell-role="th">Conviction</th>
+<th data-quarto-table-cell-role="th">Sentence</th>
+<th data-quarto-table-cell-role="th">Incident Date</th>
+<th data-quarto-table-cell-role="th">Conviction Date</th>
+<th data-quarto-table-cell-role="th">Exoneration Date</th>
+<th data-quarto-table-cell-role="th">Accused Pleaded Guilty</th>
+<th data-quarto-table-cell-role="th">Contributing Causes of Conviction</th>
+<th data-quarto-table-cell-role="th">Death Penalty Case</th>
+<th data-quarto-table-cell-role="th">Race of Exoneree</th>
+<th data-quarto-table-cell-role="th">Race of Victim</th>
+<th data-quarto-table-cell-role="th">Status</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>A.B. Butler</td>
+<td>https://innocenceproject.org/cases/a-b-butler/</td>
+<td>17 years</td>
+<td>Texas</td>
+<td>Rape, Kidnapping</td>
+<td>Aggravated Kidnapping (rape was aggravating fa...</td>
+<td>99 years</td>
+<td>05/20/1983</td>
+<td>12/16/1993</td>
+<td>05/31/2000</td>
+<td>No</td>
+<td>Eyewitness Misidentification</td>
+<td>No</td>
+<td>African American</td>
+<td>Caucasian</td>
+<td>Exonerated by DNA</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>Alan Newton</td>
+<td>https://innocenceproject.org/cases/alan-newton/</td>
+<td>21 years</td>
+<td>New York</td>
+<td>Rape, Robbery, Assault</td>
+<td>Rape, Robbery, Assault</td>
+<td>13 1/3 to 40 years</td>
+<td>06/23/1984</td>
+<td>05/21/1985</td>
+<td>07/06/2006</td>
+<td>No</td>
+<td>Eyewitness Misidentification</td>
+<td>No</td>
+<td>African American</td>
+<td>African American</td>
+<td>Exonerated by DNA</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>Albert Johnson</td>
+<td>https://innocenceproject.org/cases/albert-john...</td>
+<td>10 years</td>
+<td>California</td>
+<td>Sexual Assault</td>
+<td>Sexual Assault (2 cts.)</td>
+<td>39 years</td>
+<td>02/25/1992</td>
+<td>01/28/1992</td>
+<td>10/03/2002</td>
+<td>No</td>
+<td>Eyewitness Misidentification, Government Misco...</td>
+<td>No</td>
+<td>African American</td>
+<td>Latinx</td>
+<td>Exonerated by DNA</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>Alejandro Hernandez</td>
+<td>https://innocenceproject.org/cases/alejandro-h...</td>
+<td>10 years</td>
+<td>Illinois</td>
+<td>Murder, Rape, Kidnapping, Home Invasion, etc.</td>
+<td>Murder, Rape, Aggravated Kidnapping, Deviant S...</td>
+<td>Death</td>
+<td>02/23/1983</td>
+<td>02/22/1985</td>
+<td>12/08/1995</td>
+<td>No</td>
+<td>False Confessions or Admissions, Government Mi...</td>
+<td>Yes</td>
+<td>Latinx</td>
+<td>Caucasian</td>
+<td>Exonerated by DNA</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>Andre Hatchett</td>
+<td>https://innocenceproject.org/cases/andre-hatch...</td>
+<td>25 years</td>
+<td>New York</td>
+<td>Second-degree Murder</td>
+<td>Second-degree Murder</td>
+<td>25 years to life</td>
+<td>02/18/1991</td>
+<td>NaN</td>
+<td>03/10/2016</td>
+<td>NaN</td>
+<td>Eyewitness Misidentification, Government Misco...</td>
+<td>No</td>
+<td>African American</td>
+<td>African American</td>
+<td>Exonerated by Other Means</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div id="cell-31" class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="st">'URL'</span> <span class="kw">in</span> all_cases_df.columns:</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    all_cases_df.drop(columns<span class="op">=</span>[<span class="st">'URL'</span>], inplace<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-32" class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>all_cases_df.columns <span class="op">=</span> all_cases_df.columns.<span class="bu">str</span>.lower().<span class="bu">str</span>.replace(<span class="st">' '</span>, <span class="st">'_'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-33" class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>binary_columns <span class="op">=</span> [<span class="st">'accused_pleaded_guilty'</span>, <span class="st">'death_penalty_case'</span>]</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> column <span class="kw">in</span> binary_columns:</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    all_cases_df[column] <span class="op">=</span> all_cases_df[column].<span class="bu">apply</span>(<span class="kw">lambda</span> x: <span class="dv">1</span> <span class="cf">if</span> <span class="bu">str</span>(x).lower() <span class="kw">in</span> [<span class="st">'yes'</span>, <span class="st">'y'</span>, <span class="st">'true'</span>, <span class="st">'1'</span>] <span class="cf">else</span> <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-34" class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>all_cases_df[<span class="st">'time_served'</span>] <span class="op">=</span> all_cases_df[<span class="st">'time_served'</span>].astype(<span class="bu">str</span>)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>all_cases_df[<span class="st">'time_served'</span>] <span class="op">=</span> all_cases_df[<span class="st">'time_served'</span>].<span class="bu">str</span>.extract(<span class="vs">r'(\d+)'</span>).astype(<span class="bu">float</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-35" class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> date_column <span class="kw">in</span> [<span class="st">'incident_date'</span>, <span class="st">'conviction_date'</span>, <span class="st">'exoneration_date'</span>]:</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> date_column <span class="kw">in</span> all_cases_df.columns:</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>        all_cases_df[[<span class="ss">f"</span><span class="sc">{</span>date_column<span class="sc">}</span><span class="ss">_month"</span>, <span class="ss">f"</span><span class="sc">{</span>date_column<span class="sc">}</span><span class="ss">_day"</span>, <span class="ss">f"</span><span class="sc">{</span>date_column<span class="sc">}</span><span class="ss">_year"</span>]] <span class="op">=</span> (</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>            all_cases_df[date_column].<span class="bu">str</span>.split(<span class="st">'/'</span>, expand<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>        all_cases_df.drop(columns<span class="op">=</span>[date_column], inplace<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-36" class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Split the 'Charge' column into individual charges </span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>charge_dummies <span class="op">=</span> all_cases_df[<span class="st">'charge'</span>].<span class="bu">str</span>.get_dummies(sep<span class="op">=</span><span class="st">', '</span>)</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>col_counts <span class="op">=</span> {}</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>new_col_names <span class="op">=</span> []</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> col <span class="kw">in</span> charge_dummies.columns:</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> col <span class="kw">in</span> col_counts:</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>        col_counts[col] <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>        new_name <span class="op">=</span> <span class="ss">f"</span><span class="sc">{</span>col<span class="sc">}</span><span class="ss">_</span><span class="sc">{</span>col_counts[col]<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>        col_counts[col] <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>        new_name <span class="op">=</span> col</span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>    new_col_names.append(new_name)</span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>charge_dummies.columns <span class="op">=</span> new_col_names</span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>all_cases_df <span class="op">=</span> pd.concat([all_cases_df, charge_dummies], axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a>death_penalty_df <span class="op">=</span> all_cases_df.drop(columns<span class="op">=</span>[<span class="st">'etc.'</span>], errors<span class="op">=</span><span class="st">'ignore'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-37" class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Split the 'Conviction' column into individual charges </span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>conviction_dummies <span class="op">=</span> all_cases_df[<span class="st">'conviction'</span>].<span class="bu">str</span>.get_dummies(sep<span class="op">=</span><span class="st">', '</span>)</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>col_counts <span class="op">=</span> {}</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>new_col_names <span class="op">=</span> []</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> col <span class="kw">in</span> conviction_dummies.columns:</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> col <span class="kw">in</span> col_counts:</span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>        col_counts[col] <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>        new_name <span class="op">=</span> <span class="ss">f"</span><span class="sc">{</span>col<span class="sc">}</span><span class="ss">_</span><span class="sc">{</span>col_counts[col]<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>        col_counts[col] <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>        new_name <span class="op">=</span> col</span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>    new_col_names.append(new_name)</span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a>conviction_dummies.columns <span class="op">=</span> new_col_names</span>
+<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a>all_cases_df <span class="op">=</span> pd.concat([all_cases_df, conviction_dummies], axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-20"><a href="#cb23-20" aria-hidden="true" tabindex="-1"></a>all_cases_df <span class="op">=</span> death_penalty_df.drop(columns<span class="op">=</span>[<span class="st">'etc.'</span>], errors<span class="op">=</span><span class="st">'ignore'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-38" class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Split the 'Contributing Causes of Conviction' column into individual causes </span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>causes_dummies <span class="op">=</span> all_cases_df[<span class="st">'contributing_causes_of_conviction'</span>].<span class="bu">str</span>.get_dummies(sep<span class="op">=</span><span class="st">', '</span>)</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>col_counts <span class="op">=</span> {}</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>new_col_names <span class="op">=</span> []</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> col <span class="kw">in</span> causes_dummies.columns:</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> col <span class="kw">in</span> col_counts:</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>        col_counts[col] <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>        new_name <span class="op">=</span> <span class="ss">f"</span><span class="sc">{</span>col<span class="sc">}</span><span class="ss">_</span><span class="sc">{</span>col_counts[col]<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>        col_counts[col] <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>        new_name <span class="op">=</span> col</span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>    new_col_names.append(new_name)</span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a>causes_dummies.columns <span class="op">=</span> new_col_names</span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a>all_cases_df <span class="op">=</span> pd.concat([all_cases_df, causes_dummies], axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a>all_cases_df <span class="op">=</span> all_cases_df.drop(columns<span class="op">=</span>[<span class="st">'etc.'</span>], errors<span class="op">=</span><span class="st">'ignore'</span>)</span>
+<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-22"><a href="#cb24-22" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">New columns created for Contributing Causes:"</span>)</span>
+<span id="cb24-23"><a href="#cb24-23" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(causes_dummies.columns.tolist())</span>
+<span id="cb24-24"><a href="#cb24-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-25"><a href="#cb24-25" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Value counts for each cause:"</span>)</span>
+<span id="cb24-26"><a href="#cb24-26" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> col <span class="kw">in</span> causes_dummies.columns:</span>
+<span id="cb24-27"><a href="#cb24-27" aria-hidden="true" tabindex="-1"></a>    count <span class="op">=</span> causes_dummies[col].<span class="bu">sum</span>()</span>
+<span id="cb24-28"><a href="#cb24-28" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> count <span class="op">&gt;</span> <span class="dv">0</span>:  </span>
+<span id="cb24-29"><a href="#cb24-29" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>col<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>count<span class="sc">}</span><span class="ss"> cases"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+New columns created for Contributing Causes:
+['Eyewitness Misidentification', 'False Confessions or Admissions', 'Government Misconduct', 'Inadequate Defense', 'Informants', 'Unvalidated or Improper Forensic Science']
+
+Value counts for each cause:
+Eyewitness Misidentification: 136 cases
+False Confessions or Admissions: 59 cases
+Government Misconduct: 40 cases
+Inadequate Defense: 18 cases
+Informants: 27 cases
+Unvalidated or Improper Forensic Science: 110 cases</code></pre>
+</div>
+</div>
+<div id="cell-39" class="cell" data-execution_count="74">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>all_cases_df.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="74">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">name</th>
+<th data-quarto-table-cell-role="th">time_served</th>
+<th data-quarto-table-cell-role="th">state</th>
+<th data-quarto-table-cell-role="th">charge</th>
+<th data-quarto-table-cell-role="th">conviction</th>
+<th data-quarto-table-cell-role="th">sentence</th>
+<th data-quarto-table-cell-role="th">accused_pleaded_guilty</th>
+<th data-quarto-table-cell-role="th">contributing_causes_of_conviction</th>
+<th data-quarto-table-cell-role="th">death_penalty_case</th>
+<th data-quarto-table-cell-role="th">race_of_exoneree</th>
+<th data-quarto-table-cell-role="th">...</th>
+<th data-quarto-table-cell-role="th">Use of a Firearm</th>
+<th data-quarto-table-cell-role="th">Vehicle Theft</th>
+<th data-quarto-table-cell-role="th">Wrongful Imprisonment</th>
+<th data-quarto-table-cell-role="th">in concert)</th>
+<th data-quarto-table-cell-role="th">Eyewitness Misidentification</th>
+<th data-quarto-table-cell-role="th">False Confessions or Admissions</th>
+<th data-quarto-table-cell-role="th">Government Misconduct</th>
+<th data-quarto-table-cell-role="th">Inadequate Defense</th>
+<th data-quarto-table-cell-role="th">Informants</th>
+<th data-quarto-table-cell-role="th">Unvalidated or Improper Forensic Science</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>A.B. Butler</td>
+<td>17.0</td>
+<td>Texas</td>
+<td>Rape, Kidnapping</td>
+<td>Aggravated Kidnapping (rape was aggravating fa...</td>
+<td>99 years</td>
+<td>0</td>
+<td>Eyewitness Misidentification</td>
+<td>0</td>
+<td>African American</td>
+<td>...</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>Alan Newton</td>
+<td>21.0</td>
+<td>New York</td>
+<td>Rape, Robbery, Assault</td>
+<td>Rape, Robbery, Assault</td>
+<td>13 1/3 to 40 years</td>
+<td>0</td>
+<td>Eyewitness Misidentification</td>
+<td>0</td>
+<td>African American</td>
+<td>...</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>Albert Johnson</td>
+<td>10.0</td>
+<td>California</td>
+<td>Sexual Assault</td>
+<td>Sexual Assault (2 cts.)</td>
+<td>39 years</td>
+<td>0</td>
+<td>Eyewitness Misidentification, Government Misco...</td>
+<td>0</td>
+<td>African American</td>
+<td>...</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>Alejandro Hernandez</td>
+<td>10.0</td>
+<td>Illinois</td>
+<td>Murder, Rape, Kidnapping, Home Invasion, etc.</td>
+<td>Murder, Rape, Aggravated Kidnapping, Deviant S...</td>
+<td>Death</td>
+<td>0</td>
+<td>False Confessions or Admissions, Government Mi...</td>
+<td>1</td>
+<td>Latinx</td>
+<td>...</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>Andre Hatchett</td>
+<td>25.0</td>
+<td>New York</td>
+<td>Second-degree Murder</td>
+<td>Second-degree Murder</td>
+<td>25 years to life</td>
+<td>0</td>
+<td>Eyewitness Misidentification, Government Misco...</td>
+<td>0</td>
+<td>African American</td>
+<td>...</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+
+<p>5 rows × 146 columns</p>
+</div>
+</div>
+</div>
+<div id="cell-40" class="cell" data-execution_count="75">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>output_path <span class="op">=</span> <span class="st">"../../data/processed-data/innocence-project-all-cases_cleaned.csv"</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>all_cases_df.to_csv(output_path, index<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"File saved successfully to </span><span class="sc">{</span>output_path<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>File saved successfully to ../../data/processed-data/innocence-project-all-cases_cleaned.csv</code></pre>
+</div>
+</div>
+</section>
+<section id="upcoming-executions" class="level3">
+<h3 class="anchored" data-anchor-id="upcoming-executions">Upcoming Executions</h3>
+<div id="cell-42" class="cell" data-execution_count="29">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>executions_df_2024 <span class="op">=</span> pd.read_csv(<span class="st">"../../data/raw-data/2024_remaining_executions.csv"</span>)</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>executions_df_2025 <span class="op">=</span> pd.read_csv(<span class="st">"../../data/raw-data/2025_scheduled_executions.csv"</span>)</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>executions_df_2026 <span class="op">=</span> pd.read_csv(<span class="st">"../../data/raw-data/2026_scheduled_executions.csv"</span>)</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>executions_df_2026 <span class="op">=</span> pd.read_csv(<span class="st">"../../data/raw-data/2027_scheduled_executions.csv"</span>)</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>executions_df_2027 <span class="op">=</span> pd.read_csv(<span class="st">"../../data/raw-data/2027_scheduled_executions.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Added a year column to each CSV file.</p>
+<div id="cell-44" class="cell" data-execution_count="30">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>executions_df_2024[<span class="st">'Year'</span>] <span class="op">=</span> <span class="dv">2024</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>executions_df_2025[<span class="st">'Year'</span>] <span class="op">=</span> <span class="dv">2025</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>executions_df_2026[<span class="st">'Year'</span>] <span class="op">=</span> <span class="dv">2026</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>executions_df_2027[<span class="st">'Year'</span>] <span class="op">=</span> <span class="dv">2027</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Merged datasets together.</p>
+<div id="cell-46" class="cell" data-execution_count="31">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>all_executions <span class="op">=</span> pd.concat([executions_df_2024, executions_df_2025, executions_df_2026, executions_df_2027], ignore_index<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>all_executions.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="31">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Date</th>
+<th data-quarto-table-cell-role="th">State</th>
+<th data-quarto-table-cell-role="th">Prisoner</th>
+<th data-quarto-table-cell-role="th">Year</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>November 21</td>
+<td>AL</td>
+<td>Carey Dale Grayson</td>
+<td>2024</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>December 3</td>
+<td>MO</td>
+<td>Christopher Leroy Collings</td>
+<td>2024</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>December 18</td>
+<td>IN</td>
+<td>Joseph Corcoran</td>
+<td>2024</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>December 19</td>
+<td>OK</td>
+<td>Kevin Ray Underwood</td>
+<td>2024</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>February 5</td>
+<td>TX</td>
+<td>Steven Nelson</td>
+<td>2025</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>Save clean dataset to processed data.</p>
+<div id="cell-48" class="cell" data-execution_count="32">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>all_executions.to_csv(<span class="st">"../../data/processed-data/all_scheduled_executions.csv"</span>, index<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="death-penalty-beliefs" class="level3">
+<h3 class="anchored" data-anchor-id="death-penalty-beliefs">Death Penalty Beliefs</h3>
+<div id="cell-50" class="cell" data-execution_count="33">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>death_penalty_beliefs_df <span class="op">=</span> pd.read_csv(<span class="st">"../../data/raw-data/GSS2002.csv"</span>)</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>death_penalty_beliefs_df.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="33">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">ID</th>
+<th data-quarto-table-cell-role="th">Region</th>
+<th data-quarto-table-cell-role="th">Gender</th>
+<th data-quarto-table-cell-role="th">Race</th>
+<th data-quarto-table-cell-role="th">Education</th>
+<th data-quarto-table-cell-role="th">Marital</th>
+<th data-quarto-table-cell-role="th">Religion</th>
+<th data-quarto-table-cell-role="th">Happy</th>
+<th data-quarto-table-cell-role="th">Income</th>
+<th data-quarto-table-cell-role="th">PolParty</th>
+<th data-quarto-table-cell-role="th">...</th>
+<th data-quarto-table-cell-role="th">Marijuana</th>
+<th data-quarto-table-cell-role="th">DeathPenalty</th>
+<th data-quarto-table-cell-role="th">OwnGun</th>
+<th data-quarto-table-cell-role="th">GunLaw</th>
+<th data-quarto-table-cell-role="th">SpendMilitary</th>
+<th data-quarto-table-cell-role="th">SpendEduc</th>
+<th data-quarto-table-cell-role="th">SpendEnv</th>
+<th data-quarto-table-cell-role="th">SpendSci</th>
+<th data-quarto-table-cell-role="th">Pres00</th>
+<th data-quarto-table-cell-role="th">Postlife</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>1</td>
+<td>South Central</td>
+<td>Female</td>
+<td>White</td>
+<td>HS</td>
+<td>Divorced</td>
+<td>Inter-nondenominational</td>
+<td>Pretty happy</td>
+<td>30000-34999</td>
+<td>Strong Rep</td>
+<td>...</td>
+<td>NaN</td>
+<td>Favor</td>
+<td>No</td>
+<td>Favor</td>
+<td>Too little</td>
+<td>Too little</td>
+<td>About right</td>
+<td>About right</td>
+<td>Bush</td>
+<td>Yes</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>2</td>
+<td>South Central</td>
+<td>Male</td>
+<td>White</td>
+<td>Bachelors</td>
+<td>Married</td>
+<td>Protestant</td>
+<td>Pretty happy</td>
+<td>75000-89999</td>
+<td>Not Str Rep</td>
+<td>...</td>
+<td>Not legal</td>
+<td>Favor</td>
+<td>Yes</td>
+<td>Oppose</td>
+<td>About right</td>
+<td>Too little</td>
+<td>About right</td>
+<td>About right</td>
+<td>Bush</td>
+<td>Yes</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>3</td>
+<td>South Central</td>
+<td>Female</td>
+<td>White</td>
+<td>HS</td>
+<td>Separated</td>
+<td>Protestant</td>
+<td>NaN</td>
+<td>35000-39999</td>
+<td>Strong Rep</td>
+<td>...</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>Bush</td>
+<td>NaN</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>4</td>
+<td>South Central</td>
+<td>Female</td>
+<td>White</td>
+<td>Left HS</td>
+<td>Divorced</td>
+<td>Protestant</td>
+<td>NaN</td>
+<td>50000-59999</td>
+<td>Ind, Near Dem</td>
+<td>...</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>About right</td>
+<td>Too little</td>
+<td>Too little</td>
+<td>Too little</td>
+<td>NaN</td>
+<td>NaN</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>5</td>
+<td>South Central</td>
+<td>Male</td>
+<td>White</td>
+<td>Left HS</td>
+<td>Divorced</td>
+<td>Protestant</td>
+<td>NaN</td>
+<td>40000-49999</td>
+<td>Ind</td>
+<td>...</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+</tr>
+</tbody>
+</table>
+
+<p>5 rows × 21 columns</p>
+</div>
+</div>
+</div>
+<p>I kept only the relevant columns: region, gender, race, education, religion, political party, income, and belief in the death penalty. I removed less relevant columns, such as happiness and marital status.</p>
+<div id="cell-52" class="cell" data-execution_count="34">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>death_penalty_beliefs_df <span class="op">=</span> pd.read_csv(<span class="st">"../../data/raw-data/GSS2002.csv"</span>)</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>relevant_columns <span class="op">=</span> [</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Region'</span>, <span class="st">'Gender'</span>, <span class="st">'Race'</span>, <span class="st">'Education'</span>, <span class="st">'Religion'</span>, </span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">'PolParty'</span>, <span class="st">'Income'</span>, <span class="st">'DeathPenalty'</span></span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>death_penalty_beliefs_df <span class="op">=</span> death_penalty_beliefs_df[relevant_columns]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>I dropped any row where belief in the death penalty was NA.</p>
+<div id="cell-54" class="cell" data-execution_count="35">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>death_penalty_beliefs_df <span class="op">=</span> death_penalty_beliefs_df.dropna(subset<span class="op">=</span>[<span class="st">'DeathPenalty'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-55" class="cell" data-execution_count="36">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>death_penalty_beliefs_df.columns <span class="op">=</span> death_penalty_beliefs_df.columns.<span class="bu">str</span>.lower().<span class="bu">str</span>.replace(<span class="st">' '</span>, <span class="st">'_'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Take the average income for the income column.</p>
+<div id="cell-57" class="cell" data-execution_count="37">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> clean_income(value):</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> pd.isna(value):</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">None</span></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>    value <span class="op">=</span> <span class="bu">str</span>(value).strip()</span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="st">'-'</span> <span class="kw">in</span> value:</span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">try</span>:</span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>            low, high <span class="op">=</span> <span class="bu">map</span>(<span class="bu">int</span>, value.split(<span class="st">'-'</span>))</span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> (low <span class="op">+</span> high) <span class="op">/</span> <span class="dv">2</span></span>
+<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">except</span>:</span>
+<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="va">None</span></span>
+<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb37-14"><a href="#cb37-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> value</span>
+<span id="cb37-15"><a href="#cb37-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-16"><a href="#cb37-16" aria-hidden="true" tabindex="-1"></a>death_penalty_beliefs_df[<span class="st">'income'</span>] <span class="op">=</span> death_penalty_beliefs_df[<span class="st">'income'</span>].<span class="bu">apply</span>(clean_income)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-58" class="cell" data-execution_count="38">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>death_penalty_beliefs_df.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="38">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">region</th>
+<th data-quarto-table-cell-role="th">gender</th>
+<th data-quarto-table-cell-role="th">race</th>
+<th data-quarto-table-cell-role="th">education</th>
+<th data-quarto-table-cell-role="th">religion</th>
+<th data-quarto-table-cell-role="th">polparty</th>
+<th data-quarto-table-cell-role="th">income</th>
+<th data-quarto-table-cell-role="th">deathpenalty</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>South Central</td>
+<td>Female</td>
+<td>White</td>
+<td>HS</td>
+<td>Inter-nondenominational</td>
+<td>Strong Rep</td>
+<td>32499.5</td>
+<td>Favor</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>South Central</td>
+<td>Male</td>
+<td>White</td>
+<td>Bachelors</td>
+<td>Protestant</td>
+<td>Not Str Rep</td>
+<td>82499.5</td>
+<td>Favor</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">5</td>
+<td>South Central</td>
+<td>Male</td>
+<td>White</td>
+<td>HS</td>
+<td>Catholic</td>
+<td>Ind, Near Rep</td>
+<td>44999.5</td>
+<td>Favor</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">8</td>
+<td>South Central</td>
+<td>Male</td>
+<td>White</td>
+<td>HS</td>
+<td>Catholic</td>
+<td>Strong Rep</td>
+<td>67499.5</td>
+<td>Favor</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">13</td>
+<td>South Central</td>
+<td>Female</td>
+<td>White</td>
+<td>HS</td>
+<td>Protestant</td>
+<td>Strong Rep</td>
+<td>67499.5</td>
+<td>Favor</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div id="cell-59" class="cell" data-execution_count="39">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>death_penalty_beliefs_df.to_csv(<span class="st">"../../data/processed-data/death_penalty_beliefs_cleaned.csv"</span>, index<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="death-penalty-petitions" class="level3">
+<h3 class="anchored" data-anchor-id="death-penalty-petitions">Death Penalty Petitions</h3>
+<div id="cell-61" class="cell" data-execution_count="41">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>petitions_df <span class="op">=</span> pd.read_csv(<span class="st">"../../data/raw-data/petitions_descriptions.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-62" class="cell" data-execution_count="42">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> clean_text(text):</span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>    text <span class="op">=</span> <span class="bu">str</span>(text)</span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>    text <span class="op">=</span> re.sub(<span class="vs">r'http\S+|www\S+|https\S+'</span>, <span class="st">''</span>, text, flags<span class="op">=</span>re.MULTILINE)</span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>    text <span class="op">=</span> re.sub(<span class="vs">r'\S+@\S+'</span>, <span class="st">''</span>, text)</span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a>    redundant_phrases <span class="op">=</span> [</span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Please sign the petition"</span>,</span>
+<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Click here"</span>, </span>
+<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Read more"</span>, </span>
+<span id="cb41-11"><a href="#cb41-11" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Petitions will be delivered"</span>, </span>
+<span id="cb41-12"><a href="#cb41-12" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Please continue to sign this petition"</span>,</span>
+<span id="cb41-13"><a href="#cb41-13" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Please reach out now to the Board"</span>,</span>
+<span id="cb41-14"><a href="#cb41-14" aria-hidden="true" tabindex="-1"></a>        <span class="st">"You can simply leave a voice message"</span></span>
+<span id="cb41-15"><a href="#cb41-15" aria-hidden="true" tabindex="-1"></a>    ]</span>
+<span id="cb41-16"><a href="#cb41-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> phrase <span class="kw">in</span> redundant_phrases:</span>
+<span id="cb41-17"><a href="#cb41-17" aria-hidden="true" tabindex="-1"></a>        text <span class="op">=</span> text.replace(phrase, <span class="st">""</span>)</span>
+<span id="cb41-18"><a href="#cb41-18" aria-hidden="true" tabindex="-1"></a>    text <span class="op">=</span> re.sub(<span class="vs">r'&lt;.*?&gt;'</span>, <span class="st">''</span>, text)</span>
+<span id="cb41-19"><a href="#cb41-19" aria-hidden="true" tabindex="-1"></a>    text <span class="op">=</span> re.sub(<span class="vs">r'[^a-zA-Z\s]'</span>, <span class="st">''</span>, text)</span>
+<span id="cb41-20"><a href="#cb41-20" aria-hidden="true" tabindex="-1"></a>    text <span class="op">=</span> re.sub(<span class="vs">r'\s+'</span>, <span class="st">' '</span>, text).strip()</span>
+<span id="cb41-21"><a href="#cb41-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-22"><a href="#cb41-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> text</span>
+<span id="cb41-23"><a href="#cb41-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-24"><a href="#cb41-24" aria-hidden="true" tabindex="-1"></a>petitions_df[<span class="st">'cleaned_description'</span>] <span class="op">=</span> petitions_df[<span class="st">'description'</span>].<span class="bu">apply</span>(clean_text)</span>
+<span id="cb41-25"><a href="#cb41-25" aria-hidden="true" tabindex="-1"></a>output_path <span class="op">=</span> <span class="st">"../../data/processed-data/cleaned_petitions_descriptions.csv"</span></span>
+<span id="cb41-26"><a href="#cb41-26" aria-hidden="true" tabindex="-1"></a>petitions_df.to_csv(output_path, index<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb41-27"><a href="#cb41-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-28"><a href="#cb41-28" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Cleaned data saved to </span><span class="sc">{</span>output_path<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Cleaned data saved to ../../data/processed-data/cleaned_petitions_descriptions.csv</code></pre>
+</div>
+</div>
+<p><img src="../../assets/5.png" class="img-fluid" data-align="center" width="400"></p>
+</section>
+<section id="states-withwithout-death-penalty" class="level3">
+<h3 class="anchored" data-anchor-id="states-withwithout-death-penalty">States with/without Death Penalty</h3>
+<div id="cell-65" class="cell" data-execution_count="43">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>has_death_df <span class="op">=</span> pd.read_csv(<span class="st">"../../data/raw-data/has_death_penalty.csv"</span>)</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>has_death_df.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="43">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">State</th>
+<th data-quarto-table-cell-role="th">has_death_penalty</th>
+<th data-quarto-table-cell-role="th">abolished</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>Alabama</td>
+<td>1</td>
+<td>NaN</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>Alaska</td>
+<td>0</td>
+<td>1957.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>Arizona</td>
+<td>1</td>
+<td>NaN</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>Arkansas</td>
+<td>1</td>
+<td>NaN</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>California</td>
+<td>1</td>
+<td>NaN</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div id="cell-66" class="cell" data-execution_count="44">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>has_death_df.columns <span class="op">=</span> has_death_df.columns.<span class="bu">str</span>.lower().<span class="bu">str</span>.replace(<span class="st">' '</span>, <span class="st">'_'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-67" class="cell" data-execution_count="45">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>has_death_df.to_csv(<span class="st">"../../data/processed-data/has_death_penalty_cleaned.csv"</span>, index<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="sentence-outcomes" class="level3">
+<h3 class="anchored" data-anchor-id="sentence-outcomes">Sentence Outcomes</h3>
+<div id="cell-69" class="cell" data-execution_count="46">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>outcomes_df <span class="op">=</span> pd.read_csv(<span class="st">"../../data/raw-data/sentence_outcomes_nationally.csv"</span>)</span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>outcomes_df.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="46">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">all reversals</th>
+<th data-quarto-table-cell-role="th">4,732</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>on death row</td>
+<td>2,272</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>executed</td>
+<td>1,542</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>died, not executed</td>
+<td>734</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>commutation</td>
+<td>291</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>exoneration</td>
+<td>183</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div id="cell-70" class="cell" data-execution_count="47">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>outcomes_df.to_csv(<span class="st">"../../data/processed-data/sentence_outcomes_nationally.csv"</span>, index<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="sentences" class="level3">
+<h3 class="anchored" data-anchor-id="sentences">Sentences</h3>
+<div id="cell-72" class="cell" data-execution_count="48">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>sentences_df <span class="op">=</span> pd.read_csv(<span class="st">"../../data/raw-data/sentences.csv"</span>)</span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>sentences_df.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="48">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">defendant</th>
+<th data-quarto-table-cell-role="th">sentence</th>
+<th data-quarto-table-cell-role="th">Name</th>
+<th data-quarto-table-cell-role="th">Name (sortable)</th>
+<th data-quarto-table-cell-role="th">Aliases</th>
+<th data-quarto-table-cell-role="th">Gender</th>
+<th data-quarto-table-cell-role="th">Races</th>
+<th data-quarto-table-cell-role="th">Jurisdiction</th>
+<th data-quarto-table-cell-role="th">State Abbreviation</th>
+<th data-quarto-table-cell-role="th">Sub Jurisdiction</th>
+<th data-quarto-table-cell-role="th">County and State</th>
+<th data-quarto-table-cell-role="th">Region</th>
+<th data-quarto-table-cell-role="th">Year</th>
+<th data-quarto-table-cell-role="th">Multi-sentence identifier</th>
+<th data-quarto-table-cell-role="th">Outcome of Sentence</th>
+<th data-quarto-table-cell-role="th">Current Case Status</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>5303</td>
+<td>5502</td>
+<td>Reno [No Last Name]</td>
+<td>[no last name] reno</td>
+<td>Harold R. Memro (Tried as)</td>
+<td>Male</td>
+<td>White</td>
+<td>California</td>
+<td>CA</td>
+<td>Los Angeles County</td>
+<td>Los Angeles County, California</td>
+<td>West</td>
+<td>1987.0</td>
+<td>1.2</td>
+<td>Active Death Sentence</td>
+<td>Active Death Sentence</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>5303</td>
+<td>5501</td>
+<td>Reno [No Last Name]</td>
+<td>[no last name] reno</td>
+<td>Harold R. Memro (Tried as)</td>
+<td>Male</td>
+<td>White</td>
+<td>California</td>
+<td>CA</td>
+<td>Los Angeles County</td>
+<td>Los Angeles County, California</td>
+<td>West</td>
+<td>1979.0</td>
+<td>1.1</td>
+<td>Resentenced to Death</td>
+<td>Active Death Sentence</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>5304</td>
+<td>5503</td>
+<td>Joe Henry Abbott</td>
+<td>abbott joe</td>
+<td>NaN</td>
+<td>Male</td>
+<td>Black</td>
+<td>California</td>
+<td>CA</td>
+<td>San Bernardino County</td>
+<td>San Bernardino County, California</td>
+<td>West</td>
+<td>2006.0</td>
+<td>NaN</td>
+<td>Died on Death Row</td>
+<td>Died on Death Row</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>5305</td>
+<td>5504</td>
+<td>Dane Abdool</td>
+<td>abdool dane</td>
+<td>NaN</td>
+<td>Male</td>
+<td>White</td>
+<td>Florida</td>
+<td>FL</td>
+<td>Orange County</td>
+<td>Orange County, Florida</td>
+<td>South</td>
+<td>2008.0</td>
+<td>NaN</td>
+<td>Grant of Relief (Retrial/Resentencing Pending)</td>
+<td>Grant of Relief (Retrial/Resentencing Pending)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>6433</td>
+<td>7392</td>
+<td>Jalil Abdul-Kabir</td>
+<td>abdul-kabir jalil</td>
+<td>Ted Calvin Cole (Tried as)</td>
+<td>Male</td>
+<td>White</td>
+<td>Texas</td>
+<td>TX</td>
+<td>Tom Green County</td>
+<td>Tom Green County, Texas</td>
+<td>South</td>
+<td>1988.0</td>
+<td>NaN</td>
+<td>Resentenced to Life or Less</td>
+<td>Resentenced to Life or Less</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div id="cell-73" class="cell" data-execution_count="49">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>columns_to_drop <span class="op">=</span> [<span class="st">'Name'</span>, <span class="st">'Name (sortable)'</span>, <span class="st">'County and State'</span>, <span class="st">'sentence'</span>, <span class="st">'defendant'</span>, <span class="st">'Aliases'</span>, <span class="st">'Multi-sentence identifier'</span>]</span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>sentences_df <span class="op">=</span> sentences_df.drop(columns<span class="op">=</span>columns_to_drop)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-74" class="cell" data-execution_count="50">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>sentences_df.columns <span class="op">=</span> sentences_df.columns.<span class="bu">str</span>.lower().<span class="bu">str</span>.replace(<span class="st">' '</span>, <span class="st">'_'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-75" class="cell">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create binary columns for each race in the 'races' column</span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>races <span class="op">=</span> [<span class="st">'White'</span>, <span class="st">'Black'</span>, <span class="st">'Latino/a'</span>]</span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> race <span class="kw">in</span> races:</span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a>    sentences_df[race] <span class="op">=</span> sentences_df[<span class="st">'races'</span>].<span class="bu">apply</span>(</span>
+<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a>        <span class="kw">lambda</span> x: <span class="dv">1</span> <span class="cf">if</span> <span class="bu">isinstance</span>(x, <span class="bu">str</span>) <span class="kw">and</span> race <span class="kw">in</span> x <span class="cf">else</span> <span class="dv">0</span></span>
+<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb51-8"><a href="#cb51-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-9"><a href="#cb51-9" aria-hidden="true" tabindex="-1"></a>sentences_df[[<span class="st">'races'</span>, <span class="st">'White'</span>, <span class="st">'Black'</span>, <span class="st">'Latino/a'</span>]].head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="51">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">races</th>
+<th data-quarto-table-cell-role="th">White</th>
+<th data-quarto-table-cell-role="th">Black</th>
+<th data-quarto-table-cell-role="th">Latino/a</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>White</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>White</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>Black</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>White</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>White</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div id="cell-76" class="cell" data-execution_count="52">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>sentences_df.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="52">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">gender</th>
+<th data-quarto-table-cell-role="th">races</th>
+<th data-quarto-table-cell-role="th">jurisdiction</th>
+<th data-quarto-table-cell-role="th">state_abbreviation</th>
+<th data-quarto-table-cell-role="th">sub_jurisdiction</th>
+<th data-quarto-table-cell-role="th">region</th>
+<th data-quarto-table-cell-role="th">year</th>
+<th data-quarto-table-cell-role="th">outcome_of_sentence</th>
+<th data-quarto-table-cell-role="th">current_case_status</th>
+<th data-quarto-table-cell-role="th">White</th>
+<th data-quarto-table-cell-role="th">Black</th>
+<th data-quarto-table-cell-role="th">Latino/a</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>Male</td>
+<td>White</td>
+<td>California</td>
+<td>CA</td>
+<td>Los Angeles County</td>
+<td>West</td>
+<td>1987.0</td>
+<td>Active Death Sentence</td>
+<td>Active Death Sentence</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>Male</td>
+<td>White</td>
+<td>California</td>
+<td>CA</td>
+<td>Los Angeles County</td>
+<td>West</td>
+<td>1979.0</td>
+<td>Resentenced to Death</td>
+<td>Active Death Sentence</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>Male</td>
+<td>Black</td>
+<td>California</td>
+<td>CA</td>
+<td>San Bernardino County</td>
+<td>West</td>
+<td>2006.0</td>
+<td>Died on Death Row</td>
+<td>Died on Death Row</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>Male</td>
+<td>White</td>
+<td>Florida</td>
+<td>FL</td>
+<td>Orange County</td>
+<td>South</td>
+<td>2008.0</td>
+<td>Grant of Relief (Retrial/Resentencing Pending)</td>
+<td>Grant of Relief (Retrial/Resentencing Pending)</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>Male</td>
+<td>White</td>
+<td>Texas</td>
+<td>TX</td>
+<td>Tom Green County</td>
+<td>South</td>
+<td>1988.0</td>
+<td>Resentenced to Life or Less</td>
+<td>Resentenced to Life or Less</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div id="cell-77" class="cell" data-execution_count="53">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>sentences_df.to_csv(<span class="st">"../../data/processed-data/sentences_cleaned.csv"</span>, index<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="counties" class="level3">
+<h3 class="anchored" data-anchor-id="counties">Counties</h3>
+<div id="cell-79" class="cell" data-execution_count="54">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>counties_df <span class="op">=</span> pd.read_csv(<span class="st">"../../data/raw-data/counties.csv"</span>)</span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>counties_df.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="54">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Name</th>
+<th data-quarto-table-cell-role="th">County</th>
+<th data-quarto-table-cell-role="th">Sex</th>
+<th data-quarto-table-cell-role="th">Race</th>
+<th data-quarto-table-cell-role="th">State</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>Hosch, Justin T</td>
+<td>Autauga</td>
+<td>M</td>
+<td>W</td>
+<td>AL</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>Clark, Gregory Charles</td>
+<td>Baldwin</td>
+<td>M</td>
+<td>W</td>
+<td>AL</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>Deardorff, Donald</td>
+<td>Baldwin</td>
+<td>M</td>
+<td>W</td>
+<td>AL</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>Flowers, Timothy</td>
+<td>Baldwin</td>
+<td>M</td>
+<td>W</td>
+<td>AL</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>Saunders, Timothy Wade</td>
+<td>Baldwin</td>
+<td>M</td>
+<td>W</td>
+<td>AL</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>I changed column names to lowercase, dropped the name column, and transformed sex and race into binary columns.</p>
+<div id="cell-81" class="cell" data-execution_count="55">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>counties_df.columns <span class="op">=</span> counties_df.columns.<span class="bu">str</span>.lower()</span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>counties_df <span class="op">=</span> counties_df.drop(<span class="st">'name'</span>, axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a>counties_df[<span class="st">'sex'</span>] <span class="op">=</span> (counties_df[<span class="st">'sex'</span>] <span class="op">==</span> <span class="st">'M'</span>).astype(<span class="bu">int</span>)</span>
+<span id="cb55-5"><a href="#cb55-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-6"><a href="#cb55-6" aria-hidden="true" tabindex="-1"></a>counties_df[<span class="st">'white'</span>] <span class="op">=</span> (counties_df[<span class="st">'race'</span>] <span class="op">==</span> <span class="st">'W'</span>).astype(<span class="bu">int</span>)</span>
+<span id="cb55-7"><a href="#cb55-7" aria-hidden="true" tabindex="-1"></a>counties_df[<span class="st">'black'</span>] <span class="op">=</span> (counties_df[<span class="st">'race'</span>] <span class="op">==</span> <span class="st">'B'</span>).astype(<span class="bu">int</span>)</span>
+<span id="cb55-8"><a href="#cb55-8" aria-hidden="true" tabindex="-1"></a>counties_df[<span class="st">'latino'</span>] <span class="op">=</span> (counties_df[<span class="st">'race'</span>] <span class="op">==</span> <span class="st">'L'</span>).astype(<span class="bu">int</span>)</span>
+<span id="cb55-9"><a href="#cb55-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-10"><a href="#cb55-10" aria-hidden="true" tabindex="-1"></a>counties_df <span class="op">=</span> counties_df.drop(<span class="st">'race'</span>, axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb55-11"><a href="#cb55-11" aria-hidden="true" tabindex="-1"></a>counties_df.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="55">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">county</th>
+<th data-quarto-table-cell-role="th">sex</th>
+<th data-quarto-table-cell-role="th">state</th>
+<th data-quarto-table-cell-role="th">white</th>
+<th data-quarto-table-cell-role="th">black</th>
+<th data-quarto-table-cell-role="th">latino</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>Autauga</td>
+<td>1</td>
+<td>AL</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>Baldwin</td>
+<td>1</td>
+<td>AL</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>Baldwin</td>
+<td>1</td>
+<td>AL</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>Baldwin</td>
+<td>1</td>
+<td>AL</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>Baldwin</td>
+<td>1</td>
+<td>AL</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div id="cell-82" class="cell" data-execution_count="56">
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>counties_df.to_csv(<span class="st">"../../data/processed-data/counties_cleaned.csv"</span>, index<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="all-executions" class="level3">
+<h3 class="anchored" data-anchor-id="all-executions">All Executions</h3>
+<div id="cell-84" class="cell" data-execution_count="57">
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>all_executions_df <span class="op">=</span> pd.read_csv(<span class="st">"../../data/raw-data/all_executions.csv"</span>)</span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>all_executions_df.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="57">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Execution Volunteer</th>
+<th data-quarto-table-cell-role="th">Number of Victims</th>
+<th data-quarto-table-cell-role="th">Juvenile</th>
+<th data-quarto-table-cell-role="th">First Name</th>
+<th data-quarto-table-cell-role="th">Last Name</th>
+<th data-quarto-table-cell-role="th">Middle Name(s)</th>
+<th data-quarto-table-cell-role="th">Suffix</th>
+<th data-quarto-table-cell-role="th">Race</th>
+<th data-quarto-table-cell-role="th">Sex</th>
+<th data-quarto-table-cell-role="th">Region</th>
+<th data-quarto-table-cell-role="th">...</th>
+<th data-quarto-table-cell-role="th">Number of Asian Male Victims</th>
+<th data-quarto-table-cell-role="th">Number of Native American Male Victims</th>
+<th data-quarto-table-cell-role="th">Number of Other Male Victims</th>
+<th data-quarto-table-cell-role="th">Number of White Female Victims</th>
+<th data-quarto-table-cell-role="th">Number of Black Female Victims</th>
+<th data-quarto-table-cell-role="th">Number of Latino/a Female Victims</th>
+<th data-quarto-table-cell-role="th">Number of Asian Female Victims</th>
+<th data-quarto-table-cell-role="th">Number of American Indian or Alaska Native Female Victims</th>
+<th data-quarto-table-cell-role="th">Number of Other Female Victims</th>
+<th data-quarto-table-cell-role="th">Number of Unknown Victims</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>yes</td>
+<td>1</td>
+<td>no</td>
+<td>Gary</td>
+<td>Gilmore</td>
+<td>Mark</td>
+<td>NaN</td>
+<td>White</td>
+<td>Male</td>
+<td>West</td>
+<td>...</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>no</td>
+<td>1</td>
+<td>no</td>
+<td>John</td>
+<td>Spenkelink</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>White</td>
+<td>Male</td>
+<td>South</td>
+<td>...</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>yes</td>
+<td>1</td>
+<td>no</td>
+<td>Jesse</td>
+<td>Bishop</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>White</td>
+<td>Male</td>
+<td>West</td>
+<td>...</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>yes</td>
+<td>4</td>
+<td>no</td>
+<td>Steven</td>
+<td>Judy</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>White</td>
+<td>Male</td>
+<td>Midwest</td>
+<td>...</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>yes</td>
+<td>1</td>
+<td>no</td>
+<td>Frank</td>
+<td>Coppola</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>White</td>
+<td>Male</td>
+<td>South</td>
+<td>...</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+
+<p>5 rows × 27 columns</p>
+</div>
+</div>
+</div>
+<div id="cell-85" class="cell" data-execution_count="58">
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>all_executions_df.columns <span class="op">=</span> all_executions_df.columns.<span class="bu">str</span>.lower().<span class="bu">str</span>.replace(<span class="st">' '</span>, <span class="st">'_'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-86" class="cell" data-execution_count="59">
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>binary_columns <span class="op">=</span> [<span class="st">'execution_volunteer'</span>, <span class="st">'juvenile'</span>, <span class="st">'foreign_national'</span>]</span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> column <span class="kw">in</span> binary_columns:</span>
+<span id="cb59-4"><a href="#cb59-4" aria-hidden="true" tabindex="-1"></a>    all_executions_df[column] <span class="op">=</span> all_executions_df[column].<span class="bu">apply</span>(<span class="kw">lambda</span> x: <span class="dv">1</span> <span class="cf">if</span> <span class="bu">str</span>(x).lower() <span class="kw">in</span> [<span class="st">'yes'</span>,<span class="dv">1</span>] <span class="cf">else</span> <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-87" class="cell" data-execution_count="60">
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>all_executions_df <span class="op">=</span> all_executions_df.drop(columns<span class="op">=</span>[<span class="st">'suffix'</span>, <span class="st">'middle_name(s)'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-88" class="cell" data-execution_count="61">
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a>all_executions_df[[<span class="st">'execution_month'</span>, <span class="st">'execution_day'</span>, <span class="st">'execution_year'</span>]] <span class="op">=</span> all_executions_df[<span class="st">'execution_date'</span>].<span class="bu">str</span>.split(<span class="st">'/'</span>, expand<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb61-3"><a href="#cb61-3" aria-hidden="true" tabindex="-1"></a>all_executions_df[<span class="st">'execution_month'</span>] <span class="op">=</span> all_executions_df[<span class="st">'execution_month'</span>].astype(<span class="bu">int</span>)</span>
+<span id="cb61-4"><a href="#cb61-4" aria-hidden="true" tabindex="-1"></a>all_executions_df[<span class="st">'execution_day'</span>] <span class="op">=</span> all_executions_df[<span class="st">'execution_day'</span>].astype(<span class="bu">int</span>)</span>
+<span id="cb61-5"><a href="#cb61-5" aria-hidden="true" tabindex="-1"></a>all_executions_df[<span class="st">'execution_year'</span>] <span class="op">=</span> all_executions_df[<span class="st">'execution_year'</span>].astype(<span class="bu">int</span>)</span>
+<span id="cb61-6"><a href="#cb61-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb61-7"><a href="#cb61-7" aria-hidden="true" tabindex="-1"></a>all_executions_df <span class="op">=</span> all_executions_df.drop(columns<span class="op">=</span>[<span class="st">'execution_date'</span>])</span>
+<span id="cb61-8"><a href="#cb61-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb61-9"><a href="#cb61-9" aria-hidden="true" tabindex="-1"></a>all_executions_df.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="61">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">execution_volunteer</th>
+<th data-quarto-table-cell-role="th">number_of_victims</th>
+<th data-quarto-table-cell-role="th">juvenile</th>
+<th data-quarto-table-cell-role="th">first_name</th>
+<th data-quarto-table-cell-role="th">last_name</th>
+<th data-quarto-table-cell-role="th">race</th>
+<th data-quarto-table-cell-role="th">sex</th>
+<th data-quarto-table-cell-role="th">region</th>
+<th data-quarto-table-cell-role="th">country</th>
+<th data-quarto-table-cell-role="th">state</th>
+<th data-quarto-table-cell-role="th">...</th>
+<th data-quarto-table-cell-role="th">number_of_white_female_victims</th>
+<th data-quarto-table-cell-role="th">number_of_black_female_victims</th>
+<th data-quarto-table-cell-role="th">number_of_latino/a_female_victims</th>
+<th data-quarto-table-cell-role="th">number_of_asian_female_victims</th>
+<th data-quarto-table-cell-role="th">number_of_american_indian_or_alaska_native_female_victims</th>
+<th data-quarto-table-cell-role="th">number_of_other_female_victims</th>
+<th data-quarto-table-cell-role="th">number_of_unknown_victims</th>
+<th data-quarto-table-cell-role="th">execution_month</th>
+<th data-quarto-table-cell-role="th">execution_day</th>
+<th data-quarto-table-cell-role="th">execution_year</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+<td>Gary</td>
+<td>Gilmore</td>
+<td>White</td>
+<td>Male</td>
+<td>West</td>
+<td>United States</td>
+<td>Utah</td>
+<td>...</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>17</td>
+<td>77</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>John</td>
+<td>Spenkelink</td>
+<td>White</td>
+<td>Male</td>
+<td>South</td>
+<td>United States</td>
+<td>Florida</td>
+<td>...</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>5</td>
+<td>25</td>
+<td>79</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+<td>Jesse</td>
+<td>Bishop</td>
+<td>White</td>
+<td>Male</td>
+<td>West</td>
+<td>United States</td>
+<td>Nevada</td>
+<td>...</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>10</td>
+<td>22</td>
+<td>79</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>1</td>
+<td>4</td>
+<td>0</td>
+<td>Steven</td>
+<td>Judy</td>
+<td>White</td>
+<td>Male</td>
+<td>Midwest</td>
+<td>United States</td>
+<td>Indiana</td>
+<td>...</td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>3</td>
+<td>9</td>
+<td>81</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+<td>Frank</td>
+<td>Coppola</td>
+<td>White</td>
+<td>Male</td>
+<td>South</td>
+<td>United States</td>
+<td>Virginia</td>
+<td>...</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>8</td>
+<td>10</td>
+<td>82</td>
+</tr>
+</tbody>
+</table>
+
+<p>5 rows × 27 columns</p>
+</div>
+</div>
+</div>
+<div id="cell-89" class="cell" data-execution_count="62">
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a>all_executions_df.to_csv(<span class="st">"../../data/processed-data/all_executions_cleaned.csv"</span>, index<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="summary-and-interpretation" class="level1">
+<h1>Summary and Interpretation</h1>
+<section id="overview" class="level2">
+<h2 class="anchored" data-anchor-id="overview">Overview</h2>
+<p>In this tab, I processed multiple datasets related to the death penalty in the United States. The cleaned datasets cover exoneration cases, execution records, public opinions, and state policies.</p>
+</section>
+<section id="datasets-processed" class="level2">
+<h2 class="anchored" data-anchor-id="datasets-processed">Datasets Processed</h2>
+<section id="innocence-project-data" class="level3">
+<h3 class="anchored" data-anchor-id="innocence-project-data">Innocence Project Data</h3>
+<ul>
+<li>Death penalty exoneration cases</li>
+<li>Complete exoneration database</li>
+<li>Case details including demographics and time served</li>
+</ul>
+</section>
+<section id="execution-records" class="level3">
+<h3 class="anchored" data-anchor-id="execution-records">Execution Records</h3>
+<ul>
+<li>Scheduled executions (2024-2027)</li>
+<li>Historical execution database</li>
+</ul>
+</section>
+<section id="public-opinion-policy" class="level3">
+<h3 class="anchored" data-anchor-id="public-opinion-policy">Public Opinion &amp; Policy</h3>
+<ul>
+<li>Survey data on death penalty views</li>
+<li>State-level death penalty status</li>
+<li>Death penalty petition texts</li>
+<li>Sentence outcomes nationally</li>
+</ul>
+</section>
+<section id="geographic-data" class="level3">
+<h3 class="anchored" data-anchor-id="geographic-data">Geographic Data</h3>
+<ul>
+<li>County-level execution statistics</li>
+<li>State policy variations</li>
+<li>Regional execution patterns</li>
+</ul>
+<p>The cleaned datasets are now structured for analysis of trends, patterns, and disparities in the application of capital punishment across the United States.</p>
+
+
+</section>
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
