@@ -1,0 +1,33 @@
+project:
+  type: website
+  output-dir: ../docs
+  resources: 
+    - data/
+    - scripts/
+  
+website:
+  title: "Media Coverage Analysis (2015-2025)"
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+      - href: page-1.qmd
+        text: Network Tone Analysis
+      - href: page-2.qmd
+        text: Election Tone Analysis
+      - href: page-4.qmd
+        text: Topic Modeling
+      - href: page-5.qmd
+        text: Half-Life Analysis
+      - href: page-6.qmd
+        text: Conclusions
+  page-footer:
+    left: "© 2025, DSAN5400 Group Project"
+    
+format:
+  html:
+    theme: cosmo
+    css: styles/custom.scss
+    toc: true
+    page-layout: full
+

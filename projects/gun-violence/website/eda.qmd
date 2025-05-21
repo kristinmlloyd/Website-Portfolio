@@ -1,0 +1,554 @@
+---
+title: "Gun Violence Analysis"
+subtitle: "Examining Relationships Between Firearm Mortality and Social Factors"
+format: 
+  html:
+    code-fold: true
+    toc: true
+    toc-depth: 3
+    number-sections: true
+    fig-dpi: 150
+    self-contained: true
+    css: styles.css
+execute:
+  warning: false
+  message: false
+bibliography: references.bib
+---
+
+# Introduction
+
+In this document, we analyze:
+
+1. The relationship between gun law strength and firearm mortality
+2. Factors associated with firearm mortality rates
+3. The impact of specific gun policies on mortality outcomes
+
+Our analysis draws on state-level data from multiple sources, including firearm mortality statistics, gun ownership rates, and policy information.
+
+```{python}
+#| echo: false
+import matplotlib.pyplot as plt
+import seaborn as sns
+import pandas as pd
+import numpy as np
+import matplotlib.patches as mpatches
+
+# Set consistent styling for all plots
+plt.style.use('seaborn-v0_8-whitegrid')
+plt.rcParams['font.family'] = 'sans-serif'
+plt.rcParams['font.sans-serif'] = ['Arial', 'DejaVu Sans', 'Liberation Sans']
+
+# Load the datasets
+merged_data = pd.read_csv("data/merged_data.csv")
+```
+
+```{python}
+#| echo: false
+# Define consistent category labels and color palettes
+category_labels = {
+    "national_failures": "National Failures",
+    "weak_systems": "Weak Systems",
+    "making_progress": "Making Progress",
+    "missing_key_laws": "Missing Key Laws",
+    "national_leader": "National Leader"
+}
+
+# Define TWO separate color palettes - one for each categorical variable
+# Palette for mortality categories
+mortality_palette = {
+    "Very Low": "#1c7416",     
+    "Low": "#68bb59",        
+    "Moderate": "#fab733",     
+    "High": "#ff0000",        
+    "Very High": "#c61a09"     
+}
+
+# Palette for gun law strength categories
+law_strength_palette = {
+    "national_failures": "#d1495b",  # Very High / Weakest laws -> red
+    "weak_systems": "#ee964b",       # High / Weak laws -> orange
+    "making_progress": "#f4d35e",    # Moderate -> yellow
+    "missing_key_laws": "#7ec4cf",   # Low / Strong laws -> light blue
+    "national_leader": "#3b8ea5"     # Very Low / Strongest laws -> dark blue h
+}
+
+# Ensure gun law strength is properly ordered
+merged_data['gun_law_strength'] = pd.Categorical(
+    merged_data['gun_law_strength'], 
+    categories=["national_failures", "weak_systems", "making_progress", "missing_key_laws", "national_leader"],
+    ordered=True
+)
+```
+
+```{python}
+#| echo: false
+# Create a function for compact, consistent box plot styling
+def create_boxplot(data, x_var, y_var, x_label, y_label, title, palette=mortality_palette):
+    plt.figure(figsize=(4, 3))  # smaller, publication-friendly size
+    
+    ax = sns.boxplot(
+        data=data, 
+        x=x_var, 
+        y=y_var, 
+        palette=palette,
+        linewidth=1.8,
+        fliersize=3,
+        boxprops=dict(alpha=0.9, linewidth=1.5),
+        whiskerprops=dict(linewidth=1.4),
+        capprops=dict(linewidth=1.4),
+        medianprops=dict(color="black", linewidth=2)
+    )
+    
+    # Set labels and title
+    plt.xlabel(x_label, fontsize=8, labelpad=10)
+    plt.ylabel(y_label, fontsize=8, labelpad=10)
+    plt.title(title, fontsize=9, weight='bold', pad=20)
+    
+    # Ticks
+    plt.xticks(fontsize=8)
+    plt.yticks(fontsize=8)
+    
+    # Grid
+    plt.grid(axis='y', linestyle='--', alpha=0.25)
+    
+    plt.tight_layout()
+    return ax
+```
+
+# Relationship Between Gun Law Strength and Firearm Mortality
+
+One of the key questions in gun violence research is whether stronger gun laws are associated with lower firearm mortality rates. The following visualization examines this relationship.
+
+```{python}
+#| echo: false
+# Create boxplot for gun law strength vs firearm mortality
+plt.figure(figsize=(4,3))
+
+ax = sns.boxplot(
+    x="gun_law_strength",
+    y="firearm_mortality_by_state_2022",
+    data=merged_data,
+    order=["national_failures", "weak_systems", "making_progress", "missing_key_laws", "national_leader"],
+    palette=law_strength_palette,
+    linewidth=1.8,
+    fliersize=3,
+    boxprops=dict(alpha=0.9, linewidth=1.5),
+    whiskerprops=dict(linewidth=1.4),
+    capprops=dict(linewidth=1.4),
+    medianprops=dict(color="black", linewidth=2)
+)
+
+# Improve x-axis labels
+ax.set_xticklabels([category_labels[label.get_text()] for label in ax.get_xticklabels()], fontsize=9)
+
+# Add axis labels and title
+plt.xlabel("Gun Law Strength Category", fontsize=9, labelpad=10)
+plt.ylabel("Firearm Mortality Rate (2022)", fontsize=9, labelpad=10)
+plt.title("Firearm Mortality Rates by Gun Law Strength", fontsize=12, weight='bold', pad=20)
+
+# Customize grid
+plt.grid(axis="y", linestyle="--", alpha=0.25)
+
+# Create custom legend
+legend_handles = [
+    mpatches.Patch(color=color, label=category_labels[key])
+    for key, color in law_strength_palette.items()
+]
+
+plt.legend(handles=legend_handles, title="Gun Law Strength", fontsize=6, title_fontsize=7)
+
+# Remove x-axis
+ax.set_xlabel("")
+ax.set_xticks([])
+
+# Show the plot
+plt.tight_layout()
+plt.show()
+```
+
+This boxplot reveals a clear pattern: states with stronger gun laws ("National Leader" and "Missing Key Laws" categories) generally have lower firearm mortality rates compared to states categorized as "National Failures" or those with "Weak Systems." The median mortality rate decreases as gun law strength increases, suggesting that comprehensive gun legislation may be associated with reduced firearm deaths.
+
+```{python}
+#| echo: false
+# Define mortality categories
+bins = [0, 10, 15, 20, 25, merged_data['firearm_mortality_by_state_2022'].max()]
+labels = ["Very Low", "Low", "Moderate", "High", "Very High"]
+merged_data['mortality_category'] = pd.cut(
+    merged_data['firearm_mortality_by_state_2022'], bins=bins, labels=labels
+)
+
+# Ensure mortality category is properly ordered
+merged_data['mortality_category'] = pd.Categorical(
+    merged_data['mortality_category'],
+    categories=labels,
+    ordered=True
+)
+```
+
+## Child Firearm Mortality
+
+Children are particularly vulnerable to firearm violence. Let's examine whether the overall firearm mortality rate in a state is associated with child-specific mortality rates.
+
+```{python}
+#| echo: false
+# Child firearm mortality by overall firearm mortality category
+create_boxplot(
+    data=merged_data,
+    x_var='mortality_category',
+    y_var='firearm_mortality_rate_children_one_to_nine_years_old',
+    x_label="Overall Firearm Mortality Category",
+    y_label="Child Firearm Mortality Rate (Ages 1-9) per 100,000",
+    title="Child Firearm Mortality by Overall Firearm Mortality Category"
+)
+plt.show()
+```
+
+The plot demonstrates that children in states with higher overall firearm mortality rates also face higher risks of firearm-related deaths. This suggests that factors contributing to general firearm violence also affect child safety, potentially including access to firearms, storage practices, and broader gun safety culture.
+
+## Gun Ownership Rates
+
+A critical factor to examine is the relationship between gun ownership rates and firearm mortality.
+
+```{python}
+#| echo: false
+# Gun ownership rates by firearm mortality category
+create_boxplot(
+    data=merged_data,
+    x_var='mortality_category',
+    y_var='gun_ownership_rates_per_state',
+    x_label="Firearm Mortality Category",
+    y_label="Gun Ownership Rate (%)",
+    title="Gun Ownership Rates by Firearm Mortality Category"
+)
+plt.show()
+```
+
+The visualization shows a clear positive association between gun ownership rates and firearm mortality. States categorized as having "Very High" or "High" firearm mortality typically have substantially higher gun ownership rates than states with "Very Low" mortality rates. This suggests that the prevalence of firearms in a state may be a significant factor in firearm-related deaths.
+
+# Social and Economic Factors Related to Firearm Mortality
+
+## Women's Labor Force Participation
+
+Research suggests that women's economic empowerment may be correlated with various social outcomes. Let's examine the relationship between women's labor force participation and firearm mortality rates.
+
+```{python}
+#| echo: false
+# Women's labor participation by firearm mortality category
+create_boxplot(
+    data=merged_data,
+    x_var='mortality_category',
+    y_var='labor_participation_women_percentage',
+    x_label="Firearm Mortality Category",
+    y_label="Labor Participation of Women (%)",
+    title="Women's Labor Force Participation by Firearm Mortality Category"
+)
+plt.show()
+```
+
+The data indicates that states with lower firearm mortality rates tend to have higher women's labor force participation rates compared to states with higher mortality rates. This could reflect broader socioeconomic factors or cultural differences between states.
+
+## Alcohol-Related Deaths
+
+Substance use is often examined alongside violence. Here, we look at whether alcohol-related deaths correlate with firearm mortality.
+
+```{python}
+#| echo: false
+# Alcohol-related death rate by firearm mortality category
+create_boxplot(
+    data=merged_data,
+    x_var='mortality_category',
+    y_var='alcohol_related_death_rate',
+    x_label="Firearm Mortality Category",
+    y_label="Alcohol-Related Death Rate (per 100,000)",
+    title="Alcohol-Related Death Rate by Firearm Mortality Category"
+)
+plt.show()
+```
+
+There appears to be a relationship between alcohol-related deaths and firearm mortality rates, with states having higher firearm mortality also showing higher alcohol-related death rates. This may reflect broader public health challenges or risk factors that span multiple domains.
+
+# Specific Gun Policies and Their Relationship to Firearm Mortality
+
+Now we'll examine how specific gun policies correlate with firearm mortality rates. For this analysis, we'll create stacked bar charts that show the distribution of mortality categories for states with and without particular policies.
+
+
+```{python}
+#| echo: false
+palette = {
+    "Very Low": "#1c7416", 
+    "Low": "#68bb59", 
+    "Moderate": "#fab733", 
+    "High": "#ff0000", 
+    "Very High": "#c61a09"
+}
+
+fig = plt.figure(figsize=(6, 0.5))  # Wider but very short height
+ax = fig.add_subplot(111)
+
+patches = [mpatches.Patch(color=palette[cat], label=cat) for cat in palette]
+ax.legend(handles=patches, 
+          loc='center', 
+          ncol=5,            # All 5 items in one row
+          frameon=False,     # Remove border
+          fontsize=8)        # Smaller text
+
+ax.axis('off')
+plt.tight_layout(pad=0.1)    # Minimize padding
+plt.show()
+```
+
+## Age Requirements for Firearm Purchase
+
+Age requirements restrict gun purchases for individuals below a specified age. Let's examine whether states with these policies show different mortality patterns.
+
+```{python}
+#| echo: false
+# Recode age_requirement if needed
+merged_data["age_requirement"] = merged_data["age_requirement"].map({0: "Policy Not Enacted", 1: "Policy Enacted"})
+
+# Cross-tabulate and calculate proportions
+crosstab_age = pd.crosstab(
+    merged_data["age_requirement"], 
+    merged_data["mortality_category"], 
+    normalize="index"
+)
+
+# Plot as stacked bar chart
+crosstab_age.plot(
+    kind='bar',
+    stacked=True,
+    color=[palette[cat] for cat in crosstab_age.columns],
+    figsize=(4, 3),
+    legend=False
+)
+
+plt.title("Firearm Mortality by Age Requirement Policy", fontsize=10)
+plt.xlabel("Age Requirement Policy", fontsize=9)
+plt.ylabel("Proportion", fontsize=9)
+plt.xticks(rotation=0)
+plt.tick_params(axis='x', labelsize=7)  
+plt.grid(axis='y', linestyle='--', alpha=0.7)
+plt.tight_layout()
+plt.show()
+```
+
+States that have enacted age requirement policies for firearm purchases show a notably different distribution of mortality rates compared to states without such policies. The former have a higher proportion of states in the "Very Low" and "Low" mortality categories, suggesting that age requirements may be associated with lower firearm mortality rates.
+
+## Gun Removal Programs
+
+Gun removal programs, often known as "red flag laws" or Extreme Risk Protection Orders, allow for the temporary removal of firearms from individuals deemed to be at high risk of harming themselves or others.
+
+```{python}
+#| echo: false
+# Recode gun_removal_program if needed
+merged_data["gun_removal_program"] = merged_data["gun_removal_program"].map({0: "Policy Not Enacted", 1: "Policy Enacted"})
+
+# Cross-tabulate and calculate proportions
+crosstab_removal = pd.crosstab(
+    merged_data["gun_removal_program"], 
+    merged_data["mortality_category"], 
+    normalize="index"
+)
+
+# Plot as stacked bar chart
+crosstab_removal.plot(
+    kind='bar',
+    stacked=True,
+    color=[palette[cat] for cat in crosstab_removal.columns],
+    figsize=(4, 3),
+    legend=False
+)
+
+plt.title("Firearm Mortality by Gun Removal Program Policy", fontsize=10)
+plt.xlabel("Gun Removal Program Policy", fontsize=9)
+plt.ylabel("Proportion", fontsize=9)
+plt.xticks(rotation=0)
+plt.tick_params(axis='x', labelsize=7)  
+plt.grid(axis='y', linestyle='--', alpha=0.7)
+plt.tight_layout()
+plt.show()
+```
+
+The data reveals that states with gun removal programs have a substantially higher proportion in the "Very Low" and "Low" mortality categories compared to states without such programs. This suggests that policies enabling the temporary removal of firearms from high-risk individuals might be effective in reducing firearm deaths.
+
+## High-Capacity Magazine Restrictions
+
+High-capacity magazines allow firearms to fire many rounds without reloading. Restrictions on these devices are meant to reduce casualties in mass shooting events.
+
+```{python}
+#| echo: false
+# Recode high_capacity_magazines_prohibited if needed
+merged_data["high_capacity_magazines_prohibited"] = merged_data["high_capacity_magazines_prohibited"].map({
+    0: "Policy Not Enacted", 
+    1: "Policy Enacted"
+})
+
+# Cross-tabulate and calculate proportions
+crosstab_magazines = pd.crosstab(
+    merged_data["high_capacity_magazines_prohibited"], 
+    merged_data["mortality_category"], 
+    normalize="index"
+)
+
+# Plot as stacked bar chart
+crosstab_magazines.plot(
+    kind='bar',
+    stacked=True,
+    color=[palette[cat] for cat in crosstab_magazines.columns],
+    figsize=(4, 3),
+    legend=False
+)
+
+plt.title("Firearm Mortality by High-Capacity Magazine Policy", fontsize=12)
+plt.xlabel("High-Capacity Magazine Policy", fontsize=9)
+plt.ylabel("Proportion", fontsize=9)
+plt.xticks(rotation=0)
+plt.tick_params(axis='x', labelsize=7)  
+plt.grid(axis='y', linestyle='--', alpha=0.7)
+plt.tight_layout()
+plt.show()
+```
+
+States that have enacted high-capacity magazine prohibitions show a markedly different distribution of mortality rates, with a higher percentage falling into the "Very Low" category compared to states without such restrictions. This suggests that limiting high-capacity magazines may be associated with lower overall firearm mortality rates.
+
+## Assault Weapons Prohibitions
+
+Assault weapons bans restrict civilian access to certain semi-automatic firearms with specific features.
+
+```{python}
+#| echo: false
+# Recode assault weapons prohibition policy (note: typo in "asault")
+merged_data["asault_weapons_prohibited"] = merged_data["asault_weapons_prohibited"].map({
+    0: "Policy Not Enacted", 
+    1: "Policy Enacted"
+})
+
+# Cross-tabulate and calculate proportions
+crosstab_assault = pd.crosstab(
+    merged_data["asault_weapons_prohibited"], 
+    merged_data["mortality_category"], 
+    normalize="index"
+)
+
+# Plot as stacked bar chart
+crosstab_assault.plot(
+    kind='bar',
+    stacked=True,
+    color=[palette[cat] for cat in crosstab_assault.columns],
+    figsize=(4, 3),
+    legend=False
+)
+
+plt.title("Firearm Mortality by Assault Weapons Prohibition Policy", fontsize=12)
+plt.xlabel("Assault Weapons Prohibited Policy", fontsize=9)
+plt.ylabel("Proportion", fontsize=9)
+plt.xticks(rotation=0)
+plt.tick_params(axis='x', labelsize=7)  
+plt.grid(axis='y', linestyle='--', alpha=0.7)
+plt.tight_layout()
+plt.show()
+```
+
+Similar to high-capacity magazine restrictions, states with assault weapons prohibitions have a higher proportion in the "Very Low" mortality category compared to states without such bans. This relationship warrants further investigation to understand the specific mechanisms by which these policies might reduce firearm deaths.
+
+## Secure Storage and Child Access Laws
+
+Safe storage laws require gun owners to store firearms securely to prevent unauthorized access, especially by children.
+
+```{python}
+#| echo: false
+# Recode secure storage & child access laws
+merged_data["secure_storage_child_access_laws"] = merged_data["secure_storage_child_access_laws"].map({
+    0: "Policy Not Enacted", 
+    1: "Policy Enacted"
+})
+
+# Cross-tabulate and calculate proportions
+crosstab_storage = pd.crosstab(
+    merged_data["secure_storage_child_access_laws"], 
+    merged_data["mortality_category"], 
+    normalize="index"
+)
+
+# Plot as stacked bar chart
+crosstab_storage.plot(
+    kind='bar',
+    stacked=True,
+    color=[palette[cat] for cat in crosstab_storage.columns],
+    figsize=(4, 3),
+    legend=False
+)
+
+plt.title("Firearm Mortality by Secure Storage & Child Access Laws", fontsize=12)
+plt.xlabel("Secure Storage & Child Access Laws", fontsize=9)
+plt.ylabel("Proportion", fontsize=9)
+plt.xticks(rotation=0)
+plt.tick_params(axis='x', labelsize=7)  
+plt.grid(axis='y', linestyle='--', alpha=0.7)
+plt.tight_layout()
+plt.show()
+```
+
+States with secure storage and child access laws demonstrate a notably different mortality profile, with a higher percentage in the "Very Low" and "Low" categories. These laws, which aim to prevent unauthorized access to firearms (particularly by children), appear to be associated with reduced firearm mortality rates.
+
+## Background Checks and Purchase Permits
+
+Background check requirements aim to prevent prohibited individuals from purchasing firearms by verifying their eligibility.
+
+```{python}
+#| echo: false
+# Recode background check or purchase permit policy
+merged_data["background_check_or_purchase_permit"] = merged_data["background_check_or_purchase_permit"].map({
+    0: "Policy Not Enacted", 
+    1: "Policy Enacted"
+})
+
+# Cross-tabulate and calculate proportions
+crosstab_bgcheck = pd.crosstab(
+    merged_data["background_check_or_purchase_permit"], 
+    merged_data["mortality_category"], 
+    normalize="index"
+)
+
+crosstab_bgcheck.plot(
+    kind='bar',
+    stacked=True,
+    color=[palette[cat] for cat in crosstab_bgcheck.columns],
+    figsize=(4, 3),
+    legend=False
+)
+
+plt.title("Firearm Mortality by Background Check or Purchase Permit Policy", fontsize=10)
+plt.xlabel("Background Check or Purchase Permit Policy", fontsize=9)
+plt.ylabel("Proportion", fontsize=9)
+plt.xticks(rotation=0)
+plt.tick_params(axis='x', labelsize=7)  
+plt.grid(axis='y', linestyle='--', alpha=0.7)
+plt.tight_layout()
+plt.show()
+```
+
+The data reveals that states requiring background checks or purchase permits for firearms have a higher proportion of states in the "Very Low" and "Low" mortality categories. This suggests that policies designed to screen potential gun purchasers may be effective in reducing firearm-related deaths.
+
+# Conclusion
+
+Our analysis reveals several important patterns in the relationship between firearm policies, social factors, and mortality rates:
+
+1. **Gun Law Strength**: States with stronger gun laws generally have lower firearm mortality rates, suggesting that comprehensive gun legislation may effectively reduce gun violence.
+
+2. **Social Factors**: Several social and economic factors correlate with firearm mortality:
+   - Women's labor force participation is higher in states with lower firearm mortality
+   - Gun ownership rates are substantially higher in states with higher mortality rates
+   - Both children's firearm mortality and alcohol-related deaths follow similar patterns to overall firearm mortality
+
+3. **Specific Policies**: Multiple gun policies appear to be associated with lower firearm mortality rates:
+   - Age requirements for firearm purchases
+   - Gun removal programs for high-risk individuals
+   - Restrictions on high-capacity magazines and assault weapons
+   - Secure storage requirements and child access prevention laws
+   - Background checks and purchase permit systems
+
+These findings suggest that a multifaceted approach to reducing gun violence could be effective, combining policy interventions with broader social and economic initiatives. However, it's important to note that correlation does not imply causation, and further research is needed to establish causal relationships and understand the specific mechanisms by which these factors influence firearm mortality.
+
+Future research should consider longitudinal studies examining changes in mortality rates following policy implementations, as well as more detailed analyses of the interactions between different factors. Additionally, qualitative research could provide insights into how these policies are implemented and experienced on the ground.

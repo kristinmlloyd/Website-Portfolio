@@ -1,0 +1,826 @@
+---
+title: "Understanding Firearm Mortality Through Principal Component Regression"
+date: "April 8, 2025"
+format: 
+  html:
+    code-fold: true
+    embed-resources: true
+    theme: cosmo
+    toc: true
+    toc-depth: 3
+    fig-width: 8
+    fig-height: 4
+jupyter: python3
+---
+
+## Introduction
+
+This analysis examines the relationship between socioeconomic, policy, and public health factors and firearm mortality rates across U.S. states. Firearm mortality represents a complex public health challenge that likely stems from multiple interacting factors rather than simple, direct causes. Using Principal Component Regression (PCR), we can reduce a complex set of 27 predictors into meaningful latent factors to understand what drives differences in firearm mortality.
+
+### Why Principal Component Regression?
+
+Traditional regression approaches face challenges when analyzing firearm mortality:
+
+1. **Multicollinearity**: Many potential predictors (like poverty, education, and crime) are strongly correlated with each other, making it difficult to isolate their individual effects.
+
+2. **Dimensionality**: With 27 potential predictors and limited observations (50 states), we risk overfitting with standard regression approaches.
+
+3. **Latent Patterns**: The underlying drivers of firearm mortality may be broader societal patterns rather than individual variables.
+
+Principal Component Regression addresses these challenges by:
+
+1. First using Principal Component Analysis (PCA) to reduce our 27 predictors to uncorrelated components that capture underlying patterns
+2. Then using these components as predictors in a regression model of firearm mortality
+
+```{python}
+#| label: setup
+
+import matplotlib.pyplot as plt
+import seaborn as sns
+import pandas as pd
+import numpy as np
+from sklearn.preprocessing import StandardScaler
+from sklearn.decomposition import PCA
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import cross_val_score
+
+# Set visualization style for consistency
+sns.set_style('whitegrid')
+plt.rcParams['figure.figsize'] = (8, 4)
+plt.rcParams['font.size'] = 10
+```
+
+## Data & Preprocessing
+
+Our dataset contains state-level information on 27 potential predictors of firearm mortality, including socioeconomic indicators, crime rates, gun policies, educational attainment, and health metrics.
+
+```{python}
+#| label: data-loading
+
+# Load data
+merged_data = pd.read_csv("data/merged_data.csv")
+
+# Define the variables of interest
+selected_columns = [
+    'State',
+    'gini_index',
+    'mental health_score',
+    'gun_policy_strength',
+    'alcohol_related_death_rate',
+    'drug_overdose_mortality_rate',
+    'dv_people_to_shelter',
+    'dv_spending_per_person',
+    'unemployment_rate',
+    'labor_participation_women_percentage',
+    'domestic_violence_percentage',
+    'gun_ownership_rates_per_state',
+    'CrimeViolentRate',
+    'CrimeNonViolentRate',
+    'IncarcerationRate_Per100kResidents_2022',
+    'IncarcerationRate_BlackWhiteDisparity(X_to_1)_2020',
+    'IncarcerationRate_YouthCustodyRatePer100kYouths_2021',
+    'teen_birth_rate',
+    'less_than_hs_diploma_women',
+    'HS_Diploma_or_Equivalent_Only_women',
+    'Some_College/Associates_Degree_women',
+    "Bachelor's_Degree/Higher_women",
+    '2022 Suicide Deaths per 100,000 people (age-adjusted)',
+    'poverty_rate_2023',
+]
+
+# Define target variable
+target = 'firearm_mortality_by_state_2022'
+
+# Create modeling dataset
+model_data = merged_data[selected_columns + [target]]
+
+# Data preprocessing
+# Create feature matrix
+X = model_data.drop(columns=['State', target])
+
+# Clean data - replace commas and convert to numeric
+X = X.apply(lambda col: col.str.replace(',', '') if col.dtype == 'object' else col)
+X = X.apply(pd.to_numeric, errors='coerce')
+
+# Handle missing values
+missing_count = X.isna().sum().sum()
+if missing_count > 0:
+    print(f"Handling {missing_count} missing values with mean imputation")
+    X = X.fillna(X.mean())
+
+# Extract target variable
+y = model_data[target]
+
+# Standardize predictors (essential for PCA)
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+
+# Print target summary statistics
+print("\nFirearm Mortality Rate Summary Statistics:")
+print(y.describe().round(2))
+```
+
+## Principal Component Analysis Results
+
+### 1. Five Key Components Explain Most Variation
+
+Our analysis identifies five principal components that optimally predict firearm mortality rates, accounting for approximately 70% of the variance in the original predictors and achieving an R² of 0.816 in explaining firearm mortality rates.
+
+```{python}
+#| label: component-variance
+#| fig-cap: "Explained variance by principal components"
+
+# Perform PCA
+pca = PCA()
+X_pca = pca.fit_transform(X_scaled)
+
+# Visualize explained variance
+fig, ax = plt.subplots(1, 2, figsize=(8, 3))
+
+# Individual variance
+ax[0].bar(range(1, 11), pca.explained_variance_ratio_[:10])
+ax[0].set_xlabel('Principal Component')
+ax[0].set_ylabel('Explained Variance Ratio')
+ax[0].set_title('Variance Explained by Each Component')
+ax[0].set_xticks(range(1, 11))
+
+# Cumulative variance
+cumulative = np.cumsum(pca.explained_variance_ratio_)
+ax[1].plot(range(1, len(cumulative)+1), cumulative, marker='o')
+ax[1].set_xlabel('Number of Components')
+ax[1].set_ylabel('Cumulative Explained Variance')
+ax[1].set_title('Cumulative Explained Variance')
+ax[1].axhline(y=0.8, color='r', linestyle='--', label='80% Variance')
+ax[1].axhline(y=0.9, color='g', linestyle='--', label='90% Variance')
+ax[1].set_xticks(range(1, 11))
+ax[1].legend()
+
+plt.subplots_adjust(left=0.1, right=0.95, bottom=0.2, top=0.85, wspace=0.3)
+plt.show()
+
+```
+
+### Consistent Findings Across Methods
+
+1. **Gun Culture & Policy**: Across all modeling approaches, variables related to gun ownership and policy consistently emerged as key contributors to firearm mortality.
+
+2. **Crime and Incarceration**: Violent crime rates and incarceration metrics emerged as significant factors across all models.
+
+3. **Socioeconomic Context**: Poverty rates and educational attainment consistently showed significant relationships with firearm mortality.
+
+4. **Geographic Patterns**: Regional clusters appeared consistently across analyses, with northeastern states showing lower firearm mortality rates and southern states showing higher rates.
+
+## Conclusions
+
+Our analysis reveals that firearm mortality across U.S. states is driven by complex, interrelated factors that can be understood through several key dimensions:
+
+### 1. Principal Components of Firearm Mortality
+
+The five components identified through PCR represent coherent patterns in our society:
+
+1. **Gun Culture & Carceral Risk**: The dominant predictor, characterized by high gun ownership, weaker gun policies, and elevated incarceration rates
+2. **Educational & Economic Disadvantage**: Capturing patterns of socioeconomic inequality
+3. **Crime & Educational Polarization**: Reflecting the relationship between crime rates and educational disparities
+4. **Substance Use & Low Enforcement**: Representing substance abuse issues with less criminalization
+5. **Social Investment & Structural Factors**: Capturing patterns of social service investment and employment structures
+
+### 2. Regression Model Comparisons
+
+- **PCR** achieved strong performance (R² = 0.82) with just 5 components and showed excellent generalization in cross-validation
+- **Stepwise Regression** identified 9 key variables and achieved the highest performance (R² = 0.90)
+- **Hierarchical Regression** demonstrated the incremental value of different variable groups, with gun policy and socioeconomic factors showing the largest contributions
+
+### 3. Policy Implications
+
+These findings suggest that addressing firearm mortality requires comprehensive approaches:
+
+1. **Gun availability and policy** remain central factors, but they operate within broader social contexts
+2. **Crime reduction alone** is unlikely to dramatically reduce firearm mortality without addressing other factors
+3. **Investment in social services** and addressing socioeconomic inequalities may provide important complementary approaches
+4. **Regional differences** suggest that policy approaches may need to be tailored to different state contexts
+
+The complementary insights from these three regression approaches suggest that effective policies to reduce firearm mortality should be multi-faceted, addressing not only direct gun access and regulations but also the broader socioeconomic and health contexts in which gun violence occurs.
+
+### 2. Component Interpretations
+
+```{python}
+#| label: top-loadings
+#| fig-cap: "Top 5 variable loadings for each principal component"
+
+# Create DataFrame of component loadings
+component_df = pd.DataFrame(
+    pca.components_.T[:, :5],
+    columns=[f'PC{i+1}' for i in range(5)],
+    index=X.columns
+)
+
+# Print top 5 variables in each of the first 5 components
+for pc in component_df.columns:
+    print(f"\nTop 5 variables in {pc}:")
+    top_vars = component_df[pc].abs().sort_values(ascending=False).head(5)
+    for var in top_vars.index:
+        loading = component_df.loc[var, pc]
+        sign = "+" if loading > 0 else "-"
+        print(f"  {var}: {sign}{abs(loading):.4f}")
+```
+
+#### Key Component Interpretations:
+
+**PC1: Gun Culture & Carceral Risk**  
+This component is driven by high levels of gun ownership, teen birth rates, suicide by firearms, and incarceration rates, with negative loadings on gun policy strength and college education.
+
+**PC2: Educational & Economic Disadvantage**  
+This component captures states with higher levels of income inequality, poverty, unemployment, and low education levels, particularly for women.
+
+**PC3: Crime & Educational Polarization**  
+This component is dominated by violent and nonviolent crime rates, alongside an educational divide between high school and college attainment.
+
+**PC4: Substance Use & Low Enforcement**  
+This dimension captures substance abuse indicators but correlates negatively with crime and incarceration rates.
+
+**PC5: Social Investment vs. Structural Strain**  
+This component emphasizes domestic violence spending, lower unemployment, and a unique educational distribution pattern.
+
+### 3. Component Correlations with Firearm Mortality
+
+```{python}
+#| label: all-components
+#| fig-cap: "Correlations between principal components and firearm mortality"
+
+# Correlation with target
+component_corr = pd.DataFrame(X_pca[:, :5], columns=[f'PC{i+1}' for i in range(5)])
+component_corr['Target'] = y
+correlation = component_corr.corr()['Target'].drop('Target')
+
+# Plot correlation with target
+plt.figure(figsize=(6, 4))
+correlation.sort_values().plot(kind='barh')
+plt.title('Correlation between Principal Components and Firearm Mortality')
+plt.xlabel('Correlation Coefficient')
+plt.grid(True, alpha=0.3)
+plt.axvline(x=0, color='k', linestyle='--', alpha=0.3)
+plt.tight_layout()
+plt.show()
+```
+
+PC1 overwhelmingly correlates with firearm mortality (r = 0.878), making it the dominant predictor in our model. The other components show weaker correlations, with PC3 and PC5 showing moderate positive relationships.
+
+### 4. State Clustering Analysis
+
+States cluster in meaningful patterns along the first two principal components, with a striking left-to-right gradient of increasing firearm mortality.
+
+```{python}
+#| label: state-clusters
+#| fig-cap: "States positioned by principal components with firearm mortality rates"
+
+# Create a scatter plot of states using the top 2 principal components
+states_pca = pd.DataFrame({
+    'State': model_data['State'],
+    'PC1': X_pca[:, 0],
+    'PC2': X_pca[:, 1],
+    'Firearm_Mortality': y
+})
+
+plt.figure(figsize=(8, 6))
+scatter = plt.scatter(states_pca['PC1'], states_pca['PC2'], 
+                     c=states_pca['Firearm_Mortality'], 
+                     cmap='RdYlBu_r', s=80, alpha=0.8)
+
+# Add state labels
+for i, row in states_pca.iterrows():
+    plt.annotate(row['State'], (row['PC1'], row['PC2']), 
+                fontsize=7, alpha=0.7)
+
+plt.colorbar(scatter, label='Firearm Mortality Rate')
+plt.xlabel(f'PC1 - Gun Culture & Carceral Risk ({pca.explained_variance_ratio_[0]:.1%} variance)')
+plt.ylabel(f'PC2 - Economic Disadvantage ({pca.explained_variance_ratio_[1]:.1%} variance)')
+plt.title('States Positioned by First Two Principal Components')
+plt.grid(True, alpha=0.3)
+plt.tight_layout()
+plt.show()
+
+# Identify regional clusters
+northeast = ['Massachusetts', 'Rhode Island', 'Connecticut', 'New York', 'New Jersey', 'Vermont', 'New Hampshire', 'Maine']
+south = ['Mississippi', 'Louisiana', 'Alabama', 'Arkansas', 'Tennessee', 'South Carolina', 'Georgia', 'North Carolina', 'Kentucky']
+west = ['California', 'Washington', 'Oregon', 'Colorado', 'Hawaii', 'Nevada', 'New Mexico', 'Arizona']
+
+print("\nRegional PC1 averages:")
+ne_states = states_pca[states_pca['State'].isin(northeast)]
+south_states = states_pca[states_pca['State'].isin(south)]
+west_states = states_pca[states_pca['State'].isin(west)]
+
+print(f"Northeast states average PC1: {ne_states['PC1'].mean():.4f}")
+print(f"Southern states average PC1: {south_states['PC1'].mean():.4f}")
+print(f"Western states average PC1: {west_states['PC1'].mean():.4f}")
+```
+
+### 5. PCR Model Performance
+
+```{python}
+#| label: model-performance
+#| fig-cap: "Model selection via cross-validation"
+
+# Cross-validation to determine optimal number of components
+mse = []
+r2 = []
+n_components = np.arange(1, min(X.shape[0], X.shape[1]) + 1)
+
+for i in n_components:
+    # Cross-validation for MSE
+    mse_scores = cross_val_score(LinearRegression(), X_pca[:, :i], y, 
+                                 scoring='neg_mean_squared_error', cv=5)
+    mse.append(-mse_scores.mean())
+    
+    # Cross-validation for R²
+    r2_scores = cross_val_score(LinearRegression(), X_pca[:, :i], y, 
+                               scoring='r2', cv=5)
+    r2.append(r2_scores.mean())
+
+# Plot CV results
+fig, axes = plt.subplots(1, 2, figsize=(8, 3))
+
+# MSE plot
+axes[0].plot(n_components[:20], mse[:20], marker='o')  # Show only first 20 for clarity
+axes[0].set_xlabel('Number of Principal Components')
+axes[0].set_ylabel('Cross-Validated MSE')
+axes[0].set_title('PCR Model Selection (MSE)')
+optimal_n_mse = np.argmin(mse) + 1
+axes[0].axvline(x=optimal_n_mse, color='r', linestyle='--', 
+                label=f'Optimal: {optimal_n_mse}')
+axes[0].legend()
+axes[0].grid(True, alpha=0.3)
+
+# R² plot
+axes[1].plot(n_components[:20], r2[:20], marker='o')  # Show only first 20 for clarity
+axes[1].set_xlabel('Number of Principal Components')
+axes[1].set_ylabel('Cross-Validated R²')
+axes[1].set_title('PCR Model Selection (R²)')
+optimal_n_r2 = np.argmax(r2) + 1
+axes[1].axvline(x=optimal_n_r2, color='r', linestyle='--', 
+                label=f'Optimal: {optimal_n_r2}')
+axes[1].legend()
+axes[1].grid(True, alpha=0.3)
+
+plt.tight_layout()
+plt.show()
+
+# Choose optimal number of components
+optimal_n = optimal_n_mse  # Using MSE-based optimization
+print(f"Optimal number of components (by MSE): {optimal_n_mse}")
+print(f"Optimal number of components (by R²): {optimal_n_r2}")
+
+# Fit final model
+final_model = LinearRegression()
+final_model.fit(X_pca[:, :optimal_n], y)
+
+# Print model performance
+print(f"R² on training data: {final_model.score(X_pca[:, :optimal_n], y):.3f}")
+
+# Print coefficients
+print("\nPCR Model Coefficients for Principal Components:")
+for i, coef in enumerate(final_model.coef_[:optimal_n]):
+    print(f"PC{i+1}: {coef:.6f}")
+```
+
+### 6. Feature Importance Analysis
+
+```{python}
+#| label: feature-importance
+#| fig-cap: "Feature importance based on PCA + Regression"
+
+# Calculate feature importance
+feature_importance = np.zeros(pca.components_.shape[1])
+for i in range(optimal_n):
+    feature_importance += final_model.coef_[i] * pca.components_[i]
+
+# Create DataFrame for visualization
+importance_df = pd.DataFrame({
+    'Feature': X.columns,
+    'Importance': np.abs(feature_importance)
+}).sort_values('Importance', ascending=False)
+
+# Plot top features
+plt.figure(figsize=(7, 5))
+importance_df.head(10).set_index('Feature').sort_values('Importance').plot(kind='barh')
+plt.title('Top 10 Features - Importance Based on PCA + Regression')
+plt.xlabel('Absolute Importance')
+plt.grid(True, alpha=0.3)
+plt.tight_layout()
+plt.show()
+```
+
+```{python}
+#| label: feature-treemap
+#| fig-cap: "Treemap of feature importance"
+
+import squarify
+
+# Mapping from technical column names to readable labels
+rename_dict = {
+    'CrimeRate': 'Crime Rate',
+    'less_than_hs_diploma_women': 'Women without HS Diploma',
+    'CrimeViolentRate': 'Violent Crime Rate',
+    'CrimeNonViolentRate': 'Non-Violent Crime Rate',
+    'teen_birth_rate': 'Teen Birth Rate',
+    'IncarcerationRate_Per100kResidents_2022': 'Incarceration Rate',
+    'gun_ownership_rates_per_state': 'Gun Ownership Rate',
+    'gun_policy_strength': 'Gun Policy Strength',
+    'poverty_rate_2023': 'Poverty Rate',
+    'IncarcerationRate_BlackWhiteDisparity(X_to_1)_2020': 'Incarceration Disparity',
+    'dv_spending_per_person': 'DV Spending per Person',
+    'alcohol_related_death_rate': 'Alcohol Death Rate',
+    '2022 Suicide Deaths per 100,000 people (age-adjusted)': 'Suicide Death Rate',
+    'IncarcerationRate_YouthCustodyRatePer100kYouths_2021': 'Youth Incarceration Rate',
+    'dv_people_to_shelter': 'DV Shelter Demand'
+}
+
+# Apply renaming
+importance_df['Label'] = importance_df['Feature'].map(rename_dict).fillna(importance_df['Feature'])
+
+# Plot the treemap with custom font sizes
+plt.figure(figsize=(8, 5))
+
+# Generate the normed coordinates for the boxes
+normed = squarify.normalize_sizes(importance_df.head(10)['Importance'], 1, 1)
+rects = squarify.squarify(normed, 0, 0, 1, 1)
+
+# Choose the color palette
+colors = sns.color_palette("RdYlBu_r", 10)
+
+# Create custom labels
+labels = importance_df.head(10)['Label'].tolist()
+
+for i, (rect, label) in enumerate(zip(rects, labels)):
+    fontsize = 9
+    
+    # Fill rectangles with color
+    plt.fill_between([rect['x'], rect['x']+rect['dx']], [rect['y'], rect['y']], 
+                       [rect['y'], rect['y']], color=colors[i], alpha=0.9)
+    plt.fill_between([rect['x'], rect['x']+rect['dx']], [rect['y']+rect['dy'], rect['y']+rect['dy']], 
+                       [rect['y'], rect['y']], color=colors[i], alpha=0.9)
+    plt.fill_between([rect['x'], rect['x']], [rect['y'], rect['y']+rect['dy']], 
+                       [rect['y'], rect['y']], color=colors[i], alpha=0.9)
+    plt.fill_between([rect['x']+rect['dx'], rect['x']+rect['dx']], [rect['y'], rect['y']+rect['dy']], 
+                       [rect['y'], rect['y']], color=colors[i], alpha=0.9)
+    
+    # Calculate the center of the rectangle for text placement
+    text_x = rect['x'] + rect['dx']/2
+    text_y = rect['y'] + rect['dy']/2
+    
+    plt.text(text_x, text_y, label, 
+             horizontalalignment='center',
+             verticalalignment='center',
+             fontsize=fontsize,
+             weight='bold')
+
+plt.axis('off')
+plt.title("Top 10 Features Contributing to Firearm Mortality", 
+          fontsize=12, weight='bold')
+plt.tight_layout()
+plt.show()
+```
+
+## Comparative Regression Analysis
+
+We compare three regression approaches to understand firearm mortality predictors:
+
+1. Principal Component Regression (PCR)
+2. Backward Stepwise Regression
+3. Hierarchical Regression
+
+### 1. Backward Stepwise Regression
+
+```{python}
+#| label: stepwise-regression
+
+import statsmodels.api as sm
+from statsmodels.stats.outliers_influence import variance_inflation_factor
+from scipy import stats
+
+def backward_stepwise_regression(X, y, significance_level=0.05):
+    """
+    Perform backward stepwise regression
+    """
+    features = list(X.columns)
+    n_features = len(features)
+    
+    print(f"Starting backward elimination with {n_features} predictors")
+    print("-" * 40)
+    
+    step = 0
+    while len(features) > 0:
+        step += 1
+        
+        # Add constant (intercept)
+        X_with_const = sm.add_constant(X[features])
+        
+        # Fit the model
+        model = sm.OLS(y, X_with_const).fit()
+        
+        # Get p-values (excluding constant)
+        p_values = model.pvalues.drop('const')
+        
+        # Find predictor with highest p-value
+        max_p_value = p_values.max()
+        worst_predictor = p_values.idxmax()
+        
+        # Check if we should remove the predictor
+        if max_p_value > significance_level:
+            print(f"Step {step}: Removing '{worst_predictor}' (p={max_p_value:.4f})")
+            features.remove(worst_predictor)
+        else:
+            print(f"Step {step}: All predictors significant (p < {significance_level})")
+            break
+    
+    # Create final model with remaining features
+    if features:
+        X_final = sm.add_constant(X[features])
+        final_model = sm.OLS(y, X_final).fit()
+    else:
+        final_model = None
+    
+    return final_model, features
+
+# Run backward stepwise regression
+final_model, stepwise_features = backward_stepwise_regression(X, y)
+
+# Calculate standardized coefficients for final model
+if final_model is not None:
+    X_final = X[stepwise_features]
+    X_final_z = (X_final - X_final.mean()) / X_final.std()
+    y_z = (y - y.mean()) / y.std()
+    
+    model_std = sm.OLS(y_z, sm.add_constant(X_final_z)).fit()
+    
+    # Create DataFrame for visualization
+    std_coefs = pd.DataFrame({
+        'Standardized Coefficient': model_std.params.drop('const')
+    }).sort_values('Standardized Coefficient', ascending=False)
+    
+    # Plot standardized coefficients
+    plt.figure(figsize=(7, 4))
+    std_coefs.sort_values('Standardized Coefficient').plot(kind='barh')
+    plt.title('Standardized Regression Coefficients (Stepwise Model)')
+    plt.xlabel('Standardized Coefficient')
+    plt.grid(True, alpha=0.3)
+    plt.tight_layout()
+    plt.show()
+    
+    # Save model performance metrics
+    stepwise_r2 = final_model.rsquared
+    stepwise_adj_r2 = final_model.rsquared_adj
+    stepwise_n_predictors = len(final_model.params) - 1  # Exclude constant
+    
+    print(f"\nStepwise Model Performance:")
+    print(f"R²: {stepwise_r2:.4f}")
+    print(f"Adjusted R²: {stepwise_adj_r2:.4f}")
+    print(f"Number of predictors: {stepwise_n_predictors}")
+```
+
+### 2. Hierarchical Regression
+
+```{python}
+#| label: hierarchical-regression
+
+def hierarchical_regression(X, y, variable_blocks, block_names=None):
+    """
+    Perform hierarchical regression with blocks of variables
+    """
+    if block_names is None:
+        block_names = [f"Block {i+1}" for i in range(len(variable_blocks))]
+    
+    # Storage for models
+    models = []
+    summary = []
+    
+    # Cumulative list of variables
+    cumulative_vars = []
+    
+    print("Hierarchical Regression Results:")
+    print("-" * 40)
+    
+    # Loop through blocks
+    for i, (block, name) in enumerate(zip(variable_blocks, block_names)):
+        # Add current block to cumulative variables
+        cumulative_vars.extend(block)
+        
+        # Fit model with current set of variables
+        X_current = sm.add_constant(X[cumulative_vars])
+        model = sm.OLS(y, X_current).fit()
+        models.append(model)
+        
+        # Calculate R-squared change
+        if i > 0:
+            r2_change = model.rsquared - models[i-1].rsquared
+            adj_r2_change = model.rsquared_adj - models[i-1].rsquared_adj
+            
+            # F-test for R-squared change
+            df1 = len(block)  # degrees of freedom for the new variables
+            df2 = len(y) - len(cumulative_vars) - 1  # residual degrees of freedom
+            f_change = (r2_change / df1) / ((1 - model.rsquared) / df2)
+            
+            # p-value for F-change
+            p_change = 1 - stats.f.cdf(f_change, df1, df2)
+        else:
+            r2_change = model.rsquared
+            adj_r2_change = model.rsquared_adj
+            f_change = model.fvalue
+            p_change = model.f_pvalue
+        
+        # Store summary statistics
+        block_summary = {
+            'Block': name,
+            'R-squared': model.rsquared,
+            'Adj R-squared': model.rsquared_adj,
+            'R-squared Change': r2_change,
+            'F Change': f_change,
+            'p-value': p_change
+        }
+        summary.append(block_summary)
+        
+        # Print block results
+        print(f"Block {i+1}: {name}")
+        print(f"  Variables: {', '.join(block)}")
+        print(f"  R²: {model.rsquared:.4f}, ΔR²: {r2_change:.4f} (p={p_change:.4f})")
+        print(f"  Adj.R²: {model.rsquared_adj:.4f}")
+        print("-" * 40)
+    
+    return models, pd.DataFrame(summary)
+
+# Define variable blocks based on conceptual groupings
+blocks = [
+    # Block 1: Gun-specific factors
+    ['gun_ownership_rates_per_state', 'gun_policy_strength'],
+    
+    # Block 2: Socioeconomic indicators
+    ['poverty_rate_2023', 'gini_index', 'unemployment_rate'],
+    
+    # Block 3: Crime and justice metrics
+    ['CrimeViolentRate', 'CrimeNonViolentRate', 'IncarcerationRate_Per100kResidents_2022', 
+     'IncarcerationRate_BlackWhiteDisparity(X_to_1)_2020'],
+    
+    # Block 4: Health and substance abuse
+    ['alcohol_related_death_rate', 'drug_overdose_mortality_rate',
+     '2022 Suicide Deaths per 100,000 people (age-adjusted)', 'mental health_score'],
+    
+    # Block 5: Social factors and education
+    ['teen_birth_rate', 'domestic_violence_percentage', 'dv_spending_per_person',
+     'less_than_hs_diploma_women', "Bachelor's_Degree/Higher_women"]
+]
+
+# Block names for easier interpretation
+block_names = [
+    "Gun Policy & Ownership",
+    "Socioeconomic Factors",
+    "Crime & Justice System",
+    "Health & Substance Abuse",
+    "Social Factors & Education"
+]
+
+# Run hierarchical regression
+hier_models, hier_summary = hierarchical_regression(X, y, blocks, block_names)
+
+# Plot the progression of R-squared with each block
+plt.figure(figsize=(7, 4))
+plt.bar(hier_summary['Block'], hier_summary['R-squared'], color='blue', alpha=0.7)
+plt.plot(hier_summary['Block'], hier_summary['R-squared'], 'ro-', linewidth=2)
+plt.title('Cumulative R-squared by Variable Block')
+plt.ylabel('R-squared')
+plt.xticks(rotation=45, ha='right')
+plt.grid(axis='y', alpha=0.3)
+plt.tight_layout()
+plt.show()
+
+# Save hierarchical model performance metrics
+final_hier_model = hier_models[-1]
+hier_r2 = final_hier_model.rsquared
+hier_adj_r2 = final_hier_model.rsquared_adj
+hier_n_predictors = len(final_hier_model.params) - 1  # Exclude constant
+
+print(f"\nFinal Hierarchical Model Performance:")
+print(f"R²: {hier_r2:.4f}")
+print(f"Adjusted R²: {hier_adj_r2:.4f}")
+print(f"Number of predictors: {hier_n_predictors}")
+```
+
+### 3. Cross-Validation Comparison
+
+```{python}
+#| label: cross-validation
+
+from sklearn.model_selection import KFold
+from sklearn.linear_model import LinearRegression
+import statsmodels.api as sm
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Setup cross-validation
+kf = KFold(n_splits=5, shuffle=True, random_state=42)
+
+# Storage for results
+cv_results = {
+    'PCR': [],
+    'Stepwise': [],
+    'Hierarchical': []
+}
+
+# Cross-validate PCR
+for train_idx, test_idx in kf.split(X_scaled):
+    X_train, X_test = X_scaled[train_idx], X_scaled[test_idx]
+    y_train, y_test = y.iloc[train_idx], y.iloc[test_idx]
+    
+    pca_cv = PCA()
+    X_train_pca = pca_cv.fit_transform(X_train)
+    X_test_pca = pca_cv.transform(X_test)
+    
+    pcr_cv = LinearRegression()
+    pcr_cv.fit(X_train_pca[:, :optimal_n], y_train)
+    
+    pcr_score = pcr_cv.score(X_test_pca[:, :optimal_n], y_test)
+    cv_results['PCR'].append(pcr_score)
+
+# Cross-validate Stepwise Regression
+for train_idx, test_idx in kf.split(X):
+    X_train_df = X.iloc[train_idx]
+    X_test_df = X.iloc[test_idx]
+    y_train, y_test = y.iloc[train_idx], y.iloc[test_idx]
+    
+    X_train_sw = sm.add_constant(X_train_df[stepwise_features])
+    X_test_sw = sm.add_constant(X_test_df[stepwise_features])
+    stepwise_cv = sm.OLS(y_train, X_train_sw).fit()
+    
+    y_pred = stepwise_cv.predict(X_test_sw)
+    stepwise_score = 1 - (((y_test - y_pred) ** 2).sum() / ((y_test - y_test.mean()) ** 2).sum())
+    cv_results['Stepwise'].append(stepwise_score)
+
+# Cross-validate Hierarchical Regression
+hier_vars = []
+for block in blocks:
+    hier_vars.extend(block)
+
+for train_idx, test_idx in kf.split(X):
+    X_train_df = X.iloc[train_idx]
+    X_test_df = X.iloc[test_idx]
+    y_train, y_test = y.iloc[train_idx], y.iloc[test_idx]
+    
+    X_train_hier = sm.add_constant(X_train_df[hier_vars])
+    X_test_hier = sm.add_constant(X_test_df[hier_vars])
+    hier_cv = sm.OLS(y_train, X_train_hier).fit()
+    
+    y_pred = hier_cv.predict(X_test_hier)
+    hier_score = 1 - (((y_test - y_pred) ** 2).sum() / ((y_test - y_test.mean()) ** 2).sum())
+    cv_results['Hierarchical'].append(hier_score)
+
+# --- Summary Table ---
+cv_summary = {
+    'Model': ['PCR', 'Stepwise', 'Hierarchical'],
+    'Mean CV R²': [np.mean(cv_results['PCR']), np.mean(cv_results['Stepwise']), np.mean(cv_results['Hierarchical'])],
+    'R² Std Dev': [np.std(cv_results['PCR']), np.std(cv_results['Stepwise']), np.std(cv_results['Hierarchical'])],
+    'Train R²': [final_model.rsquared, stepwise_r2, hier_r2],
+    'Number of Predictors': [optimal_n, stepwise_n_predictors, hier_n_predictors]
+}
+
+cv_df = pd.DataFrame(cv_summary)
+
+# Format and print summary table
+print("\nCross-Validation Comparison of All Models:")
+cv_formatted = cv_df.copy()
+cv_formatted['Mean CV R²'] = cv_formatted['Mean CV R²'].apply(lambda x: f"{x:.4f}")
+cv_formatted['R² Std Dev'] = cv_formatted['R² Std Dev'].apply(lambda x: f"{x:.4f}")
+cv_formatted['Train R²'] = cv_formatted['Train R²'].apply(lambda x: f"{x:.4f}")
+print(cv_formatted)
+
+# --- Visualization ---
+plt.figure(figsize=(7, 4))
+x = np.arange(len(cv_df['Model']))
+width = 0.35
+
+plt.bar(x - width/2, cv_df['Train R²'], width, label='Training R²')
+plt.bar(x + width/2, cv_df['Mean CV R²'], width, label='Cross-Validation R²')
+
+plt.xlabel('Model')
+plt.ylabel('R-squared')
+plt.title('Model Performance Comparison')
+plt.xticks(x, cv_df['Model'])
+plt.legend()
+plt.grid(axis='y', alpha=0.3)
+plt.tight_layout()
+plt.show()
+```
+
+## Conclusion: Implications for Research and Policy
+
+This study has applied Principal Component Regression and complementary methods to understand the complex relationships between socioeconomic, policy, and public health factors and firearm mortality rates across U.S. states. Our findings offer several important insights for both research methodology and policy development.
+
+### Methodological Insights
+
+The success of our Principal Component Regression approach demonstrates the value of dimension reduction techniques when studying complex social phenomena with multiple correlated predictors. By reducing 27 variables to five meaningful components, we achieved:
+
+1. **Parsimony without sacrificing explanatory power** - The PCR model with five components achieved an R² of 0.82, nearly matching more complex models while dramatically reducing dimensionality
+  
+2. **Superior cross-validation performance** - PCR showed the most consistent performance across validation samples, suggesting better generalizability to new data
+
+3. **Interpretable latent dimensions** - The components identified represent coherent social phenomena that help us conceptualize the underlying drivers of firearm mortality
+
+These results suggest that treating firearm mortality as emerging from broad societal patterns rather than individual isolated factors provides a more robust analytical framework.

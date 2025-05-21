@@ -1,0 +1,139 @@
+---
+format: 
+  html:
+    embed-resources: true
+    code-fold: true
+    css: styles.css
+    toc-location: right
+    page-layout: full
+bibliography: references.bib
+csl: apa.csl
+---
+# PEPFAR
+
+## What is PEPFAR?
+
+PEPFAR stands for the President’s Emergency Plan for AIDS Relief. It is a U.S. government initiative launched in 2003 to combat the global HIV/AIDS epidemic, primarily in low- and middle-income countries. PEPFAR provides funding, treatment, testing, and prevention programs and is the largest commitment by any nation to address a single disease in history.
+
+<figure>
+  <iframe src="../interactive_viz_outputs/pepfar_lineplot.html" width="102%" height="465px" frameborder="0" scrolling="no"></iframe>
+  <figcaption style="text-align: left; margin-top: 10px;">
+    <strong>Figure 1: </strong>Lineplot of PEPFAR's impact. <em>Data sources: @pepfar2025, @worldometers2025population</em>
+  </figcaption>
+</figure>
+
+## What Resources Does PEPFAR Provide?
+
+PEPFAR supports a wide range of HIV-related services, including:
+
+- HIV testing and counseling services
+- Antiretroviral therapy (ART) and medication access
+- Prevention programs such as condom distribution, PrEP, and PEP
+- Data systems and surveillance to monitor, evaluate, and improve care
+- Technical assistance to strengthen national HIV responses
+
+## Which countries get PEPFAR funding?
+
+The map below illustrates the expansion of PEPFAR (the U.S. President’s Emergency Plan for AIDS Relief) funding between 2003 and 2015. Countries colored in red indicate those that received PEPFAR support during this period, while those in white were not funded under the program.
+
+```{python}
+
+#| echo: false
+
+import plotly.express as px
+import pandas as pd
+
+# Load data
+hiv_data = pd.read_csv('../data/clean_data/pepfar.csv')
+
+# Fix columns
+hiv_data['usa_funds_pepfar_2022'] = hiv_data['usa_funds_pepfar_2022'].fillna(0).astype(int)
+hiv_data['Year'] = hiv_data['Year'].fillna(9999).astype(int)  # Fill missing years temporarily
+
+# Build long dataframe for animation
+all_years = list(range(2004, 2016))
+records = []
+
+for _, row in hiv_data.iterrows():
+    for year in all_years:
+        funded = int((row['Year'] != 9999) and (year >= row['Year']))
+        records.append({
+            'Countries': row['Countries'],
+            'Year_Shown': year,
+            'Funding Status': 'PEPFAR Funded' if funded else 'Not PEPFAR Funded'
+        })
+
+animated_df = pd.DataFrame(records)
+
+# Plot animated choropleth
+fig = px.choropleth(
+    animated_df,
+    locations='Countries',
+    locationmode='country names',
+    color='Funding Status',
+    animation_frame='Year_Shown',
+    color_discrete_map={
+        'Not PEPFAR Funded': 'white',  # UNFUNDED = WHITE
+        'PEPFAR Funded': 'red'         # FUNDED = RED
+    },
+    hover_name='Countries',
+    title='PEPFAR Funding by Country (2003–2015)'
+)
+
+# Update background, style, and zoom
+fig.update_layout(
+    geo=dict(
+        showframe=False,
+        showcoastlines=False,
+        bgcolor='#111',  # Map background
+        landcolor='#111',
+        projection_type='natural earth',
+        lonaxis=dict(range=[-130, 160]),  # Zoom horizontally
+        lataxis=dict(range=[-60, 70])     # Zoom vertically
+    ),
+    paper_bgcolor='#111',
+    plot_bgcolor='#111',
+    font_color='white',
+    legend_title_text='Funding Status',
+    margin={"r":0,"t":50,"l":0,"b":0}
+)
+
+fig.show()
+
+```
+
+<figcaption style="text-align: left; margin-top: 10px;">
+  <strong>Figure 2:</strong> Map of PEPFAR funding. <em>Data source: @unaids_kpatlas_dashboard</em>
+</figcaption>
+
+Launched in 2003 under U.S. President George W. Bush, PEPFAR was the largest commitment by any nation to combat a single disease internationally. The program was initiated in response to the escalating global HIV/AIDS epidemic, especially in sub-Saharan Africa where HIV prevalence rates were devastating entire populations.
+
+Initially, PEPFAR focused on 15 countries, referred to as the "PEPFAR focus countries", which accounted for about half of the world’s HIV/AIDS burden. These countries were primarily in Africa (such as Botswana, South Africa, Kenya, Uganda, Mozambique, Zambia, and Namibia), with Haiti and Guyana included from the Caribbean region. They were chosen based on the severity of the HIV/AIDS crisis, the country's willingness and ability to partner with the U.S., and the feasibility of rapid program scale-up.
+
+Over time, the program expanded to additional countries as the infrastructure and lessons learned from the initial focus countries allowed broader implementation. Later phases of PEPFAR funding included countries with emerging epidemics, countries with concentrated epidemics among key populations (such as men who have sex with men, sex workers, and people who inject drugs), and post-conflict or fragile states. Expansion prioritized countries where new infections could be dramatically reduced with strategic investment and where health systems could be strengthened to sustain long-term responses.
+
+PEPFAR's phased approach emphasized treatment access, prevention initiatives (especially for mother-to-child transmission), and the building of health system capacity. By 2015, the program had evolved from an emergency response to a more sustainable health systems strengthening initiative, adapting its investments based on country progress and epidemic shifts (@pepfar2025).
+
+## HIV Expenditures by Country
+
+This visualization shows how U.S. funding through PEPFAR has shaped the global fight against HIV/AIDS. On the left, the map displays HIV-related expenditures by country, with larger red bubbles representing higher levels of funding. We can see that countries receiving PEPFAR support received more resources for key prevention efforts, such as clean needle programs, free condom distribution, and other harm reduction services. On the right, the line graph highlights the sharp decline in HIV-related deaths beginning in 2004—the year PEPFAR was launched—demonstrating how large-scale investments can drive major public health gains.
+
+<figure>
+ <iframe src="../interactive_viz_outputs/pepfar_impact.html" width="105%" height="720px" frameborder="0"></iframe>
+ <figcaption style="text-align: left; margin-top: 10px;">
+  <strong>Figure 3:</strong> Map of PEPFAR funding. <em>Data source: @who_hiv_profiles</em>
+ </figcaption>
+</figure>
+
+
+<h2 style="color: #e53935; text-align: center;">This is a Learning Opportunity</h2>
+
+Take yourself back through the story, and continue spreading informed backgrounds about HIV/AIDS. Through this, we can work to dispel many common stereotypes and misconceptions associated with the disease, epidemic, and communities it affects the most. 
+
+```{=html}
+<div style="text-align: center; margin-top: 2rem; padding-bottom: 2rem;">
+    <a href="new_york.html" class="btn">← New York</a>
+    <a href="misconception.html" class="btn">Misconceptions</a>
+    <a href="index.html" class="btn">Home →</a>
+</div>
+```

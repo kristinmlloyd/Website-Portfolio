@@ -1,0 +1,341 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HIV and AIDS Flow Diagram (1990-2023)</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://unpkg.com/d3-sankey@0.12.3/dist/d3-sankey.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #121212;
+            color: white;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: flex-start;
+            margin-bottom: 20px;
+            gap: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #333;
+            color: white;
+            border: 1px solid #666;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #444;
+        }
+
+        .year-display {
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        #sankey-container {
+            width: 100%;
+            height: 450px; 
+            position: relative;
+            margin: 0 auto;
+        }
+
+        #year-slider {
+            width: 100%;
+            margin: 20px 0;
+        }
+
+        .node rect {
+            cursor: move;
+            fill-opacity: 0.9;
+            shape-rendering: crispEdges;
+        }
+
+        .node text {
+            pointer-events: none;
+            text-shadow: 0 1px 0 #000;
+        }
+
+        .link {
+            fill: none;
+            stroke-opacity: 0.5;
+        }
+
+        .tooltip {
+            position: absolute;
+            background-color: white;
+            color: #121212;
+            padding: 10px;
+            border-radius: 5px;
+            pointer-events: none;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+
+        .explanation {
+            text-align: center;
+            margin-top: 30px;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+
+        /* STYLING FOR STATS BOXES --> MODIFY POSITIONS HERE */
+        .stats-box {
+            position: absolute;
+            padding: 10px;
+            border-radius: 4px;
+            pointer-events: none;
+        }
+
+        .hiv-stats {
+            top: 35%;  /* ADJUST TO MOVE box up/down */
+            right: 10px;  /* ADJUST TO MOVE box left/right */
+            background-color: white;
+            color: #fc9097;
+            border: 2px solid #fc9097;
+        }
+
+        .aids-stats {
+            bottom: 10%;  /* ADJUST TO MOVE box up/down */
+            right: 10px;  /* ADJUST TO MOVE box left/right */
+            background-color: white;
+            color: red;
+            border: 2px solid red;
+        }
+
+        /* STYLING FOR STARTING POINT BOX */
+        .starting-note {
+            position: absolute;
+            top: 25%;  /* ADJUST TO MOVE box up/down */
+            left: 80px;  /* ADJUST TO MOVE box left/right */
+            background-color: #121212;
+            color: #fc656f;  
+            border: 2px solid #fc656f;
+            padding: 10px;
+            border-radius: 4px;
+            pointer-events: none;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>HIV and AIDS Flow Diagram (1990-2023)</h1>
+
+        <div class="controls">
+            <button id="play-button">Play</button>
+            <button id="pause-button">Pause</button>
+        </div>
+
+        <div class="year-display" id="year-display">Year: 1990</div>
+
+        <div id="sankey-container">
+            <div class="starting-note">All 17,750,540 HIV cases in 1990</div>
+            <div class="stats-box hiv-stats" id="hiv-stats"></div>
+            <div class="stats-box aids-stats" id="aids-stats"></div>
+        </div>
+
+        <input type="range" id="year-slider" min="0" max="33" value="0" step="1">
+
+        <div class="explanation">
+            This visualization shows how the proportion of AIDS-related deaths has decreased over time.<br>
+            Modern treatments have allowed more people to live with HIV without developing AIDS.
+        </div>
+    </div>
+
+    <script>
+        const allYearsData = [{"year": 1990, "total_hiv": 17750540.0, "aids_deaths": 774450.0, "non_aids": 16976090.0, "death_percentage": 4.362965859066822, "survival_percentage": 95.63703414093318}, {"year": 1991, "total_hiv": 33686640.0, "aids_deaths": 1511510.0, "non_aids": 32175130.0, "death_percentage": 4.486971689666882, "survival_percentage": 95.51302831033311}, {"year": 1992, "total_hiv": 39807630.0, "aids_deaths": 1868340.0, "non_aids": 37939290.0, "death_percentage": 4.69342183897911, "survival_percentage": 95.3065781610209}, {"year": 1993, "total_hiv": 45718030.0, "aids_deaths": 2260730.0, "non_aids": 43457300.0, "death_percentage": 4.944941853356323, "survival_percentage": 95.05505814664367}, {"year": 1994, "total_hiv": 51582930.0, "aids_deaths": 2671940.0, "non_aids": 48910990.0, "death_percentage": 5.179891875083482, "survival_percentage": 94.82010812491652}, {"year": 1995, "total_hiv": 57036920.0, "aids_deaths": 3097240.0, "non_aids": 53939680.0, "death_percentage": 5.4302371165904475, "survival_percentage": 94.56976288340955}, {"year": 1996, "total_hiv": 62194020.0, "aids_deaths": 3460810.0, "non_aids": 58733210.0, "death_percentage": 5.564538198366981, "survival_percentage": 94.43546180163301}, {"year": 1997, "total_hiv": 66580770.0, "aids_deaths": 3906010.0, "non_aids": 62674760.0, "death_percentage": 5.866573786995854, "survival_percentage": 94.13342621300414}, {"year": 1998, "total_hiv": 70328390.0, "aids_deaths": 4251960.0, "non_aids": 66076430.0, "death_percentage": 6.045865688095519, "survival_percentage": 93.95413431190448}, {"year": 1999, "total_hiv": 73285800.0, "aids_deaths": 4689050.0, "non_aids": 68596750.0, "death_percentage": 6.398306356756697, "survival_percentage": 93.6016936432433}, {"year": 2000, "total_hiv": 75746740.0, "aids_deaths": 5038670.0, "non_aids": 70708070.0, "death_percentage": 6.65199584827017, "survival_percentage": 93.34800415172984}, {"year": 2001, "total_hiv": 77709510.0, "aids_deaths": 5308920.0, "non_aids": 72400590.0, "death_percentage": 6.831750708504017, "survival_percentage": 93.16824929149598}, {"year": 2002, "total_hiv": 79325670.0, "aids_deaths": 5617970.0, "non_aids": 73707700.0, "death_percentage": 7.082158902660388, "survival_percentage": 92.91784109733962}, {"year": 2003, "total_hiv": 80388520.0, "aids_deaths": 5700270.0, "non_aids": 74688250.0, "death_percentage": 7.090900541520108, "survival_percentage": 92.90909945847989}, {"year": 2004, "total_hiv": 81423420.0, "aids_deaths": 5797340.0, "non_aids": 75626080.0, "death_percentage": 7.11999078397837, "survival_percentage": 92.88000921602163}, {"year": 2005, "total_hiv": 82431820.0, "aids_deaths": 5538390.0, "non_aids": 76893430.0, "death_percentage": 6.718752539977888, "survival_percentage": 93.28124746002212}, {"year": 2006, "total_hiv": 83402340.0, "aids_deaths": 5276510.0, "non_aids": 78125830.0, "death_percentage": 6.32657309135451, "survival_percentage": 93.67342690864548}, {"year": 2007, "total_hiv": 84933900.0, "aids_deaths": 4825810.0, "non_aids": 80108090.0, "death_percentage": 5.681841997129532, "survival_percentage": 94.31815800287046}, {"year": 2008, "total_hiv": 86405650.0, "aids_deaths": 4421140.0, "non_aids": 81984510.0, "death_percentage": 5.116725584495922, "survival_percentage": 94.88327441550408}, {"year": 2009, "total_hiv": 88207700.0, "aids_deaths": 3934840.0, "non_aids": 84272860.0, "death_percentage": 4.460880399330217, "survival_percentage": 95.53911960066979}, {"year": 2010, "total_hiv": 90067970.0, "aids_deaths": 3630120.0, "non_aids": 86437850.0, "death_percentage": 4.0304228018017945, "survival_percentage": 95.96957719819821}, {"year": 2011, "total_hiv": 91981110.0, "aids_deaths": 3345210.0, "non_aids": 88635900.0, "death_percentage": 3.636844565150388, "survival_percentage": 96.36315543484962}, {"year": 2012, "total_hiv": 94043210.0, "aids_deaths": 3091330.0, "non_aids": 90951880.0, "death_percentage": 3.287137901821939, "survival_percentage": 96.71286209817806}, {"year": 2013, "total_hiv": 96018310.0, "aids_deaths": 2856440.0, "non_aids": 93161870.0, "death_percentage": 2.9748909348644026, "survival_percentage": 97.0251090651356}, {"year": 2014, "total_hiv": 98218660.0, "aids_deaths": 2723090.0, "non_aids": 95495570.0, "death_percentage": 2.77247724617705, "survival_percentage": 97.22752275382295}, {"year": 2015, "total_hiv": 100155450.0, "aids_deaths": 2581670.0, "non_aids": 97573780.0, "death_percentage": 2.5776630228310093, "survival_percentage": 97.42233697716898}, {"year": 2016, "total_hiv": 102321960.0, "aids_deaths": 2432740.0, "non_aids": 99889220.0, "death_percentage": 2.3775345976562607, "survival_percentage": 97.62246540234374}, {"year": 2017, "total_hiv": 103740570.0, "aids_deaths": 2329150.0, "non_aids": 101411420.0, "death_percentage": 2.245167922250668, "survival_percentage": 97.75483207774933}, {"year": 2018, "total_hiv": 105601210.0, "aids_deaths": 2207160.0, "non_aids": 103394050.0, "death_percentage": 2.0900896874193013, "survival_percentage": 97.90991031258069}, {"year": 2019, "total_hiv": 107268870.0, "aids_deaths": 2136980.0, "non_aids": 105131890.0, "death_percentage": 1.992171633764763, "survival_percentage": 98.00782836623524}, {"year": 2020, "total_hiv": 108505950.0, "aids_deaths": 2043310.0, "non_aids": 106462640.0, "death_percentage": 1.8831317545259039, "survival_percentage": 98.1168682454741}, {"year": 2021, "total_hiv": 109714080.0, "aids_deaths": 1945340.0, "non_aids": 107768740.0, "death_percentage": 1.7730996787285642, "survival_percentage": 98.22690032127144}, {"year": 2022, "total_hiv": 110218160.0, "aids_deaths": 1865760.0, "non_aids": 108352400.0, "death_percentage": 1.6927881938874683, "survival_percentage": 98.30721180611252}, {"year": 2023, "total_hiv": 113683840.0, "aids_deaths": 1789050.0, "non_aids": 111894790.0, "death_percentage": 1.5737065180064291, "survival_percentage": 98.42629348199358}];
+        const availableYears = allYearsData.map(d => d.year);
+
+        let currentYearIndex = 0;
+        let animationInterval;
+        let isPlaying = false;
+
+        // get DOM elements
+        const sankeyContainer = document.getElementById('sankey-container');
+        const yearDisplay = document.getElementById('year-display');
+        const yearSlider = document.getElementById('year-slider');
+        const playButton = document.getElementById('play-button');
+        const pauseButton = document.getElementById('pause-button');
+        const hivStats = document.getElementById('hiv-stats');
+        const aidsStats = document.getElementById('aids-stats');
+
+        // set up sankey
+        const margin = {top: 10, right: 100, bottom: 10, left: 100};
+        const width = sankeyContainer.clientWidth - margin.left - margin.right;
+        const height = sankeyContainer.clientHeight - margin.top - margin.bottom;
+
+        const svg = d3.select('#sankey-container')
+            .append('svg')
+            .attr('width', width + margin.left + margin.right)
+            .attr('height', height + margin.top + margin.bottom)
+            .append('g')
+            .attr('transform', `translate(${margin.left},${margin.top})`);
+
+        updateSankey(allYearsData[0]);
+
+        playButton.addEventListener('click', startAnimation);
+        pauseButton.addEventListener('click', pauseAnimation);
+        yearSlider.addEventListener('input', handleSliderChange);
+
+        // RESIZE WINDOW !!!!!!
+        window.addEventListener('resize', () => {
+            // Redraw on window resize
+            updateSankey(allYearsData[currentYearIndex]);
+        });
+
+        // funcs
+        function updateSankey(yearData) {
+            // clear previous 
+            svg.selectAll('*').remove();
+
+            // update year display
+            yearDisplay.textContent = `Year: ${yearData.year}`;
+
+            // update stats
+            hivStats.textContent = `Living with HIV: ${yearData.survival_percentage.toFixed(1)}%`;
+            aidsStats.textContent = `AIDS-related Deaths: ${yearData.death_percentage.toFixed(1)}%`;
+
+            const totalFlow = yearData.aids_deaths + yearData.non_aids;
+            const totalHeight = height * 0.8; // Use 80% of available height
+
+            const hivNodeHeight = totalHeight;
+            const nonAidsNodeHeight = (yearData.non_aids / totalFlow) * totalHeight;
+            const aidsNodeHeight = (yearData.aids_deaths / totalFlow) * totalHeight;
+
+            const nodes = [
+                { 
+                    id: 0,
+                    x0: 0,
+                    x1: 20,
+                    y0: (height - hivNodeHeight) / 2,
+                    y1: (height - hivNodeHeight) / 2 + hivNodeHeight
+                },
+                { 
+                    id: 1,
+                    x0: width - 20,
+                    x1: width,
+                    y0: height - aidsNodeHeight,
+                    y1: height
+                },
+                { 
+                    id: 2,
+                    x0: width - 20,
+                    x1: width,
+                    y0: 0,
+                    y1: nonAidsNodeHeight
+                }
+            ];
+
+            // Create links with proper values
+            const links = [
+                { 
+                    source: nodes[0], 
+                    target: nodes[1], 
+                    value: yearData.aids_deaths,
+                    width: aidsNodeHeight,
+                    color: 'rgba(255, 0, 0, 0.6)'
+                },
+                { 
+                    source: nodes[0], 
+                    target: nodes[2], 
+                    value: yearData.non_aids,
+                    width: nonAidsNodeHeight,
+                    color: 'rgba(252, 144, 151, 0.6)'
+                }
+            ];
+
+            // color scale
+            const nodeColors = {'0': '#fc656f', '1': 'red', '2': '#fc9097'};
+
+            // nodes
+            const nodes_g = svg.append('g')
+                .attr('class', 'nodes')
+                .selectAll('g')
+                .data(nodes)
+                .enter()
+                .append('g');
+
+            nodes_g.append('rect')
+                .attr('x', d => d.x0)
+                .attr('y', d => d.y0)
+                .attr('height', d => d.y1 - d.y0)
+                .attr('width', d => d.x1 - d.x0)
+                .style('fill', d => nodeColors[d.id])
+                .style('stroke', '#fff');
+
+            svg.append('g')
+                .attr('class', 'links')
+                .selectAll('path')
+                .data(links)
+                .enter()
+                .append('path')
+                .attr('d', d => {
+                    const sourceX = d.source.x1;
+                    const sourceY = d.source.y0 + (d.source.y1 - d.source.y0) / 2;
+                    const targetX = d.target.x0;
+                    const targetY = d.target.y0 + (d.target.y1 - d.target.y0) / 2;
+
+                    const controlX1 = sourceX + (targetX - sourceX) / 3;
+                    const controlX2 = sourceX + 2 * (targetX - sourceX) / 3;
+
+                    // adjust for flow target(AIDS deaths = bottom, HIV = top)
+                    const controlY1 = sourceY;
+                    const controlY2 = targetY;
+
+                    return `M${sourceX},${sourceY} C${controlX1},${controlY1} ${controlX2},${controlY2} ${targetX},${targetY}`;
+                })
+                .attr('stroke', d => d.color)
+                .attr('stroke-width', d => Math.max(1, d.width))
+                .style('fill', 'none');
+        }
+
+        function startAnimation() {
+            if (isPlaying) return;
+
+            isPlaying = true;
+            animationInterval = setInterval(() => {
+                currentYearIndex = (currentYearIndex + 1) % availableYears.length;
+                yearSlider.value = currentYearIndex;
+                updateSankey(allYearsData[currentYearIndex]);
+
+                if (currentYearIndex === availableYears.length - 1) {
+                    // Reached the end
+                    pauseAnimation();
+                }
+            }, 500); // 500ms per frame
+        }
+
+        function pauseAnimation() {
+            clearInterval(animationInterval);
+            isPlaying = false;
+        }
+
+        function handleSliderChange() {to_csv("../../data/clean_data/AIDSVu_long.csv", index=False)
+            pauseAnimation();
+
+            // update year
+            currentYearIndex = parseInt(yearSlider.value);
+            updateSankey(allYearsData[currentYearIndex]);
+        }
+    </script>
+</body>
+</html>

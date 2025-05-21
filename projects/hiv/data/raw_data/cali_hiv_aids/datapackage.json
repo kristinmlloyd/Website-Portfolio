@@ -1,0 +1,154 @@
+{
+  "accrual_periodicity": "annually",
+  "additional_limitations": "",
+  "citation": "Office of AIDS, California Department of Public Health. 2019.  ",
+  "contact_email": "opendata@cdph.ca.gov",
+  "data_collection_tool": "https://www.cdph.ca.gov/Programs/CID/DOA/Pages/OA_care_mai.aspx#",
+  "data_license": "Terms of Use",
+  "de_identification_method": "",
+  "description": "This data set includes tables on persons living with HIV/AIDS, newly diagnosed HIV cases and all cause deaths in HIV/AIDS cases by gender, age, race/ethnicity and transmission category.\r\n\r\nIn all tables, cases are reported as of December 31 of the given year, as reported by January 9, 2019, to allow a minimum of 12 months reporting delay.\r\n\r\nGender is determined by both current gender and sex at birth variables; transgender values are assigned when current gender is identified as \"Transgender\" or when a discrepancy is identified between a person's sex at birth and their current gender (e.g., cases where sex at birth is \"Male\" and current gender is \"Female\" will become Transgender: Male to Female.) Prior to 2003, Asian and Native Hawaiian/Pacific Islanders were classified as one combined group. In order to present these race/ethnicities separately, living cases recorded under this combined classification were split and redistributed according to their expected proportional population representation estimated from post-2003 data.",
+  "geo_coverage": "California",
+  "geographic_granularity": "statewide",
+  "keywords": [
+    "aids",
+    "california",
+    "hiv",
+    "msm",
+    "ooa",
+    "public health surveillance",
+    "transgendered persons"
+  ],
+  "limitations": "Limitations",
+  "name": "hiv-aids-cases",
+  "program_web_page": "https://www.cdph.ca.gov/Programs/CID/DOA/Pages/OAsre.aspx#",
+  "related_resources": "",
+  "resources": [
+    {
+      "description": "Living HIV/AIDS cases by gender, race/ethnicity, current age group, and transmission category in California, 2011-2017. Table includes all persons living with HIV/AIDS whose last known residence in the given year is in California (regardless of state of diagnosis) who were living as of December 31 of the given year. Current age group is calculated as of the end of the given year.\r\n\r\nIn all tables, cases are reported as of December 31 of the given year, as reported by January 9, 2019, to allow a minimum of 12 months reporting delay.\r\n\r\nGender is determined by both current gender and sex at birth variables; transgender values are assigned when current gender is identified as \"Transgender\" or when a discrepancy is identified between a person's sex at birth and their current gender (e.g., cases where sex at birth is \"Male\" and current gender is \"Female\" will become Transgender: Male to Female.) Prior to 2003, Asian and Native Hawaiian/Pacific Islanders were classified as one combined group. In order to present these race/ethnicities separately, living cases recorded under this combined classification were split and redistributed according to their expected proportional population representation estimated from post-2003 data.",
+      "format": "XLSX",
+      "hash": "cb6268e5683823d73e8e2f5d4f849b6e",
+      "name": "persons-living-with-hiv-aids",
+      "path": "persons-living-with-hiv-aids.xlsx",
+      "schema": {
+        "fields": [
+          {
+            "description": "Indicates year of HIV/AIDS diagnosis, year of death, or year living for tables 1) Newly diagnosed HIV/AIDS cases   2) Death of persons with HIV/AIDS infection, and 3) Persons living with HIV/AIDS, respectively. ",
+            "name": "Year",
+            "type": "string"
+          },
+          {
+            "description": "Indicates the general demographic categories (Age (years), Transmission category (Primary Risk encountered), Race/Ethnicity, and Gender) under which the HIV/AIDS indicators are broken down into specific groups (e.g. White, Black, etc). Values are mutually exclusive within each demographic category.",
+            "name": "Category",
+            "type": "string"
+          },
+          {
+            "description": "Indicates sub divisions of the HIV_AIDS category.\r\nGender category: Gender is determined by both the current gender and sex at birth data fields.  Transgender values are assigned when current gender is identified as \"Transgender\" or a discrepancy is identified between a person's sex at birth and their current gender (e.g. cases where sex at birth is \"Male\" and current gender is \"Female\" will become Transgender: Male to Female.) \r\nGender values: Female, Male, Transgender: Female To Male, Transgender: Male To Female\r\n\r\nRace/Ethnicity category: Prior to 2003, Asian and Native Hawaiian/Pacific Islanders were classified as one group. Thus, in order to present these race/ethnicity categories separately, living cases recorded under this combined classification were redistributed according to their expected proportional population representation estimated from  post-2003 data.\r\nRace/Ethnicity values: American Indian/Alaskan Native, Asian, Black/African American, Hispanic/Latino, Native Hawaiian/Pacific Islander, White, Multiple races, Unknown race\r\n\r\nAge Group (years): For newly diagnosed, age of persons at diagnosis.  For living cases, age of persons at year end for the reported year.  For deaths, age of person at time of death.\r\nAge Group (years) values: 0-11, 12-14, 15-17, 18-19, 20-24, 25-29, 30-34, 35-39, 40-44, 45-49, 50-54, 55-59, 60-64, 65-74, 75 and over\r\n\r\nTransmission category: Represents category of highest reported exposure risk. MSM = Men who have sex with men; IDU = Intravenous drug users; MSM/IDU = Men who have sex with men who are also intravenous drug users; Heterosexual (HRH)= Heterosexual contact with a high risk partner (HIV infected partner or a partner who is an IDU or MSM); Non-High Risk Heterosexual (Non-HRH) = cases with no other identified risk who reported engaging in heterosexual intercourse with a person opposite sex of their sex-at-birth.\r\nPerinatal = children and adults exposed perinatally (HIV-positive mother);  Other = child and adult cases with hemophilia, blood transfusion, or occupational exposures; Unknown = includes missing/unknown/no reported risk information. ",
+            "name": "Group",
+            "type": "string"
+          },
+          {
+            "description": "For table \"Newly diagnosed HIV/AIDS cases,\" this is the count of persons who were living in California when they were diagnosed with HIV during the reported year. For the table  \"Persons living with HIV/AIDS,\" this is the count of persons living with an HIV/AIDS diagnosis whose most current known residence at the end of the reported year was in California.  For tables \"Death of persons with HIV/AIDS infection,\" this is the count of persons living with an HIV/AIDS diagnosis whose most current known residence at the time of death during the reported year was in California.",
+            "name": "Count",
+            "type": "string"
+          }
+        ]
+      },
+      "sources": [
+        {
+          "path": "https://data.chhs.ca.gov/dataset/2269414f-024a-47fa-b055-ee3b28dda27e/resource/ffc84784-957e-486f-ad34-9b14d07583c1/download/persons-living-with-hiv-aids-2011-2017.xlsx",
+          "title": "Persons living with HIV/AIDS"
+        }
+      ],
+      "title": "Persons living with HIV/AIDS"
+    },
+    {
+      "description": "Persons newly diagnosed with HIV by gender, race/ethnicity, current age group, and exposure category in California, 2011-2017.  Current age group is calculated as of the date of diagnosis. \r\n\r\nIn all tables, cases are reported as of December 31 of the given year, as reported by January 9, 2019, to allow a minimum of 12 months reporting delay.\r\n\r\n Gender is determined by both current gender and sex at birth variables; transgender values are assigned when current gender is identified as \"Transgender\" or when a discrepancy is identified between a person's sex at birth and their current gender (e.g., cases where sex at birth is \"Male\" and current gender is \"Female\" will become Transgender: Male to Female.) Prior to 2003, Asian and Native Hawaiian/Pacific Islanders were classified as one combined group. In order to present these race/ethnicities separately, living cases recorded under this combined classification were split and redistributed according to their expected proportional population representation estimated from post-2003 data.",
+      "format": "XLSX",
+      "name": "persons-newly-diagnosed-with-hiv",
+      "path": "persons-newly-diagnosed-with-hiv.xlsx",
+      "sources": [
+        {
+          "path": "https://data.chhs.ca.gov/dataset/2269414f-024a-47fa-b055-ee3b28dda27e/resource/3fa428a1-891b-450e-91bb-d47525c06a68/download/persons-newly-diagnosed-with-hiv-2011-2017.xlsx",
+          "title": "Persons newly diagnosed with HIV"
+        }
+      ],
+      "title": "Persons newly diagnosed with HIV"
+    },
+    {
+      "description": "Death of persons with diagnosed HIV/AIDS infection from any cause, by gender, race/ethnicity, current age group, and transmission category in California, 2011-2017.  Current age group is calculated as of the date of death. \r\n\r\nIn all tables, cases are reported as of December 31 of the given year, as reported by January 9, 2019, to allow a minimum of 12 months reporting delay.  \r\n\r\nGender is determined by both current gender and sex at birth variables; transgender values are assigned when current gender is identified as \"Transgender\" or when a discrepancy is identified between a person's sex at birth and their current gender (e.g., cases where sex at birth is \"Male\" and current gender is \"Female\" will become Transgender: Male to Female.) Prior to 2003, Asian and Native Hawaiian/Pacific Islanders were classified as one combined group. In order to present these race/ethnicities separately, living cases recorded under this combined classification were split and redistributed according to their expected proportional population representation estimated from post-2003 data.",
+      "format": "XLSX",
+      "name": "deaths-of-persons-diagnosed-with-hiv-aids",
+      "path": "deaths-of-persons-diagnosed-with-hiv-aids.xlsx",
+      "schema": {
+        "fields": [
+          {
+            "description": "Indicates year of HIV/AIDS diagnosis, year of death, or year living for tables 1) Newly diagnosed HIV/AIDS cases   2) Death of persons with HIV/AIDS infection, and 3) Persons living with HIV/AIDS, respectively. ",
+            "name": "Year",
+            "type": "string"
+          },
+          {
+            "description": "Indicates the general demographic categories (Age (years), Transmission category (Primary Risk encountered), Race/Ethnicity, and Gender) under which the HIV/AIDS indicators are broken down into specific groups (e.g. White, Black, etc). Values are mutually exclusive within each demographic category.",
+            "name": "Category",
+            "type": "string"
+          },
+          {
+            "description": "Indicates sub divisions of the HIV_AIDS category.\r\nGender category: Gender is determined by both the current gender and sex at birth data fields.  Transgender values are assigned when current gender is identified as \"Transgender\" or a discrepancy is identified between a person's sex at birth and their current gender (e.g. cases where sex at birth is \"Male\" and current gender is \"Female\" will become Transgender: Male to Female.) \r\nGender values: Female, Male, Transgender: Female To Male, Transgender: Male To Female\r\n\r\nRace/Ethnicity category: Prior to 2003, Asian and Native Hawaiian/Pacific Islanders were classified as one group. Thus, in order to present these race/ethnicity categories separately, living cases recorded under this combined classification were redistributed according to their expected proportional population representation estimated from  post-2003 data.\r\nRace/Ethnicity values: American Indian/Alaskan Native, Asian, Black/African American, Hispanic/Latino, Native Hawaiian/Pacific Islander, White, Multiple races, Unknown race\r\n\r\nAge Group (years): For newly diagnosed, age of persons at diagnosis.  For living cases, age of persons at year end for the reported year.  For deaths, age of person at time of death.\r\nAge Group (years) values: 0-11, 12-14, 15-17, 18-19, 20-24, 25-29, 30-34, 35-39, 40-44, 45-49, 50-54, 55-59, 60-64, 65-74, 75 and over\r\n\r\nTransmission category: Represents category of highest reported exposure risk. MSM = Men who have sex with men; IDU = Intravenous drug users; MSM/IDU = Men who have sex with men who are also intravenous drug users; Heterosexual (HRH)= Heterosexual contact with a high risk partner (HIV infected partner or a partner who is an IDU or MSM); Non-High Risk Heterosexual (Non-HRH) = cases with no other identified risk who reported engaging in heterosexual intercourse with a person opposite sex of their sex-at-birth.\r\nPerinatal = children and adults exposed perinatally (HIV-positive mother);  Other = child and adult cases with hemophilia, blood transfusion, or occupational exposures; Unknown = includes missing/unknown/no reported risk information. ",
+            "name": "Group",
+            "type": "string"
+          },
+          {
+            "description": "For table \"Newly diagnosed HIV/AIDS cases,\" this is the count of persons who were living in California when they were diagnosed with HIV during the reported year. For the table  \"Persons living with HIV/AIDS,\" this is the count of persons living with an HIV/AIDS diagnosis whose most current known residence at the end of the reported year was in California.  For tables \"Death of persons with HIV/AIDS infection,\" this is the count of persons living with an HIV/AIDS diagnosis whose most current known residence at the time of death during the reported year was in California.",
+            "name": "Count",
+            "type": "string"
+          }
+        ]
+      },
+      "sources": [
+        {
+          "path": "https://data.chhs.ca.gov/dataset/2269414f-024a-47fa-b055-ee3b28dda27e/resource/ff1b0ec6-60f3-4e82-a10b-9c0c8ea8fb2f/download/deaths-of-persons-diagnosed-with-hiv-aids-2011-2017.xlsx",
+          "title": "Deaths of persons diagnosed with HIV/AIDS"
+        }
+      ],
+      "title": "Deaths of persons diagnosed with HIV/AIDS"
+    },
+    {
+      "description": "In all tables, cases are reported as of December 31 of the given year, as reported by January 9, 2019, to allow a minimum of 12 months reporting delay.\r\n\r\nGender is determined by both current gender and sex at birth variables; transgender values are assigned when current gender is identified as \"Transgender\" or when a discrepancy is identified between a person's sex at birth and their current gender (e.g., cases where sex at birth is \"Male\" and current gender is \"Female\" will become Transgender: Male to Female.) Prior to 2003, Asian and Native Hawaiian/Pacific Islanders were classified as one combined group. In order to present these race/ethnicities separately, living cases recorded under this combined classification were split and redistributed according to their expected proportional population representation estimated from post-2003 data.",
+      "format": "XLSX",
+      "hash": "73ff98d03da59c677fc9c353dc60ee4a",
+      "name": "hiv-aids-data-dictionary",
+      "path": "hiv-aids-data-dictionary.xlsx",
+      "schema": {
+        "fields": [
+          {
+            "name": "COLUMN NAME",
+            "type": "string"
+          },
+          {
+            "name": "FORMAT",
+            "type": "string"
+          },
+          {
+            "name": "DEFINITION",
+            "type": "string"
+          }
+        ]
+      },
+      "sources": [
+        {
+          "path": "https://data.chhs.ca.gov/dataset/2269414f-024a-47fa-b055-ee3b28dda27e/resource/84871481-e091-48ea-8add-b5cd9c84907d/download/hiv-aids-dd.xlsx",
+          "title": "HIV/AIDs-Data Dictionary"
+        }
+      ],
+      "title": "HIV/AIDs-Data Dictionary"
+    }
+  ],
+  "secondary_sources": "",
+  "sources": [
+    {
+      "name": "Center for Infectious Diseases / Office of AIDS /Surveillance, Research and Evaluation Branch / Surveillance Section / Data Management and Analysis Unit",
+      "web": "https://www.cdph.ca.gov/Programs/CID/DOA/Pages/OAsre.aspx#"
+    }
+  ],
+  "temporal_coverage": "2011-2017",
+  "title": "HIV/AIDS Cases"
+}

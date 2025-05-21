@@ -1,0 +1,36 @@
+---
+title: "Appendix"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: true
+    number-sections: true
+    theme: cosmo
+    fig-width: 5
+    fig-height: 3
+    fig-dpi: 150
+    self-contained: true
+execute:
+  warning: false
+  message: false
+---
+
+## 📂 Project Sections
+
+### 🔹 Core Pages
+
+- [**Executive Summary**](index.qmd)  
+  Overview of the project examining firearm mortality across U.S. states, key research questions about socioeconomic and policy predictors, data sources, and why a multidimensional approach to understanding gun violence prevention matters.
+
+- [**Exploratory Data Analysis**](eda.qmd)  
+  Detailed examination of patterns in state-level firearm mortality data.
+
+- [**Logistic Regression**](logistic_regression.qmd)  
+  Comparison of three different logistic regression models (Standard, Lasso/L1, and Ridge/L2) to predict whether states have above-median firearm mortality rates, evaluation of model performance metrics, and analysis of which policy domains most strongly predict mortality outcomes.
+
+- [**Linear Regression**](linear_regression.qmd)  
+Comparison of three regression approaches (Principal Component Regression, Backward Stepwise Regression, and Hierarchical Regression) to quantify relationships between socioeconomic factors, gun policies, and firearm mortality rates, with cross-validation to assess generalizability. 
+
+- [**LLM Log**](llm.qmd)  
+Documentation of how large language models were used throughout the project to assist with analysis planning, code development, interpretation of statistical results

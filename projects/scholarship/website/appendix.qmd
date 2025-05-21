@@ -1,0 +1,69 @@
+---
+title: "Appendix"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: true
+    number-sections: true
+    theme: cosmo
+    fig-width: 5
+    fig-height: 3
+    fig-dpi: 150
+    self-contained: true
+execute:
+  warning: false
+  message: false
+---
+
+## 📂 Project Sections
+
+### 🔹 Core Pages
+
+- [**Executive Summary**](intro.qmd)  
+  Overview of the project goals, data source (AWSD), key research questions, and why analyzing violence against aid workers matters.
+
+- [**Data Cleaning**](data_cleaning.qmd)  
+  Details on how the raw data was processed for analysis, including missing value handling and variable selection.
+
+- [**Global Analysis**](international.qmd)  
+  A global-level analysis of trends, followed by the identification of countries with the highest number of security incidents for deeper investigation.
+
+- [**Exploring the Unknown**](unknown.qmd)  
+  Investigates patterns of missing or "Unknown" data in security reports, revealing systematic information gaps by country and attribute.
+
+### 🌍 Individual Country Analysis  
+Country-specific deep dives, each including historical context, temporal and spatial trends, attack characteristics, casualty patterns, and strategic recommendations:
+
+- [**🇵🇸 Palestine**](palestine.qmd)  
+  Focus on the October 2023 escalation and impacts of aerial bombardment on aid operations in Gaza and the West Bank.
+
+- [**🇦🇫 Afghanistan**](af.qmd)  
+  Tracks violence across regimes—from Taliban rule to NATO presence to the current Islamic Emirate—highlighting shifts in targeting patterns.
+
+- [**🇨🇩 DR Congo**](dr.qmd)  
+  Explores complex violence in eastern DRC driven by armed groups, with a focus on mobility risks and localized conflict dynamics.
+
+- [**🇸🇾 Syria**](syria.qmd)  
+  Analyzes conflict phases from civil war to regime collapse in 2024, with emphasis on aerial attacks and frontline crossfire incidents.
+
+- [**🇸🇴 Somalia**](somolia.qmd)  
+  Details threats from Al-Shabaab, patterns of ambushes and kidnappings, and the impact of climate shocks on humanitarian security.
+
+- [**🇲🇱 Mali**](mali.qmd)  
+  Highlights post-coup violence, the rise in kidnapping, and the shift from international to local staff exposure following MINUSMA withdrawal.
+
+- [**🇸🇸 South Sudan**](southsudan.qmd)  
+  Investigates intercommunal conflict, targeted attacks on convoys, and the relationship between aid presence and violence.
+
+- [**🇸🇩 Sudan**](sudan.qmd)  
+  Focuses on the humanitarian fallout from the 2023 civil war, including documentation challenges and increasing targeting of aid facilities.
+
+### 🤖 LLM Useage Log
+
+- [**LLM Log**](llm.qmd)  
+  A running log of how large language models were used throughout the project for analysis, text generation, and research assistance.
+
+### Commit History
+
+![](images/commits.png)

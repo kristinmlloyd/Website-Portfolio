@@ -1,0 +1,344 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HIV and AIDS Flow by UN Region (1990-2023)</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://unpkg.com/d3-sankey@0.12.3/dist/d3-sankey.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #121212;
+            color: white;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: flex-start;
+            margin-bottom: 20px;
+            gap: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #333;
+            color: white;
+            border: 1px solid #666;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #444;
+        }
+
+        .year-display {
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        #sankey-container {
+            width: 100%;
+            height: 700px; /* Increased height to accommodate more nodes */
+            position: relative;
+            margin: 0 auto;
+        }
+
+        #year-slider {
+            width: 100%;
+            margin: 20px 0;
+        }
+
+        .node rect {
+            cursor: move;
+            fill-opacity: 0.9;
+            shape-rendering: crispEdges;
+        }
+
+        .node text {
+            pointer-events: none;
+            text-shadow: 0 1px 0 #000;
+        }
+
+        .link {
+            fill: none;
+            stroke-opacity: 0.5;
+        }
+
+        .tooltip {
+            position: absolute;
+            background-color: white;
+            color: #121212;
+            padding: 10px;
+            border-radius: 5px;
+            pointer-events: none;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+
+        .explanation {
+            text-align: center;
+            margin-top: 30px;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+
+        .stats-box {
+            position: absolute;
+            padding: 10px;
+            border-radius: 4px;
+            pointer-events: none;
+        }
+
+        .region-stats {
+            background-color: white;
+            color: black;
+            border: 1px solid black;
+            padding: 5px;
+            margin-bottom: 5px;
+        }
+
+        #region-stats-container {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 180px; /* Increased width for more info */
+            font-size: 0.9em;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>HIV and AIDS Flow by UN Region (1990-2023)</h1>
+
+        <div class="controls">
+            <button id="play-button">Play</button>
+            <button id="pause-button">Pause</button>
+        </div>
+
+        <div class="year-display" id="year-display">Year: 1990</div>
+
+        <div id="sankey-container">
+            <div id="region-stats-container"></div>
+        </div>
+
+        <input type="range" id="year-slider" min="0" max="33" value="0" step="1">
+
+        <div class="explanation">
+            This visualization shows the flow of HIV cases from a global total to UN regions, and then to AIDS-related deaths and non-AIDS related living with HIV over time.
+        </div>
+    </div>
+
+    <script>
+        const allYearsDataRegionsFlow = {"1990": {"global_hiv": 17750540.0, "regions": {"UNAAP": {"hiv": 1400000.0, "aids_deaths": 34000.0, "non_aids": 1366000.0}, "UNACAR": {"hiv": 110000.0, "aids_deaths": 4500.0, "non_aids": 105500.0}, "UNAESA": {"hiv": 5100000.0, "aids_deaths": 230000.0, "non_aids": 4870000.0}, "UNAEECA": {"hiv": 82000.0, "aids_deaths": 4000.0, "non_aids": 78000.0}, "UNALA": {"hiv": 300000.0, "aids_deaths": 18000.0, "non_aids": 282000.0}, "UNAMENA": {"hiv": 27000.0, "aids_deaths": 1200.0, "non_aids": 25800.0}, "UNAWCA": {"hiv": 1900000.0, "aids_deaths": 89000.0, "non_aids": 1811000.0}, "UNAWCENA": {"hiv": 900000.0, "aids_deaths": 42000.0, "non_aids": 858000.0}}}, "1991": {"global_hiv": 33686640.0, "regions": {"UNAAP": {"hiv": 1900000.0, "aids_deaths": 52000.0, "non_aids": 1848000.0}, "UNACAR": {"hiv": 130000.0, "aids_deaths": 5800.0, "non_aids": 124200.0}, "UNAESA": {"hiv": 6200000.0, "aids_deaths": 290000.0, "non_aids": 5910000.0}, "UNAEECA": {"hiv": 91000.0, "aids_deaths": 4500.0, "non_aids": 86500.0}, "UNALA": {"hiv": 360000.0, "aids_deaths": 22000.0, "non_aids": 338000.0}, "UNAMENA": {"hiv": 32000.0, "aids_deaths": 1500.0, "non_aids": 30500.0}, "UNAWCA": {"hiv": 2300000.0, "aids_deaths": 110000.0, "non_aids": 2190000.0}, "UNAWCENA": {"hiv": 940000.0, "aids_deaths": 50000.0, "non_aids": 890000.0}}}, "1992": {"global_hiv": 39807630.0, "regions": {"UNAAP": {"hiv": 2500000.0, "aids_deaths": 73000.0, "non_aids": 2427000.0}, "UNACAR": {"hiv": 150000.0, "aids_deaths": 7200.0, "non_aids": 142800.0}, "UNAESA": {"hiv": 7300000.0, "aids_deaths": 350000.0, "non_aids": 6950000.0}, "UNAEECA": {"hiv": 100000.0, "aids_deaths": 5100.0, "non_aids": 94900.0}, "UNALA": {"hiv": 410000.0, "aids_deaths": 26000.0, "non_aids": 384000.0}, "UNAMENA": {"hiv": 37000.0, "aids_deaths": 1800.0, "non_aids": 35200.0}, "UNAWCA": {"hiv": 2700000.0, "aids_deaths": 140000.0, "non_aids": 2560000.0}, "UNAWCENA": {"hiv": 980000.0, "aids_deaths": 57000.0, "non_aids": 923000.0}}}, "1993": {"global_hiv": 45718030.0, "regions": {"UNAAP": {"hiv": 3000000.0, "aids_deaths": 99000.0, "non_aids": 2901000.0}, "UNACAR": {"hiv": 170000.0, "aids_deaths": 8600.0, "non_aids": 161400.0}, "UNAESA": {"hiv": 8500000.0, "aids_deaths": 430000.0, "non_aids": 8070000.0}, "UNAEECA": {"hiv": 120000.0, "aids_deaths": 5800.0, "non_aids": 114200.0}, "UNALA": {"hiv": 470000.0, "aids_deaths": 31000.0, "non_aids": 439000.0}, "UNAMENA": {"hiv": 44000.0, "aids_deaths": 2200.0, "non_aids": 41800.0}, "UNAWCA": {"hiv": 3000000.0, "aids_deaths": 160000.0, "non_aids": 2840000.0}, "UNAWCENA": {"hiv": 1000000.0, "aids_deaths": 64000.0, "non_aids": 936000.0}}}, "1994": {"global_hiv": 51582930.0, "regions": {"UNAAP": {"hiv": 3600000.0, "aids_deaths": 130000.0, "non_aids": 3470000.0}, "UNACAR": {"hiv": 190000.0, "aids_deaths": 10000.0, "non_aids": 180000.0}, "UNAESA": {"hiv": 9400000.0, "aids_deaths": 500000.0, "non_aids": 8900000.0}, "UNAEECA": {"hiv": 140000.0, "aids_deaths": 6600.0, "non_aids": 133400.0}, "UNALA": {"hiv": 530000.0, "aids_deaths": 36000.0, "non_aids": 494000.0}, "UNAMENA": {"hiv": 50000.0, "aids_deaths": 2700.0, "non_aids": 47300.0}, "UNAWCA": {"hiv": 3500000.0, "aids_deaths": 190000.0, "non_aids": 3310000.0}, "UNAWCENA": {"hiv": 1000000.0, "aids_deaths": 70000.0, "non_aids": 930000.0}}}, "1995": {"global_hiv": 57036920.0, "regions": {"UNAAP": {"hiv": 4200000.0, "aids_deaths": 170000.0, "non_aids": 4030000.0}, "UNACAR": {"hiv": 210000.0, "aids_deaths": 12000.0, "non_aids": 198000.0}, "UNAESA": {"hiv": 10400000.0, "aids_deaths": 580000.0, "non_aids": 9820000.0}, "UNAEECA": {"hiv": 170000.0, "aids_deaths": 7700.0, "non_aids": 162300.0}, "UNALA": {"hiv": 580000.0, "aids_deaths": 40000.0, "non_aids": 540000.0}, "UNAMENA": {"hiv": 57000.0, "aids_deaths": 3100.0, "non_aids": 53900.0}, "UNAWCA": {"hiv": 3800000.0, "aids_deaths": 220000.0, "non_aids": 3580000.0}, "UNAWCENA": {"hiv": 1000000.0, "aids_deaths": 67000.0, "non_aids": 933000.0}}}, "1996": {"global_hiv": 62194020.0, "regions": {"UNAAP": {"hiv": 4800000.0, "aids_deaths": 200000.0, "non_aids": 4600000.0}, "UNACAR": {"hiv": 220000.0, "aids_deaths": 13000.0, "non_aids": 207000.0}, "UNAESA": {"hiv": 11300000.0, "aids_deaths": 660000.0, "non_aids": 10640000.0}, "UNAEECA": {"hiv": 210000.0, "aids_deaths": 8900.0, "non_aids": 201100.0}, "UNALA": {"hiv": 630000.0, "aids_deaths": 45000.0, "non_aids": 585000.0}, "UNAMENA": {"hiv": 63000.0, "aids_deaths": 3500.0, "non_aids": 59500.0}, "UNAWCA": {"hiv": 4100000.0, "aids_deaths": 250000.0, "non_aids": 3850000.0}, "UNAWCENA": {"hiv": 1100000.0, "aids_deaths": 58000.0, "non_aids": 1042000.0}}}, "1997": {"global_hiv": 66580770.0, "regions": {"UNAAP": {"hiv": 5200000.0, "aids_deaths": 240000.0, "non_aids": 4960000.0}, "UNACAR": {"hiv": 230000.0, "aids_deaths": 15000.0, "non_aids": 215000.0}, "UNAESA": {"hiv": 12100000.0, "aids_deaths": 740000.0, "non_aids": 11360000.0}, "UNAEECA": {"hiv": 250000.0, "aids_deaths": 11000.0, "non_aids": 239000.0}, "UNALA": {"hiv": 690000.0, "aids_deaths": 40000.0, "non_aids": 650000.0}, "UNAMENA": {"hiv": 69000.0, "aids_deaths": 3900.0, "non_aids": 65100.0}, "UNAWCA": {"hiv": 4300000.0, "aids_deaths": 280000.0, "non_aids": 4020000.0}, "UNAWCENA": {"hiv": 1100000.0, "aids_deaths": 48000.0, "non_aids": 1052000.0}}}, "1998": {"global_hiv": 70328390.0, "regions": {"UNAAP": {"hiv": 5500000.0, "aids_deaths": 280000.0, "non_aids": 5220000.0}, "UNACAR": {"hiv": 240000.0, "aids_deaths": 16000.0, "non_aids": 224000.0}, "UNAESA": {"hiv": 12800000.0, "aids_deaths": 820000.0, "non_aids": 11980000.0}, "UNAEECA": {"hiv": 300000.0, "aids_deaths": 12000.0, "non_aids": 288000.0}, "UNALA": {"hiv": 760000.0, "aids_deaths": 39000.0, "non_aids": 721000.0}, "UNAMENA": {"hiv": 75000.0, "aids_deaths": 4400.0, "non_aids": 70600.0}, "UNAWCA": {"hiv": 4600000.0, "aids_deaths": 310000.0, "non_aids": 4290000.0}, "UNAWCENA": {"hiv": 1100000.0, "aids_deaths": 35000.0, "non_aids": 1065000.0}}}, "1999": {"global_hiv": 73285800.0, "regions": {"UNAAP": {"hiv": 5600000.0, "aids_deaths": 320000.0, "non_aids": 5280000.0}, "UNACAR": {"hiv": 240000.0, "aids_deaths": 17000.0, "non_aids": 223000.0}, "UNAESA": {"hiv": 13300000.0, "aids_deaths": 890000.0, "non_aids": 12410000.0}, "UNAEECA": {"hiv": 340000.0, "aids_deaths": 15000.0, "non_aids": 325000.0}, "UNALA": {"hiv": 820000.0, "aids_deaths": 41000.0, "non_aids": 779000.0}, "UNAMENA": {"hiv": 80000.0, "aids_deaths": 4900.0, "non_aids": 75100.0}, "UNAWCA": {"hiv": 4700000.0, "aids_deaths": 330000.0, "non_aids": 4370000.0}, "UNAWCENA": {"hiv": 1200000.0, "aids_deaths": 29000.0, "non_aids": 1171000.0}}}, "2000": {"global_hiv": 75746740.0, "regions": {"UNAAP": {"hiv": 5700000.0, "aids_deaths": 360000.0, "non_aids": 5340000.0}, "UNACAR": {"hiv": 250000.0, "aids_deaths": 18000.0, "non_aids": 232000.0}, "UNAESA": {"hiv": 13800000.0, "aids_deaths": 960000.0, "non_aids": 12840000.0}, "UNAEECA": {"hiv": 380000.0, "aids_deaths": 17000.0, "non_aids": 363000.0}, "UNALA": {"hiv": 880000.0, "aids_deaths": 43000.0, "non_aids": 837000.0}, "UNAMENA": {"hiv": 84000.0, "aids_deaths": 5300.0, "non_aids": 78700.0}, "UNAWCA": {"hiv": 4900000.0, "aids_deaths": 360000.0, "non_aids": 4540000.0}, "UNAWCENA": {"hiv": 1200000.0, "aids_deaths": 29000.0, "non_aids": 1171000.0}}}, "2001": {"global_hiv": 77709510.0, "regions": {"UNAAP": {"hiv": 5800000.0, "aids_deaths": 390000.0, "non_aids": 5410000.0}, "UNACAR": {"hiv": 250000.0, "aids_deaths": 19000.0, "non_aids": 231000.0}, "UNAESA": {"hiv": 14200000.0, "aids_deaths": 1000000.0, "non_aids": 13200000.0}, "UNAEECA": {"hiv": 420000.0, "aids_deaths": 19000.0, "non_aids": 401000.0}, "UNALA": {"hiv": 940000.0, "aids_deaths": 43000.0, "non_aids": 897000.0}, "UNAMENA": {"hiv": 88000.0, "aids_deaths": 5700.0, "non_aids": 82300.0}, "UNAWCA": {"hiv": 4900000.0, "aids_deaths": 380000.0, "non_aids": 4520000.0}, "UNAWCENA": {"hiv": 1300000.0, "aids_deaths": 28000.0, "non_aids": 1272000.0}}}, "2002": {"global_hiv": 79325670.0, "regions": {"UNAAP": {"hiv": 5800000.0, "aids_deaths": 410000.0, "non_aids": 5390000.0}, "UNACAR": {"hiv": 250000.0, "aids_deaths": 19000.0, "non_aids": 231000.0}, "UNAESA": {"hiv": 14500000.0, "aids_deaths": 1100000.0, "non_aids": 13400000.0}, "UNAEECA": {"hiv": 460000.0, "aids_deaths": 22000.0, "non_aids": 438000.0}, "UNALA": {"hiv": 990000.0, "aids_deaths": 44000.0, "non_aids": 946000.0}, "UNAMENA": {"hiv": 92000.0, "aids_deaths": 6100.0, "non_aids": 85900.0}, "UNAWCA": {"hiv": 5000000.0, "aids_deaths": 390000.0, "non_aids": 4610000.0}, "UNAWCENA": {"hiv": 1300000.0, "aids_deaths": 28000.0, "non_aids": 1272000.0}}}, "2003": {"global_hiv": 80388520.0, "regions": {"UNAAP": {"hiv": 5800000.0, "aids_deaths": 430000.0, "non_aids": 5370000.0}, "UNACAR": {"hiv": 260000.0, "aids_deaths": 20000.0, "non_aids": 240000.0}, "UNAESA": {"hiv": 14700000.0, "aids_deaths": 1100000.0, "non_aids": 13600000.0}, "UNAEECA": {"hiv": 490000.0, "aids_deaths": 25000.0, "non_aids": 465000.0}, "UNALA": {"hiv": 1100000.0, "aids_deaths": 44000.0, "non_aids": 1056000.0}, "UNAMENA": {"hiv": 95000.0, "aids_deaths": 6300.0, "non_aids": 88700.0}, "UNAWCA": {"hiv": 5000000.0, "aids_deaths": 400000.0, "non_aids": 4600000.0}, "UNAWCENA": {"hiv": 1400000.0, "aids_deaths": 28000.0, "non_aids": 1372000.0}}}, "2004": {"global_hiv": 81423420.0, "regions": {"UNAAP": {"hiv": 5800000.0, "aids_deaths": 440000.0, "non_aids": 5360000.0}, "UNACAR": {"hiv": 260000.0, "aids_deaths": 19000.0, "non_aids": 241000.0}, "UNAESA": {"hiv": 14900000.0, "aids_deaths": 1100000.0, "non_aids": 13800000.0}, "UNAEECA": {"hiv": 530000.0, "aids_deaths": 28000.0, "non_aids": 502000.0}, "UNALA": {"hiv": 1100000.0, "aids_deaths": 45000.0, "non_aids": 1055000.0}, "UNAMENA": {"hiv": 98000.0, "aids_deaths": 6400.0, "non_aids": 91600.0}, "UNAWCA": {"hiv": 5000000.0, "aids_deaths": 400000.0, "non_aids": 4600000.0}, "UNAWCENA": {"hiv": 1400000.0, "aids_deaths": 27000.0, "non_aids": 1373000.0}}}, "2005": {"global_hiv": 82431820.0, "regions": {"UNAAP": {"hiv": 5700000.0, "aids_deaths": 430000.0, "non_aids": 5270000.0}, "UNACAR": {"hiv": 260000.0, "aids_deaths": 19000.0, "non_aids": 241000.0}, "UNAESA": {"hiv": 15200000.0, "aids_deaths": 1000000.0, "non_aids": 14200000.0}, "UNAEECA": {"hiv": 580000.0, "aids_deaths": 31000.0, "non_aids": 549000.0}, "UNALA": {"hiv": 1200000.0, "aids_deaths": 45000.0, "non_aids": 1155000.0}, "UNAMENA": {"hiv": 100000.0, "aids_deaths": 6600.0, "non_aids": 93400.0}, "UNAWCA": {"hiv": 5000000.0, "aids_deaths": 390000.0, "non_aids": 4610000.0}, "UNAWCENA": {"hiv": 1500000.0, "aids_deaths": 27000.0, "non_aids": 1473000.0}}}, "2006": {"global_hiv": 83402340.0, "regions": {"UNAAP": {"hiv": 5700000.0, "aids_deaths": 410000.0, "non_aids": 5290000.0}, "UNACAR": {"hiv": 260000.0, "aids_deaths": 17000.0, "non_aids": 243000.0}, "UNAESA": {"hiv": 15400000.0, "aids_deaths": 970000.0, "non_aids": 14430000.0}, "UNAEECA": {"hiv": 630000.0, "aids_deaths": 31000.0, "non_aids": 599000.0}, "UNALA": {"hiv": 1200000.0, "aids_deaths": 44000.0, "non_aids": 1156000.0}, "UNAMENA": {"hiv": 100000.0, "aids_deaths": 6800.0, "non_aids": 93200.0}, "UNAWCA": {"hiv": 5000000.0, "aids_deaths": 380000.0, "non_aids": 4620000.0}, "UNAWCENA": {"hiv": 1500000.0, "aids_deaths": 26000.0, "non_aids": 1474000.0}}}, "2007": {"global_hiv": 84933900.0, "regions": {"UNAAP": {"hiv": 5700000.0, "aids_deaths": 390000.0, "non_aids": 5310000.0}, "UNACAR": {"hiv": 260000.0, "aids_deaths": 15000.0, "non_aids": 245000.0}, "UNAESA": {"hiv": 15700000.0, "aids_deaths": 880000.0, "non_aids": 14820000.0}, "UNAEECA": {"hiv": 690000.0, "aids_deaths": 30000.0, "non_aids": 660000.0}, "UNALA": {"hiv": 1300000.0, "aids_deaths": 43000.0, "non_aids": 1257000.0}, "UNAMENA": {"hiv": 110000.0, "aids_deaths": 6800.0, "non_aids": 103200.0}, "UNAWCA": {"hiv": 5000000.0, "aids_deaths": 360000.0, "non_aids": 4640000.0}, "UNAWCENA": {"hiv": 1600000.0, "aids_deaths": 24000.0, "non_aids": 1576000.0}}}, "2008": {"global_hiv": 86405650.0, "regions": {"UNAAP": {"hiv": 5600000.0, "aids_deaths": 360000.0, "non_aids": 5240000.0}, "UNACAR": {"hiv": 260000.0, "aids_deaths": 14000.0, "non_aids": 246000.0}, "UNAESA": {"hiv": 16000000.0, "aids_deaths": 770000.0, "non_aids": 15230000.0}, "UNAEECA": {"hiv": 760000.0, "aids_deaths": 30000.0, "non_aids": 730000.0}, "UNALA": {"hiv": 1400000.0, "aids_deaths": 44000.0, "non_aids": 1356000.0}, "UNAMENA": {"hiv": 110000.0, "aids_deaths": 6800.0, "non_aids": 103200.0}, "UNAWCA": {"hiv": 5000000.0, "aids_deaths": 330000.0, "non_aids": 4670000.0}, "UNAWCENA": {"hiv": 1600000.0, "aids_deaths": 23000.0, "non_aids": 1577000.0}}}, "2009": {"global_hiv": 88207700.0, "regions": {"UNAAP": {"hiv": 5700000.0, "aids_deaths": 330000.0, "non_aids": 5370000.0}, "UNACAR": {"hiv": 260000.0, "aids_deaths": 12000.0, "non_aids": 248000.0}, "UNAESA": {"hiv": 16400000.0, "aids_deaths": 680000.0, "non_aids": 15720000.0}, "UNAEECA": {"hiv": 840000.0, "aids_deaths": 31000.0, "non_aids": 809000.0}, "UNALA": {"hiv": 1400000.0, "aids_deaths": 44000.0, "non_aids": 1356000.0}, "UNAMENA": {"hiv": 110000.0, "aids_deaths": 6700.0, "non_aids": 103300.0}, "UNAWCA": {"hiv": 5000000.0, "aids_deaths": 300000.0, "non_aids": 4700000.0}, "UNAWCENA": {"hiv": 1700000.0, "aids_deaths": 21000.0, "non_aids": 1679000.0}}}, "2010": {"global_hiv": 90067970.0, "regions": {"UNAAP": {"hiv": 5700000.0, "aids_deaths": 310000.0, "non_aids": 5390000.0}, "UNACAR": {"hiv": 270000.0, "aids_deaths": 12000.0, "non_aids": 258000.0}, "UNAESA": {"hiv": 16800000.0, "aids_deaths": 600000.0, "non_aids": 16200000.0}, "UNAEECA": {"hiv": 920000.0, "aids_deaths": 33000.0, "non_aids": 887000.0}, "UNALA": {"hiv": 1500000.0, "aids_deaths": 42000.0, "non_aids": 1458000.0}, "UNAMENA": {"hiv": 120000.0, "aids_deaths": 6700.0, "non_aids": 113300.0}, "UNAWCA": {"hiv": 5000000.0, "aids_deaths": 290000.0, "non_aids": 4710000.0}, "UNAWCENA": {"hiv": 1700000.0, "aids_deaths": 19000.0, "non_aids": 1681000.0}}}, "2011": {"global_hiv": 91981110.0, "regions": {"UNAAP": {"hiv": 5700000.0, "aids_deaths": 280000.0, "non_aids": 5420000.0}, "UNACAR": {"hiv": 270000.0, "aids_deaths": 12000.0, "non_aids": 258000.0}, "UNAESA": {"hiv": 17300000.0, "aids_deaths": 530000.0, "non_aids": 16770000.0}, "UNAEECA": {"hiv": 1000000.0, "aids_deaths": 36000.0, "non_aids": 964000.0}, "UNALA": {"hiv": 1500000.0, "aids_deaths": 41000.0, "non_aids": 1459000.0}, "UNAMENA": {"hiv": 120000.0, "aids_deaths": 6800.0, "non_aids": 113200.0}, "UNAWCA": {"hiv": 5000000.0, "aids_deaths": 280000.0, "non_aids": 4720000.0}, "UNAWCENA": {"hiv": 1800000.0, "aids_deaths": 18000.0, "non_aids": 1782000.0}}}, "2012": {"global_hiv": 94043210.0, "regions": {"UNAAP": {"hiv": 5800000.0, "aids_deaths": 260000.0, "non_aids": 5540000.0}, "UNACAR": {"hiv": 270000.0, "aids_deaths": 11000.0, "non_aids": 259000.0}, "UNAESA": {"hiv": 17700000.0, "aids_deaths": 480000.0, "non_aids": 17220000.0}, "UNAEECA": {"hiv": 1100000.0, "aids_deaths": 37000.0, "non_aids": 1063000.0}, "UNALA": {"hiv": 1600000.0, "aids_deaths": 41000.0, "non_aids": 1559000.0}, "UNAMENA": {"hiv": 120000.0, "aids_deaths": 6700.0, "non_aids": 113300.0}, "UNAWCA": {"hiv": 5000000.0, "aids_deaths": 260000.0, "non_aids": 4740000.0}, "UNAWCENA": {"hiv": 1900000.0, "aids_deaths": 16000.0, "non_aids": 1884000.0}}}, "2013": {"global_hiv": 96018310.0, "regions": {"UNAAP": {"hiv": 5800000.0, "aids_deaths": 240000.0, "non_aids": 5560000.0}, "UNACAR": {"hiv": 280000.0, "aids_deaths": 11000.0, "non_aids": 269000.0}, "UNAESA": {"hiv": 18200000.0, "aids_deaths": 440000.0, "non_aids": 17760000.0}, "UNAEECA": {"hiv": 1200000.0, "aids_deaths": 37000.0, "non_aids": 1163000.0}, "UNALA": {"hiv": 1600000.0, "aids_deaths": 42000.0, "non_aids": 1558000.0}, "UNAMENA": {"hiv": 130000.0, "aids_deaths": 6700.0, "non_aids": 123300.0}, "UNAWCA": {"hiv": 5000000.0, "aids_deaths": 250000.0, "non_aids": 4750000.0}, "UNAWCENA": {"hiv": 1900000.0, "aids_deaths": 15000.0, "non_aids": 1885000.0}}}, "2014": {"global_hiv": 98218660.0, "regions": {"UNAAP": {"hiv": 5900000.0, "aids_deaths": 230000.0, "non_aids": 5670000.0}, "UNACAR": {"hiv": 280000.0, "aids_deaths": 9900.0, "non_aids": 270100.0}, "UNAESA": {"hiv": 18600000.0, "aids_deaths": 400000.0, "non_aids": 18200000.0}, "UNAEECA": {"hiv": 1300000.0, "aids_deaths": 37000.0, "non_aids": 1263000.0}, "UNALA": {"hiv": 1700000.0, "aids_deaths": 43000.0, "non_aids": 1657000.0}, "UNAMENA": {"hiv": 130000.0, "aids_deaths": 6600.0, "non_aids": 123400.0}, "UNAWCA": {"hiv": 5000000.0, "aids_deaths": 240000.0, "non_aids": 4760000.0}, "UNAWCENA": {"hiv": 2000000.0, "aids_deaths": 14000.0, "non_aids": 1986000.0}}}, "2015": {"global_hiv": 100155450.0, "regions": {"UNAAP": {"hiv": 5900000.0, "aids_deaths": 220000.0, "non_aids": 5680000.0}, "UNACAR": {"hiv": 290000.0, "aids_deaths": 9500.0, "non_aids": 280500.0}, "UNAESA": {"hiv": 19100000.0, "aids_deaths": 370000.0, "non_aids": 18730000.0}, "UNAEECA": {"hiv": 1400000.0, "aids_deaths": 38000.0, "non_aids": 1362000.0}, "UNALA": {"hiv": 1800000.0, "aids_deaths": 42000.0, "non_aids": 1758000.0}, "UNAMENA": {"hiv": 140000.0, "aids_deaths": 6500.0, "non_aids": 133500.0}, "UNAWCA": {"hiv": 5000000.0, "aids_deaths": 230000.0, "non_aids": 4770000.0}, "UNAWCENA": {"hiv": 2000000.0, "aids_deaths": 13000.0, "non_aids": 1987000.0}}}, "2016": {"global_hiv": 102321960.0, "regions": {"UNAAP": {"hiv": 6000000.0, "aids_deaths": 200000.0, "non_aids": 5800000.0}, "UNACAR": {"hiv": 290000.0, "aids_deaths": 9700.0, "non_aids": 280300.0}, "UNAESA": {"hiv": 19500000.0, "aids_deaths": 350000.0, "non_aids": 19150000.0}, "UNAEECA": {"hiv": 1500000.0, "aids_deaths": 36000.0, "non_aids": 1464000.0}, "UNALA": {"hiv": 1800000.0, "aids_deaths": 39000.0, "non_aids": 1761000.0}, "UNAMENA": {"hiv": 140000.0, "aids_deaths": 6200.0, "non_aids": 133800.0}, "UNAWCA": {"hiv": 5000000.0, "aids_deaths": 210000.0, "non_aids": 4790000.0}, "UNAWCENA": {"hiv": 2100000.0, "aids_deaths": 13000.0, "non_aids": 2087000.0}}}, "2017": {"global_hiv": 103740570.0, "regions": {"UNAAP": {"hiv": 6100000.0, "aids_deaths": 190000.0, "non_aids": 5910000.0}, "UNACAR": {"hiv": 300000.0, "aids_deaths": 8800.0, "non_aids": 291200.0}, "UNAESA": {"hiv": 19800000.0, "aids_deaths": 340000.0, "non_aids": 19460000.0}, "UNAEECA": {"hiv": 1600000.0, "aids_deaths": 33000.0, "non_aids": 1567000.0}, "UNALA": {"hiv": 1900000.0, "aids_deaths": 39000.0, "non_aids": 1861000.0}, "UNAMENA": {"hiv": 150000.0, "aids_deaths": 6000.0, "non_aids": 144000.0}, "UNAWCA": {"hiv": 5000000.0, "aids_deaths": 200000.0, "non_aids": 4800000.0}, "UNAWCENA": {"hiv": 2100000.0, "aids_deaths": 13000.0, "non_aids": 2087000.0}}}, "2018": {"global_hiv": 105601210.0, "regions": {"UNAAP": {"hiv": 6200000.0, "aids_deaths": 180000.0, "non_aids": 6020000.0}, "UNACAR": {"hiv": 300000.0, "aids_deaths": 7500.0, "non_aids": 292500.0}, "UNAESA": {"hiv": 20100000.0, "aids_deaths": 320000.0, "non_aids": 19780000.0}, "UNAEECA": {"hiv": 1700000.0, "aids_deaths": 34000.0, "non_aids": 1666000.0}, "UNALA": {"hiv": 2000000.0, "aids_deaths": 40000.0, "non_aids": 1960000.0}, "UNAMENA": {"hiv": 150000.0, "aids_deaths": 5800.0, "non_aids": 144200.0}, "UNAWCA": {"hiv": 5000000.0, "aids_deaths": 190000.0, "non_aids": 4810000.0}, "UNAWCENA": {"hiv": 2100000.0, "aids_deaths": 12000.0, "non_aids": 2088000.0}}}, "2019": {"global_hiv": 107268870.0, "regions": {"UNAAP": {"hiv": 6300000.0, "aids_deaths": 160000.0, "non_aids": 6140000.0}, "UNACAR": {"hiv": 310000.0, "aids_deaths": 6800.0, "non_aids": 303200.0}, "UNAESA": {"hiv": 20400000.0, "aids_deaths": 320000.0, "non_aids": 20080000.0}, "UNAEECA": {"hiv": 1800000.0, "aids_deaths": 34000.0, "non_aids": 1766000.0}, "UNALA": {"hiv": 2000000.0, "aids_deaths": 37000.0, "non_aids": 1963000.0}, "UNAMENA": {"hiv": 160000.0, "aids_deaths": 5700.0, "non_aids": 154300.0}, "UNAWCA": {"hiv": 5100000.0, "aids_deaths": 190000.0, "non_aids": 4910000.0}, "UNAWCENA": {"hiv": 2200000.0, "aids_deaths": 12000.0, "non_aids": 2188000.0}}}, "2020": {"global_hiv": 108505950.0, "regions": {"UNAAP": {"hiv": 6400000.0, "aids_deaths": 160000.0, "non_aids": 6240000.0}, "UNACAR": {"hiv": 320000.0, "aids_deaths": 6200.0, "non_aids": 313800.0}, "UNAESA": {"hiv": 20600000.0, "aids_deaths": 310000.0, "non_aids": 20290000.0}, "UNAEECA": {"hiv": 1900000.0, "aids_deaths": 34000.0, "non_aids": 1866000.0}, "UNALA": {"hiv": 2100000.0, "aids_deaths": 34000.0, "non_aids": 2066000.0}, "UNAMENA": {"hiv": 170000.0, "aids_deaths": 5700.0, "non_aids": 164300.0}, "UNAWCA": {"hiv": 5100000.0, "aids_deaths": 170000.0, "non_aids": 4930000.0}, "UNAWCENA": {"hiv": 2200000.0, "aids_deaths": 13000.0, "non_aids": 2187000.0}}}, "2021": {"global_hiv": 109714080.0, "regions": {"UNAAP": {"hiv": 6500000.0, "aids_deaths": 160000.0, "non_aids": 6340000.0}, "UNACAR": {"hiv": 320000.0, "aids_deaths": 5800.0, "non_aids": 314200.0}, "UNAESA": {"hiv": 20700000.0, "aids_deaths": 290000.0, "non_aids": 20410000.0}, "UNAEECA": {"hiv": 1900000.0, "aids_deaths": 37000.0, "non_aids": 1863000.0}, "UNALA": {"hiv": 2200000.0, "aids_deaths": 33000.0, "non_aids": 2167000.0}, "UNAMENA": {"hiv": 180000.0, "aids_deaths": 5800.0, "non_aids": 174200.0}, "UNAWCA": {"hiv": 5100000.0, "aids_deaths": 150000.0, "non_aids": 4950000.0}, "UNAWCENA": {"hiv": 2300000.0, "aids_deaths": 13000.0, "non_aids": 2287000.0}}}, "2022": {"global_hiv": 110218160.0, "regions": {"UNAAP": {"hiv": 6600000.0, "aids_deaths": 160000.0, "non_aids": 6440000.0}, "UNACAR": {"hiv": 330000.0, "aids_deaths": 5400.0, "non_aids": 324600.0}, "UNAESA": {"hiv": 20800000.0, "aids_deaths": 280000.0, "non_aids": 20520000.0}, "UNAEECA": {"hiv": 2000000.0, "aids_deaths": 41000.0, "non_aids": 1959000.0}, "UNALA": {"hiv": 2200000.0, "aids_deaths": 32000.0, "non_aids": 2168000.0}, "UNAMENA": {"hiv": 190000.0, "aids_deaths": 6000.0, "non_aids": 184000.0}, "UNAWCA": {"hiv": 5100000.0, "aids_deaths": 140000.0, "non_aids": 4960000.0}, "UNAWCENA": {"hiv": 2300000.0, "aids_deaths": 13000.0, "non_aids": 2287000.0}}}, "2023": {"global_hiv": 113683840.0, "regions": {"UNAAP": {"hiv": 6700000.0, "aids_deaths": 150000.0, "non_aids": 6550000.0}, "UNACAR": {"hiv": 340000.0, "aids_deaths": 5100.0, "non_aids": 334900.0}, "UNAESA": {"hiv": 20800000.0, "aids_deaths": 260000.0, "non_aids": 20540000.0}, "UNAEECA": {"hiv": 2100000.0, "aids_deaths": 44000.0, "non_aids": 2056000.0}, "UNALA": {"hiv": 2300000.0, "aids_deaths": 30000.0, "non_aids": 2270000.0}, "UNAMENA": {"hiv": 210000.0, "aids_deaths": 6200.0, "non_aids": 203800.0}, "UNAWCA": {"hiv": 5100000.0, "aids_deaths": 130000.0, "non_aids": 4970000.0}, "UNAWCENA": {"hiv": 2300000.0, "aids_deaths": 13000.0, "non_aids": 2287000.0}}}};
+        const availableYears = Object.keys(allYearsDataRegionsFlow).sort((a, b) => parseInt(a) - parseInt(b));
+        const unRegions = ["UNAAP", "UNACAR", "UNAESA", "UNAEECA", "UNALA", "UNAMENA", "UNAWCA", "UNAWCENA"];
+
+        let currentYearIndex = 0;
+        let animationInterval;
+        let isPlaying = false;
+
+        // Get DOM elements
+        const sankeyContainer = document.getElementById('sankey-container');
+        const yearDisplay = document.getElementById('year-display');
+        const yearSlider = document.getElementById('year-slider');
+        const playButton = document.getElementById('play-button');
+        const pauseButton = document.getElementById('pause-button');
+        const regionStatsContainer = document.getElementById('region-stats-container');
+
+        // Set up Sankey
+        const margin = {top: 10, right: 10, bottom: 10, left: 180}; /* Increased left margin */
+        const width = sankeyContainer.clientWidth - margin.left - margin.right;
+        const height = sankeyContainer.clientHeight - margin.top - margin.bottom;
+
+        const svg = d3.select('#sankey-container')
+            .append('svg')
+            .attr('width', width + margin.left + margin.right)
+            .attr('height', height + margin.top + margin.bottom)
+            .append('g')
+            .attr('transform', `translate(${margin.left},${margin.top})`);
+
+        const color = d3.scaleOrdinal(d3.schemeCategory10);
+
+        updateSankey(allYearsDataRegionsFlow[availableYears[0]]);
+
+        playButton.addEventListener('click', startAnimation);
+        pauseButton.addEventListener('click', pauseAnimation);
+        yearSlider.addEventListener('input', handleSliderChange);
+
+        window.addEventListener('resize', () => {
+            updateSankey(allYearsDataRegionsFlow[availableYears[currentYearIndex]]);
+        });
+
+        function updateSankey(yearData) {
+            svg.selectAll('*').remove();
+            regionStatsContainer.innerHTML = '';
+            yearDisplay.textContent = `Year: ${availableYears[currentYearIndex]}`;
+
+            const nodes = [];
+            const links = [];
+            const regionNodeIndices = {};
+            let nodeIndex = 0;
+
+            // Initial node: Global Living with HIV
+            nodes.push({ name: 'People Living with HIV' });
+            const globalHIVIndex = nodeIndex++;
+
+            // Region nodes
+            for (const region of unRegions) {
+                nodes.push({ name: region });
+                regionNodeIndices[region] = nodeIndex++;
+            }
+
+            // Final nodes
+            nodes.push({ name: 'Living with HIV (non-AIDS)' });
+            const nonAidsIndex = nodeIndex++;
+            nodes.push({ name: 'AIDS-related Deaths' });
+            const aidsDeathIndex = nodeIndex++;
+
+            // Links from Global HIV to Regions
+            const globalHIVValue = yearData.global_hiv;
+            if (globalHIVValue > 0) {
+                const totalRegionalHIV = Object.values(yearData.regions).reduce((sum, r) => sum + r.hiv, 0);
+                for (const region of unRegions) {
+                    const regionData = yearData.regions[region];
+                    if (regionData && regionData.hiv > 0) {
+                        links.push({
+                            source: globalHIVIndex,
+                            target: regionNodeIndices[region],
+                            value: regionData.hiv * (globalHIVValue > 0 ? 1 : 0), // Avoid division by zero
+                            color: 'rgba(100, 149, 237, 0.6)' // Cornflower blue
+                        });
+                        // Add region stats
+                        const regionDiv = document.createElement('div');
+                        regionDiv.className = 'region-stats';
+                        regionDiv.innerHTML = `<strong>${region}</strong><br>HIV: ${formatNumber(regionData.hiv)}<br>Deaths: ${formatNumber(regionData.aids_deaths)}<br>Living (non-AIDS): ${formatNumber(regionData.non_aids)}`;
+                        regionStatsContainer.appendChild(regionDiv);
+                    }
+                }
+            }
+
+            // Links from Regions to Outcomes
+            for (const region of unRegions) {
+                const regionData = yearData.regions[region];
+                if (regionData) {
+                    const regionSource = regionNodeIndices[region];
+                    if (regionData.non_aids > 0) {
+                        links.push({
+                            source: regionSource,
+                            target: nonAidsIndex,
+                            value: regionData.non_aids,
+                            color: 'rgba(0, 255, 0, 0.6)' // Green
+                        });
+                    }
+                    if (regionData.aids_deaths > 0) {
+                        links.push({
+                            source: regionSource,
+                            target: aidsDeathIndex,
+                            value: regionData.aids_deaths,
+                            color: 'rgba(255, 0, 0, 0.6)' // Red
+                        });
+                    }
+                }
+            }
+
+            const sankey = d3.sankey()
+                .nodeAlign(d3.sankeyLeft)
+                .nodeWidth(15)
+                .nodePadding(10)
+                .extent([[0, 0], [width, height]]);
+
+            const {nodes: graphNodes, links: graphLinks} = sankey({ nodes: nodes, links: links });
+
+            const node = svg.append('g')
+                .attr('class', 'nodes')
+                .selectAll('g')
+                .data(graphNodes)
+                .join('g');
+
+            node.append('rect')
+                .attr('x', d => d.x0)
+                .attr('y', d => d.y0)
+                .attr('height', d => d.y1 - d.y0)
+                .attr('width', d => d.x1 - d.x0)
+                .attr('fill', d => color(d.name))
+                .style('stroke', '#000')
+                .style('stroke-width', '0.5px')
+                .append('title')
+                .text(d => `${d.name}\n${formatNumber(d.value)}`);
+
+            node.append('text')
+                .attr('x', d => d.x0 - 5)
+                .attr('y', d => (d.y1 + d.y0) / 2)
+                .attr('dy', '0.35em')
+                .attr('text-anchor', 'end')
+                .style('font-size', '10px')
+                .text(d => d.name)
+                .filter(d => d.x0 < width / 2);
+
+            node.filter(d => d.x0 < width / 2)
+                .select('text')
+                .attr('x', d => d.x1 + 5)
+                .attr('text-anchor', 'start');
+
+            const link = svg.append('g')
+                .attr('class', 'links')
+                .selectAll('path')
+                .data(graphLinks)
+                .join('path')
+                .attr('d', d3.sankeyLinkHorizontal())
+                .attr('stroke', d => d.color)
+                .style('stroke-opacity', 0.6)
+                .style('fill', 'none')
+                .attr('stroke-width', d => Math.max(1, d.width))
+                .sort((a, b) => b.width - a.width);
+
+            link.append('title')
+                .text(d => `${d.source.name} → ${d.target.name}\n${formatNumber(d.value)}`);
+        }
+
+        function startAnimation() {
+            if (isPlaying) return;
+            isPlaying = true;
+            animationInterval = setInterval(() => {
+                currentYearIndex = (currentYearIndex + 1) % availableYears.length;
+                yearSlider.value = currentYearIndex;
+                updateSankey(allYearsDataRegionsFlow[availableYears[currentYearIndex]]);
+                if (currentYearIndex === availableYears.length - 1) {
+                    pauseAnimation();
+                }
+            }, 500);
+        }
+
+        function pauseAnimation() {
+            clearInterval(animationInterval);
+            isPlaying = false;
+        }
+
+        function handleSliderChange() {
+            pauseAnimation();
+            currentYearIndex = parseInt(yearSlider.value);
+            updateSankey(allYearsDataRegionsFlow[availableYears[currentYearIndex]]);
+        }
+
+        function formatNumber(num) {
+            return num.toString().replace(/\B(?=(\d3)+(?!\d))/g, ",");
+        }
+    </script>
+</body>
+</html>

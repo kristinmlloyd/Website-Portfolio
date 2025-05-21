@@ -1,0 +1,55 @@
+project:
+  type: website
+
+website:
+  title: "Mini Project"
+  favicon: "images/gu.png"
+  navbar:
+    search: true
+    left:
+      - href: intro.qmd
+        text: Executive Summary
+      - href: data_cleaning.qmd
+        text: Data Cleaning
+      - href: international.qmd
+        text: Global Analysis
+      - text: Individual Country Analysis
+        menu: 
+          - href: palestine.qmd
+            text: Palestine
+          - href: af.qmd
+            text: Afghanistan
+          - href: dr.qmd
+            text: DR Congo
+          - href: syria.qmd
+            text: Syrian Arab Republic
+          - href: somolia.qmd
+            text: Somolia
+          - href: mali.qmd
+            text: Mali
+          - href: southsudan.qmd
+            text: South Sudan
+          - href: sudan.qmd
+            text: Sudan
+      - href: unknown.qmd
+        text: Missing Pieces
+      - href: appendix.qmd
+        text: Appendix
+      - href: llm.qmd
+        text: LLM Log
+
+    right:
+      - icon: github
+        href: "https://github.com/kristinmlloyd/Mini_Project"
+  page-footer:
+    center: "© 2025 Scholarship Project"
+
+format:
+  html:
+    theme: 
+      - flatly
+    css: styles.css
+    toc: true
+    toc-depth: 2
+    code-copy: true
+    code-overflow: wrap

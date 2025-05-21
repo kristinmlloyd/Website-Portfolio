@@ -1,0 +1,543 @@
+---
+title: "Security Incidents in South Sudan: Trends and Patterns"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: true
+    number-sections: true
+    theme: cosmo
+    fig-width: 9
+    fig-height: 6
+    fig-dpi: 300
+    self-contained: true
+bibliography: references.bib
+execute:
+  warning: false
+  message: false
+---
+
+<style>
+.typing-line {
+  font-family: monospace;
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: .15em solid #000;
+  width: 0;
+  display: block;
+  animation: typing 2s steps(20, end) forwards;
+  /* Only type, no infinite blinking */
+}
+
+.typing-line:nth-child(2) {
+  animation-delay: 2s;
+}
+
+.typing-line:nth-child(3) {
+  animation-delay: 4s;
+}
+
+.typing-line:nth-child(4) {
+  animation-delay: 6s;
+}
+
+@keyframes typing {
+  from { width: 0 }
+  to { width: 100% }
+}
+</style>
+
+```{python}
+#| label: setup
+#| include: false
+#| echo: false
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+import folium
+from folium.plugins import MarkerCluster
+from matplotlib.colors import LinearSegmentedColormap
+import warnings
+import plotly.express as px
+import plotly.graph_objects as go
+from IPython.display import display
+from scipy import stats
+
+plt.rcParams['figure.figsize'] = (10, 6)
+warnings.filterwarnings('ignore', category=FutureWarning)
+sns.set_theme(style="whitegrid")
+
+palette = {"primary": "#FFBD59", "secondary": "#64C1FF", "danger": "#FF5252"}
+
+df = pd.read_csv("data/security_incidents_cleaned.csv")
+country_data = df[df['country'] == 'South Sudan']
+
+```
+
+![](images/ss.png)
+
+```{python}
+#| echo: false
+
+from IPython.display import HTML
+
+killed = int(country_data['nationals_killed'].sum() + country_data['internationals_killed'].sum())
+wounded = int(country_data['nationals_wounded'].sum() + country_data['internationals_wounded'].sum())
+kidnapped = int(country_data['nationals_kidnapped'].sum() + country_data['internationals_kidnapped'].sum())
+
+from IPython.display import HTML
+
+html = f"""
+<div>
+  <span class="typing-line">In South Sudan...</span>
+  <span class="typing-line">{killed} humanitarian workers have died,</span>
+  <span class="typing-line">{wounded} humanitarian workers have been wounded,</span>
+  <span class="typing-line">{kidnapped} humanitarian workers have been kidnapped.</span>
+</div>
+"""
+
+HTML(html)
+
+```             
+
+# Executive Summary
+
+![](images/southsudan2.png){width=150px}
+
+This analysis examines security incidents affecting humanitarian operations in South Sudan from 1996 to 2025, revealing critical patterns in Africa's youngest nation. Key findings include:
+
+-   **Peace agreement paradox**: The highest levels of security incidents occurred during supposed peace periods, with incidents peaking after the 2018 revitalized peace agreement and 2020 unity government formation.
+
+-   **Organized violence predominates**: Shootings and ambushes emerge as the most common attack types and contexts, indicating coordinated operations by military-trained groups rather than opportunistic violence.
+
+-   **Disproportionate impact on nationals**: South Sudanese humanitarian workers face substantially higher casualty rates than international personnel, though both groups are significantly affected.
+
+-   **Road networks as danger zones**: Transportation routes represent the most dangerous operational environment, with major incidents frequently occurring during road movements.
+
+-   **Recent decline masks deterioration**: The sharp drop in reported incidents since 2022 coincides with increased intercommunal violence and might reflect reduced humanitarian presence rather than improved security.
+
+These findings have significant implications for humanitarian operations in South Sudan as the country faces renewed political tensions, severe food insecurity, and spillover risks from neighboring Sudan's conflict.
+
+# Background: The Conflict
+
+## Historical Context
+
+Sudan gained independence in 1956, but long-standing divisions between the north and south led to decades of conflict. After two civil wars, South Sudan became an independent nation in 2011 following an overwhelming vote for separation. However, the country soon fell into crisis as political rivalry and ethnic tensions sparked a brutal civil war in 2013. Despite a peace agreement in 2018 and the formation of a unity government in 2020, the conflict has left deep scars, with widespread displacement, violence against civilians, and ongoing instability.
+
+## Recent Escalation
+
+Since early 2024, South Sudan has seen a sharp decline in security and humanitarian conditions. Intercommunal violence escalated, prompting the deployment of additional peacekeepers, while fighting in neighboring Sudan disrupted a key oil pipeline, slashing state revenue. In 2025, clashes between government and opposition forces intensified. South Sudan has experienced a dramatic deterioration in security and humanitarian conditions:
+
+-   7.7+ million people facing severe food insecurity—the worst in the country's history
+-   Widespread flooding since May 2024 threatening millions more
+-   Elections postponed to 2026 amid growing political tensions
+-   Possible spillover from Sudan's conflict into border regions
+
+<h1>Map of Incidents <img src="images/map.png" width="60px" style="vertical-align:middle; margin-left:10px;"></h1>
+
+```{python}
+#| echo: false
+icon_path = "images/hazard2.png"
+valid_points = country_data[country_data['latitude'].notna() & country_data['longitude'].notna()]
+
+country_map = folium.Map(location=[31.9, 35.2], zoom_start=8)
+
+coords = []
+
+for _, row in valid_points.iterrows():
+    coords.append((row['latitude'], row['longitude']))
+    
+    popup_html = f"""
+    <b>Location:</b> {row['location']}, {row['country']}<br>
+    <b>Year:</b> {row['year']}<br>
+    <b>Total Affected:</b> {row['total_affected']}<br>
+    <b>Attack Type:</b> {row.get('means_of_attack', 'Unknown')}
+    """
+
+    icon = folium.CustomIcon(
+        icon_image=icon_path,
+        icon_size=(20, 20)
+    )
+
+    folium.Marker(
+        location=[row['latitude'], row['longitude']],
+        popup=folium.Popup(popup_html, max_width=300),
+        icon=icon
+    ).add_to(country_map)
+
+if coords:
+    country_map.fit_bounds(coords)
+
+country_map
+
+```
+
+# Temporal Trends in Security Incidents {#sec-temporal}
+
+## Incident Frequency Over Time
+
+```{python}
+#| label: fig-yearly-incidents
+#| fig-cap: "Security incidents"
+#| echo: false
+
+yearly_incidents = country_data.groupby('year').size().reset_index(name='incidents')
+
+fig = px.line(
+    yearly_incidents, 
+    x='year', 
+    y='incidents',
+    markers=True,
+    labels={'incidents': 'Number of Incidents', 'year': 'Year'},
+    height=500,
+)
+
+fig.update_layout(
+    title=None,
+    xaxis=dict(tickmode='linear', dtick=2),
+    yaxis=dict(zeroline=True),
+    hovermode='x unified',
+    template='plotly_white'
+)
+
+fig.update_xaxes(rangeslider_visible=True)
+
+events = [
+    {'year': 2011, 'event': 'South Sudan independence', 'y_position': 9},
+    {'year': 2013, 'event': 'Civil war begins', 'y_position': 36},
+    {'year': 2015, 'event': 'First peace agreement', 'y_position': 31},
+    {'year': 2018, 'event': 'Revitalized peace agreement', 'y_position': 55},
+    {'year': 2020, 'event': 'Unity government formed', 'y_position': 62},
+    {'year': 2024, 'event': 'Increased intercommunal violence', 'y_position': 33},
+    {'year': 2025, 'event': 'Machar placed under house arrest', 'y_position': 8}
+]
+
+for event in events:
+    fig.add_annotation(
+        x=event['year'],
+        y=event['y_position'],
+        text=event['event'],
+        showarrow=True,
+        arrowhead=1,
+        ax=0,
+        ay=-20,
+        font=dict(size=8),  # Reduced font size from 10 to 8
+        bgcolor="rgba(255,255,255,0.85)",
+        bordercolor="black",
+        borderwidth=1,
+        borderpad=3
+    )
+
+fig.show()
+```
+
+### Analysis of Incident Trends
+
+The line chart reveals dramatic fluctuations in security incidents affecting humanitarian operations in South Sudan:
+
+-   **Pre-independence period (1996-2010)**: Security incidents were minimal before South Sudan's independence, with near-zero recorded incidents during this period when the region was still part of Sudan.
+
+-   **Post-independence volatility (2011-2013)**: Following independence in 2011, incidents began a gradual increase, reflecting the fragility of the new state and emerging tensions between political factions.
+
+-   **Civil war eruption (2013-2015)**: A sharp spike followed the outbreak of civil war in December 2013, with incidents more than tripling as violence spread along ethnic lines between forces loyal to President Kiir and former Vice President Machar.
+
+-   **Failed peace attempts (2015-2018)**: Despite the first peace agreement, incident levels remained high with significant fluctuations, demonstrating the agreement's limited effectiveness in improving security.
+
+-   **Post-peace agreement surge (2018-2021)**: Contrary to expectations, the 2018 revitalized peace agreement and 2020 unity government formation coincided with the highest recorded levels of incidents, peaking at over 60 annual incidents in 2021.
+
+-   **Recent dramatic decline (2022-2025)**: A precipitous drop occurred after 2022, with incidents falling to single digits by 2025 following Machar's house arrest. This decline likely reflects reduced humanitarian presence rather than genuine security improvements, as it coincides with increased intercommunal violence and restricted access.
+
+This pattern illustrates how formal political agreements in South Sudan have often failed to translate into improved security for humanitarian operations, with peaks in incidents paradoxically occurring during supposed "peace" periods, while recent declines may mask deteriorating conditions and shrinking humanitarian space.
+
+# Nature of Security Incidents {#sec-nature}
+
+## Predominant Attack Types
+
+```{python}
+#| label: fig-attack-types
+#| fig-cap: "Most common types of attacks"
+#| echo: false
+
+attack_counts = country_data['means_of_attack'].value_counts().reset_index()
+attack_counts.columns = ['Attack Type', 'Count']
+attack_counts = attack_counts.sort_values('Count', ascending=False).head(10)
+
+fig_attacks = px.bar(
+    attack_counts,
+    y='Attack Type',
+    x='Count',
+    title=None,
+    height=500,
+    orientation='h'
+)
+
+fig_attacks.update_traces(marker_color=palette["secondary"])
+
+fig_attacks.update_layout(
+    yaxis={'categoryorder': 'total ascending'},
+    xaxis_title="Number of Incidents",
+    yaxis_title=None
+)
+
+fig_attacks.show()
+```
+
+### Analysis of Attack Methods
+
+The predominance of shootings and bodily assaults reflects the nature of the conflict in South Sudan, characterized by armed confrontations between government forces, opposition forces, and communal militias.
+
+## Attack Contexts
+
+```{python}
+#| label: fig-attack-contexts
+#| fig-cap: "Security incidents by attack context"
+#| echo: false
+
+context_counts = country_data['attack_context'].value_counts().reset_index()
+context_counts.columns = ['Attack Context', 'Count']
+
+context_counts = context_counts.sort_values('Count', ascending=False)
+
+fig_context = px.bar(
+    context_counts,
+    x='Count',
+    y='Attack Context',
+    title=None,
+    height=450,
+    orientation='h'
+)
+
+fig_context.update_traces(marker_color=palette["secondary"])
+
+fig_context.update_layout(
+    xaxis_title="Number of Incidents",
+    yaxis_title=None,
+    yaxis=dict(categoryorder='total ascending'),  # <-- ensures most at top
+    margin=dict(l=150, r=20, t=30, b=30)
+)
+
+fig_context.show()
+```
+
+### Analysis of Attack Contexts
+
+The prevalence of ambushes highlights the tactical nature of much of the violence in South Sudan, suggesting organized planning rather than spontaneous outbreaks. Ambushes are typically employed by armed groups with some level of military training and coordination, which aligns with the involvement of both formal military forces (SSPDF) and organized opposition groups (SPLA/IO).
+
+## Location of Attack
+
+```{python}
+#| label: fig-attack-locations
+#| fig-cap: "Security incidents by attack locations"
+#| echo: false
+
+# Get top 10 most frequent locations
+location_counts = country_data['location'].value_counts().reset_index()
+location_counts.columns = ['Location', 'Count']
+location_counts = location_counts.sort_values('Count', ascending=False).head(10)
+
+# Create bar chart
+fig_locations = px.bar(
+    location_counts,
+    y='Location',
+    x='Count',
+    title=None,
+    height=500,
+    orientation='h'
+)
+
+fig_locations.update_traces(marker_color="#64C1FF")  # <- updated color
+
+fig_locations.update_layout(
+    yaxis={'categoryorder': 'total ascending'},
+    xaxis_title="Number of Incidents",
+    yaxis_title=None
+)
+
+fig_locations.show()
+```
+
+### Analysis of Attack Locations
+
+The majority of attacks on humanitarian workers occurred on roads, followed by public locations, highlighting extreme vulnerability during travel and in everyday environments.
+
+# Human Impact of Security Incidents {#sec-impact}
+
+## Casualties by Category
+
+```{python}
+#| label: fig-casualties
+#| fig-cap: "Total casualties by category"
+#| echo: false
+
+stacked_data = {
+    'Category': ['Nationals', 'Internationals'],
+    'Killed': [
+        country_data['nationals_killed'].sum(),
+        country_data['internationals_killed'].sum()
+    ],
+    'Wounded': [
+        country_data['nationals_wounded'].sum(),
+        country_data['internationals_wounded'].sum()
+    ],
+    'Kidnapped': [
+        country_data['nationals_kidnapped'].sum(),
+        country_data['internationals_kidnapped'].sum()
+    ]
+}
+
+stacked_df = pd.DataFrame(stacked_data)
+stacked_df_long = pd.melt(
+    stacked_df,
+    id_vars=['Category'],
+    value_vars=['Killed', 'Wounded', 'Kidnapped'],
+    var_name='Status',
+    value_name='Count'
+)
+
+fig_stacked = px.bar(
+    stacked_df_long,
+    x='Category',
+    y='Count',
+    color='Status',
+    title=None,
+    barmode='stack',
+    height=500,
+    color_discrete_map={
+        'Killed': palette["danger"], 
+        'Wounded': palette["primary"], 
+        'Kidnapped': palette["secondary"]
+    }
+)
+
+fig_stacked.update_layout(
+    xaxis_title=None,
+    yaxis_title="Number of People",
+    legend_title_text=None
+)
+
+fig_stacked.show()
+
+```
+
+### Analysis of Casualty Patterns
+
+The dramatic disparity highlights how South Sudanese civilians bear the overwhelming burden of the conflict. While international aid workers and peacekeepers face significant risks (as shown by the approximately 75 casualties), the impact on the local population is more than ten times greater.
+
+# Major Incidents {#sec-major}
+
+## Top 5 Most Impactful Security Incidents
+
+```{python}
+#| label: tbl-interactive-incidents
+#| echo: false
+
+import plotly.graph_objects as go
+from IPython.display import display, HTML
+
+if not country_data.empty and 'total_affected' in country_data.columns:
+    # Sort the entire dataset by total_affected
+    sorted_incidents = country_data.sort_values(by='total_affected', ascending=False)
+    
+    # Select display columns and rename them
+    display_cols = ['year', 'location', 'total_affected', 'total_killed', 'total_wounded', 'attack_context', 'actor_type']
+    column_names = {
+        'year': 'Year',
+        'location': 'Location',
+        'total_affected': 'Total Affected',
+        'total_killed': 'Killed',
+        'total_wounded': 'Wounded',
+        'attack_context': 'Context',
+        'actor_type': 'Actor Type'
+    }
+    
+    # Prepare the display dataframe
+    display_df = sorted_incidents[display_cols].rename(columns=column_names)
+    
+    # Create an interactive table with Plotly
+    fig = go.Figure(data=[go.Table(
+        header=dict(
+            values=list(column_names.values()),
+            fill_color='#A1083B',
+            align='left',
+            font=dict(color='white', size=14),
+            height=40
+        ),
+        cells=dict(
+            values=[display_df[col] for col in display_df.columns],
+            fill_color=[['#F99301' if i < 5 else '#f9f9f9' for i in range(len(display_df))]],
+            align='left',
+            font=dict(color=['black' if i < 5 else '#333333' for i in range(len(display_df))], size=12),
+            height=30
+        )
+    )])
+    
+    # Update layout for better appearance with fixed height for scrolling
+    fig.update_layout(
+        title={
+            'text': 'Security Incidents Ranked by Impact',
+            'y': 0.98,
+            'x': 0.5,
+            'xanchor': 'center',
+            'yanchor': 'top',
+            'font': {'size': 20}
+        },
+        margin=dict(l=20, r=20, t=60, b=20),
+        height=600,  # Fixed height to enable scrolling
+        width=900
+    )
+    
+    # Add a note about the highlighted rows
+    fig.add_annotation(
+        x=0,
+        y=-0.15,
+        xref='paper',
+        yref='paper',
+        text="<i>Top 5 most impactful incidents are highlighted. Scroll to view all incidents.</i>",
+        showarrow=False,
+        font=dict(size=12),
+        align='left'
+    )
+    
+    # Save and display the figure
+    fig.write_html("images/interactive_incidents_table.html",
+                  include_plotlyjs='cdn',
+                  config={'scrollZoom': True})
+    fig.show()
+
+```
+
+### Analysis of Major Incidents
+
+Road ambushes appear to be a common tactic, with three significant incidents on roads in 2018 affecting 10-12 people each. This aligns with the earlier analysis showing ambushes as the most frequent attack method. The sample shows multiple significant incidents in 2018, which aligns with the period following the signing of the Revitalized Peace Agreement. This suggests that despite political agreements at the national level, security incidents continued to threaten civilians and aid operations on the ground.
+
+For more detailed information on the South Sudan conflict timeline, see the [Council on Foreign Relations Conflict Tracker](https://www.cfr.org/global-conflict-tracker/conflict/civil-war-south-sudan).
+
+# 💡 Recommendations
+
+## For Security Planning
+
+-   Develop specialized road movement protocols with multiple alternative routes when possible
+-   Establish robust communications systems that function in remote areas with limited infrastructure
+-   Create context-specific security trainings focusing on ambush prevention and response
+-   Implement staff tracking systems with regular check-in procedures during field movements
+-   Install additional physical protection for vehicles operating in high-risk areas
+
+## For Humanitarian Organizations
+
+-   Emphasize community acceptance strategies to mitigate targeting risks
+-   Invest in national staff security with equal protection measures and evacuation planning
+-   Develop flexible programming modalities that can adapt to rapid security changes
+-   Consider operational partnerships that expand access while maintaining security standards
+-   Balance risk mitigation with humanitarian imperatives through principled engagement
+
+### For Future Research
+
+-   Investigate the relationship between political transitions and security incident patterns
+-   Analyze the changing targeting patterns between national and international personnel
+-   Examine community-based protection mechanisms that have proven effective
+-   Study the effectiveness of different security approaches in the South Sudan context
+-   Explore correlations between food insecurity and security incidents
+
+By providing a data-driven understanding of security patterns in South Sudan, this analysis aims to contribute to safer and more effective operations in this challenging environment.

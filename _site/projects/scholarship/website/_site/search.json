@@ -1,0 +1,947 @@
+[
+  {
+    "objectID": "sudan.html",
+    "href": "sudan.html",
+    "title": "Security Incidents in Sudan: Trends and Patterns",
+    "section": "",
+    "text": "In Sudan...\n  231 humanitarian workers have died,\n  281 humanitarian workers have been wounded,\n  155 humanitarian workers have been kidnapped."
+  },
+  {
+    "objectID": "sudan.html#historical-context",
+    "href": "sudan.html#historical-context",
+    "title": "Security Incidents in Sudan: Trends and Patterns",
+    "section": "2.1 Historical Context",
+    "text": "2.1 Historical Context\nSudan faces a catastrophic humanitarian crisis as civil war between the Sudanese Armed Forces (SAF) and Rapid Support Forces (RSF) enters its third year. Since April 2023, approximately 150,000 people have died and 14 million been displaced. Three million refugees have fled to neighboring countries, while 30 million need humanitarian assistance. The UN warns Sudan faces the “world’s largest hunger crisis.”\nThe conflict stems from a power struggle between SAF leader Burhan and RSF commander Hemedti after they jointly overthrew dictator Bashir in 2019. Foreign involvement has complicated peace efforts. Recently, SAF has gained territory around Khartoum, while RSF continues committing atrocities in Darfur, raising concerns of renewed genocide (Foreign Relations 2024)."
+  },
+  {
+    "objectID": "sudan.html#recent-escalation",
+    "href": "sudan.html#recent-escalation",
+    "title": "Security Incidents in Sudan: Trends and Patterns",
+    "section": "2.2 Recent Escalation",
+    "text": "2.2 Recent Escalation\nInitial outbreak (2023):\n\nFighting began April 2023 in Khartoum between SAF and RSF\nViolence spread quickly to Darfur, where RSF targeted non-Arab groups\nRSF killed over 800 civilians in Ardamata during November attacks\n\nSAF counteroffensive (2024-2025):\n\nSAF recaptured much of Khartoum area by early 2025\nSAF successfully ended the blockade around the city of Obeid that had been maintained by the RSF for two years.\nKey gains include Omdurman city and a strategic oil refinery\n\n\nMap of Incidents \n\n\n\nMake this Notebook Trusted to load map: File -&gt; Trust Notebook"
+  },
+  {
+    "objectID": "sudan.html#incident-frequency-over-time",
+    "href": "sudan.html#incident-frequency-over-time",
+    "title": "Security Incidents in Sudan: Trends and Patterns",
+    "section": "3.1 Incident Frequency Over Time",
+    "text": "3.1 Incident Frequency Over Time\n\n\n\n\n                                                \n\n\nFigure 1: Security incidents in Sudan\n\n\n\n\n\n3.1.1 Analysis of Incident Trends\nThe time-series plot illustrates clear peaks in humanitarian security incidents in Sudan, aligning with key political and military events:\n\n2004–2006: A sharp rise in incidents coincides with the height of the Darfur conflict, reaching a peak of over 40 incidents in 2005.\n2019: A brief uptick follows the ousting of President Omar al-Bashir, reflecting the instability during Sudan’s political transition.\n2021: The military coup is marked by a modest increase in violence, likely due to the power vacuum and shifting control structures.\n2023–2024: The most dramatic escalation occurs with the outbreak of civil war between the SAF and RSF. Incidents surge, peaking in 2024 with the SAF counteroffensive and high-profile events like the assassination of the Darfur governor.\n2025: Incident numbers drop significantly following the SAF’s recapture of Khartoum areas, suggesting a potential shift in conflict intensity or a redistribution of control.\n\nThese patterns indicate that spikes in violence are closely tied to leadership changes, territorial contests, and transitions in power, reinforcing the need for real-time monitoring during political turning points."
+  },
+  {
+    "objectID": "sudan.html#predominant-attack-types",
+    "href": "sudan.html#predominant-attack-types",
+    "title": "Security Incidents in Sudan: Trends and Patterns",
+    "section": "4.1 Predominant Attack Types",
+    "text": "4.1 Predominant Attack Types\n\n\n\n\n                                                \n\n\nFigure 2: Most common types of attacks\n\n\n\n\n\n4.1.1 Analysis of Attack Methods\nThe most prevalent method of attack is shooting, underscoring the militarized nature of the conflict. Kidnapping and bodily assault are also common, reflecting tactics aimed at intimidation and disruption of humanitarian work. A significant portion of incidents are recorded as “unknown,” highlighting data gaps and the opacity of conflict environments. These attack types reflect the dangers posed to aid workers not only from crossfire but also from deliberate targeting."
+  },
+  {
+    "objectID": "sudan.html#attack-contexts",
+    "href": "sudan.html#attack-contexts",
+    "title": "Security Incidents in Sudan: Trends and Patterns",
+    "section": "4.2 Attack Contexts",
+    "text": "4.2 Attack Contexts\n\n\n\n\n                                                \n\n\nFigure 3: Security incidents by attack context\n\n\n\n\n\n4.2.1 Analysis of Attack Contexts\nAmbushes are by far the most frequent attack context, significantly surpassing other categories. This suggests both SAF and RSF frequently utilize element-of-surprise tactics, particularly along transport routes. The prevalence of ambushes indicates high risks associated with road travel, reinforcing the need for dynamic security planning, route risk assessments, and protection protocols, especially for humanitarian convoys."
+  },
+  {
+    "objectID": "sudan.html#location-of-attack",
+    "href": "sudan.html#location-of-attack",
+    "title": "Security Incidents in Sudan: Trends and Patterns",
+    "section": "4.3 Location of Attack",
+    "text": "4.3 Location of Attack\n\n\n\n\n                                                \n\n\nFigure 4: Security incidents by attack locations\n\n\n\n\n\n4.3.1 Analysis of Attack Locations\nMost humanitarian incidents occurred on roads and project sites, with a high share of unknown locations."
+  },
+  {
+    "objectID": "sudan.html#casualties-by-category",
+    "href": "sudan.html#casualties-by-category",
+    "title": "Security Incidents in Sudan: Trends and Patterns",
+    "section": "5.1 Casualties by Category",
+    "text": "5.1 Casualties by Category\n\n\n\n\n                                                \n\n\nFigure 5: Total casualties by category\n\n\n\n\n\n5.1.1 Analysis of Casualty Patterns\nThe impact of the conflict is disproportionately borne by Sudanese nationals, who account for the vast majority of those killed, wounded, and kidnapped. Nationals face nearly ten times more fatalities than international staff, emphasizing the local toll of the crisis. The high proportion of fatalities relative to injuries also suggests that many attacks are deliberately lethal. This underscores the need for context-specific strategies that prioritize national staff safety and psychological support."
+  },
+  {
+    "objectID": "sudan.html#top-5-most-impactful-security-incidents",
+    "href": "sudan.html#top-5-most-impactful-security-incidents",
+    "title": "Security Incidents in Sudan: Trends and Patterns",
+    "section": "6.1 Top 5 Most Impactful Security Incidents",
+    "text": "6.1 Top 5 Most Impactful Security Incidents\n\n\n\n\nTable 1\n\n\n\n                                                \n\n\n\n\n\n\n6.1.1 Analysis of Major Incidents\nThe top five most impactful incidents span a wide timeframe—from the early 2000s during the height of the Darfur conflict to a recent event in 2023. Notably, several of the deadliest incidents occurred during roadside ambushes, highlighting the sustained vulnerability of transportation routes over decades. These high-impact events demonstrate the long-running and geographically dispersed nature of conflict in Sudan, with implications for both historical accountability and forward-looking risk mitigation.\nFor more detailed information on the Sudan conflict timeline, see the Council on Foreign Relations Conflict Tracker."
+  },
+  {
+    "objectID": "sudan.html#for-security-planning",
+    "href": "sudan.html#for-security-planning",
+    "title": "Security Incidents in Sudan: Trends and Patterns",
+    "section": "7.1 For Security Planning",
+    "text": "7.1 For Security Planning\n\nConduct regular route risk assessments, especially on roads with a history of ambushes.\nUse armed escorts for convoys in high-risk areas.\nTailor security protocols by region—urban areas like Khartoum vs. rural areas like Darfur.\nSet evacuation thresholds based on real-time shifts in territorial control."
+  },
+  {
+    "objectID": "sudan.html#for-humanitarian-organizations",
+    "href": "sudan.html#for-humanitarian-organizations",
+    "title": "Security Incidents in Sudan: Trends and Patterns",
+    "section": "7.2 For Humanitarian Organizations",
+    "text": "7.2 For Humanitarian Organizations\n\nEnhance security info-sharing between national and international partners.\nPre-position essential supplies in hard-to-reach regions.\nUse remote programming in RSF-held areas to reduce staff exposure.\nProvide mental health support for staff affected by violence."
+  },
+  {
+    "objectID": "sudan.html#for-future-research",
+    "href": "sudan.html#for-future-research",
+    "title": "Security Incidents in Sudan: Trends and Patterns",
+    "section": "7.3 For Future Research",
+    "text": "7.3 For Future Research\n\nStudy how shifts in control affect attack frequency and location.\nCompare risks faced by national vs. international staff.\nAssess damage to infrastructure like hospitals and clinics.\nEvaluate which diplomatic efforts improve humanitarian access.\n\nBy providing a data-driven understanding of security patterns in Sudan, this analysis aims to contribute to safer and more effective operations in this challenging environment."
+  },
+  {
+    "objectID": "mali.html",
+    "href": "mali.html",
+    "title": "Security Incidents in Mali: Trends and Patterns",
+    "section": "",
+    "text": "In Mali...\n  26 humanitarian workers have died,\n  55 humanitarian workers have been wounded,\n  183 humanitarian workers have been kidnapped."
+  },
+  {
+    "objectID": "mali.html#historical-context",
+    "href": "mali.html#historical-context",
+    "title": "Security Incidents in Mali: Trends and Patterns",
+    "section": "3.1 Historical Context",
+    "text": "3.1 Historical Context\nMali’s crisis began with the 2012 Tuareg rebellion, triggered by fighters and weapons flowing from Libya after Gaddafi’s fall. The Tuareg MNLA briefly allied with Islamist groups to capture northern cities and declare the independent Azawad state. A military coup in March 2012 further destabilized Mali, until French intervention in 2013 pushed back the Islamists (Foreign Relations 2024). Major developments included:\n\n2012: Military coup and Tuareg rebellion seize northern Mali\n2013: French Operation Serval pushes back Islamist groups\n2015: Peace agreement signed with Tuareg separatists, excluding Islamist factions\n2013-2019: Gradual expansion of jihadist groups into central Mali\n2015-2020: Deployment of UN peacekeeping mission MINUSMA across northern regions\n\nYears of marginalization in northern regions, weak governance, and corruption created fertile ground for danger."
+  },
+  {
+    "objectID": "mali.html#recent-escalation",
+    "href": "mali.html#recent-escalation",
+    "title": "Security Incidents in Mali: Trends and Patterns",
+    "section": "3.2 Recent Escalation",
+    "text": "3.2 Recent Escalation\nMali’s security has deteriorated rapidly since the 2020-2021 military coups. The situation has worsened dramatically with:\n\n2022: Junta cuts ties with France and hires Wagner Group mercenaries\n2022: Moura massacre with over 300 civilian deaths\nRenewed fighting with Tuareg separatists in northeast regions\nJNIM jihadist group controlling northern territories\nHumanitarian crisis with thousands displaced\nMultiple sieges of major northern cities including Timbuktu\n\nWith international support gone and violence surging on multiple fronts, Mali now stands on the brink of civil war.\n\nMap of Incidents \n\n\n\nMake this Notebook Trusted to load map: File -&gt; Trust Notebook"
+  },
+  {
+    "objectID": "mali.html#incident-frequency-over-time",
+    "href": "mali.html#incident-frequency-over-time",
+    "title": "Security Incidents in Mali: Trends and Patterns",
+    "section": "4.1 Incident Frequency Over Time",
+    "text": "4.1 Incident Frequency Over Time\n\n\n\n\n                                                \n\n\nFigure 1: Security incidents\n\n\n\n\n\n4.1.1 Analysis of Incident Trends\nThe line chart reveals striking patterns in security incidents affecting humanitarian operations in Mali:\n\nInitial stability (2006-2012): Prior to the Tuareg rebellion and military coup, security incidents remained minimal, with almost no reported attacks on humanitarian operations.\nModest increase (2013-2018): Following French intervention and the 2015 peace agreement with Tuareg groups, incidents began a slow but steady climb as Islamist groups excluded from peace processes expanded their operations in central Mali.\nSharp escalation (2019-2022): A dramatic surge occurred after the 2020 military coup, with incidents peaking in 2021-2022 at approximately 20 annual incidents - coinciding with the withdrawal of French forces and their replacement with Wagner Group mercenaries.\nUnexpected decline (2023-2025): Contrary to general security trends, incidents affecting humanitarian operations decreased significantly after the expulsion of UN peacekeepers. This likely reflects reduced humanitarian presence rather than improved security conditions, as many organizations withdrew from high-risk areas.\n\nThis pattern reveals a complex relationship between political developments and humanitarian security in Mali, where periods of apparent improvement may actually signal reduced operational capacity rather than enhanced security conditions."
+  },
+  {
+    "objectID": "mali.html#predominant-attack-types",
+    "href": "mali.html#predominant-attack-types",
+    "title": "Security Incidents in Mali: Trends and Patterns",
+    "section": "5.1 Predominant Attack Types",
+    "text": "5.1 Predominant Attack Types\n\n\n\n\n                                                \n\n\nFigure 2: Most common types of attacks\n\n\n\n\n\n5.1.1 Analysis of Attack Methods\nThe significant disparity between kidnapping and other attack methods highlights how extremist groups have adapted their strategies, focusing on operations that require minimal resources while maximizing psychological impact and financial gain."
+  },
+  {
+    "objectID": "mali.html#attack-contexts",
+    "href": "mali.html#attack-contexts",
+    "title": "Security Incidents in Mali: Trends and Patterns",
+    "section": "5.2 Attack Contexts",
+    "text": "5.2 Attack Contexts\n\n\n\n\n                                                \n\n\nFigure 3: Security incidents by attack context\n\n\n\n\n\n5.2.1 Analysis of Attack Contexts\nThere is a significant gap between ambushes and the second most common category. This disparity highlights how armed groups in Mali have strategically prioritized ambush tactics, likely due to their effectiveness along the country’s limited road networks (Encyclopedia Britannica 2024)."
+  },
+  {
+    "objectID": "mali.html#location-of-attack",
+    "href": "mali.html#location-of-attack",
+    "title": "Security Incidents in Mali: Trends and Patterns",
+    "section": "5.3 Location of Attack",
+    "text": "5.3 Location of Attack\n\n\n\n\n                                                \n\n\nFigure 4: Security incidents by attack locations\n\n\n\n\n\n5.3.1 Analysis of Attack Locations\nThe vast majority of incidents occurred on roads, underscoring the heightened dangers faced by aid workers during travel and transportation. As mentioned above, Mali has a very limited road network."
+  },
+  {
+    "objectID": "mali.html#casualties-by-category",
+    "href": "mali.html#casualties-by-category",
+    "title": "Security Incidents in Mali: Trends and Patterns",
+    "section": "6.1 Casualties by Category",
+    "text": "6.1 Casualties by Category\n\n\n\n\n                                                \n\n\nFigure 5: Total casualties by category\n\n\n\n\n\n6.1.1 Analysis of Casualty Patterns\nThis chart shows that Malian nationals suffer far more from conflict than internationals. Kidnapping is the most common form of violence against locals, showing how armed groups target communities to gain control and extract ransoms. This data highlights that Malians themselves bear the overwhelming burden of the country’s ongoing security crisis."
+  },
+  {
+    "objectID": "mali.html#top-5-most-impactful-security-incidents",
+    "href": "mali.html#top-5-most-impactful-security-incidents",
+    "title": "Security Incidents in Mali: Trends and Patterns",
+    "section": "7.1 Top 5 Most Impactful Security Incidents",
+    "text": "7.1 Top 5 Most Impactful Security Incidents\n\n\n\n\nTable 1\n\n\n\n                                                \n\n\n\n\n\n\n7.1.1 Analysis of Major Incidents\nThis table displays all security incidents in Mali from 2018 to 2024, highlighting the evolution of the conflict. The top incidents in public locations (2018) and at project sites (2022) each affected 9 individuals, suggesting targeted attacks on civilian gatherings and humanitarian operations. Road incidents in 2020 and 2024 each affected 6 people.\nFor more detailed information on the Mali conflict timeline, see the Council on Foreign Relations Conflict Tracker."
+  },
+  {
+    "objectID": "mali.html#for-security-planning",
+    "href": "mali.html#for-security-planning",
+    "title": "Security Incidents in Mali: Trends and Patterns",
+    "section": "8.1 For Security Planning",
+    "text": "8.1 For Security Planning\n\nImplement journey management systems with real-time risk assessments for ambush prevention\nEstablish early warning networks for intelligence on armed group movements\nCreate specialized anti-kidnapping protocols with comprehensive staff training\nDevelop clear security thresholds for program suspension in high-risk areas"
+  },
+  {
+    "objectID": "mali.html#for-humanitarian-organizations",
+    "href": "mali.html#for-humanitarian-organizations",
+    "title": "Security Incidents in Mali: Trends and Patterns",
+    "section": "8.2 For Humanitarian Organizations",
+    "text": "8.2 For Humanitarian Organizations\n\nBalance operational presence with community acceptance strategies\nInvest in remote management capabilities for periods of limited access\nPrioritize national staff security with equal protection measures\nDevelop flexible programming models adaptable to changing security conditions"
+  },
+  {
+    "objectID": "mali.html#for-future-research",
+    "href": "mali.html#for-future-research",
+    "title": "Security Incidents in Mali: Trends and Patterns",
+    "section": "8.3 For Future Research",
+    "text": "8.3 For Future Research\n\nExamine access negotiation effectiveness with different armed groups\nAnalyze the impact of foreign security actors (UN, France, Wagner) on humanitarian security\nStudy community protection strategies in areas where state authority has receded\nEvaluate digital technology applications for security management in high-risk environments"
+  },
+  {
+    "objectID": "somolia.html",
+    "href": "somolia.html",
+    "title": "Security Incidents in Somolia: Trends and Patterns",
+    "section": "",
+    "text": "In Somolia...\n  260 humanitarian workers have died,\n  165 humanitarian workers have been wounded,\n  160 humanitarian workers have been kidnapped."
+  },
+  {
+    "objectID": "somolia.html#historical-context",
+    "href": "somolia.html#historical-context",
+    "title": "Security Incidents in Somolia: Trends and Patterns",
+    "section": "2.1 Historical Context",
+    "text": "2.1 Historical Context\nThe Somali conflict has been shaped by decades of state collapse, civil war, and the rise of extremist groups. Al-Shabaab emerged from this chaotic environment, tracing its origins to Afghan war veterans who returned to Somalia in the late 1980s (Foreign Relations 2024). The group’s evolution occurred against a backdrop of complete state failure:\n\n1991: Collapse of the Somali central government, leading to prolonged civil war\nLate 1990s: Formation of al-Ittihad al-Islami (AIAI), a Salafi militant organization\n2004-2006: Rise of the Islamic Courts Union (ICU) controlling much of southern Somalia\n2006: Ethiopian invasion to oust ICU from Mogadishu, triggering al-Shabaab’s formal establishment\n2007: Creation of African Union Mission in Somalia (AMISOM) peacekeeping force\n2010-2011: Al-Shabaab reaches peak territorial control, including parts of Mogadishu\n2012: Establishment of Federal Government of Somalia (FGS), beginning efforts to rebuild state institutions\n2013-2021: Al-Shabaab demonstrates resilience despite territorial losses, launching high-profile attacks across East Africa"
+  },
+  {
+    "objectID": "somolia.html#recent-escalation",
+    "href": "somolia.html#recent-escalation",
+    "title": "Security Incidents in Somolia: Trends and Patterns",
+    "section": "2.2 Recent Escalation",
+    "text": "2.2 Recent Escalation\nSomalia entered a new phase in its fight against al-Shabaab in 2022, with intensified military operations and evolving humanitarian challenges:\n\nMay 2022: Hassan Sheikh Mohamud elected president, promising renewed focus on defeating al-Shabaab\nAugust 2022: Launch of “total war” against al-Shabaab, a major government offensive supported by clan militias\nApril 2022: AMISOM replaced by African Union Transition Mission in Somalia (ATMIS) with planned withdrawal by end of 2024\n2022: 41% increase in al-Shabaab violence targeting civilians despite territorial losses\n2021-2023: Five consecutive failed rainy seasons produced Somalia’s worst drought on record\nOctober 2023: Devastating floods affecting 2.48 million people after years of drought\n37% of the population requiring humanitarian assistance\n3.8 million internally displaced persons\n4.3 million people facing crisis or worse levels of food insecurity\n\n\nMap of Incidents \n\n\n\nMake this Notebook Trusted to load map: File -&gt; Trust Notebook"
+  },
+  {
+    "objectID": "somolia.html#incident-frequency-over-time",
+    "href": "somolia.html#incident-frequency-over-time",
+    "title": "Security Incidents in Somolia: Trends and Patterns",
+    "section": "3.1 Incident Frequency Over Time",
+    "text": "3.1 Incident Frequency Over Time\n\n\n\n\n                                                \n\n\nFigure 1: Security incidents\n\n\n\n\n\n3.1.1 Analysis of Incident Trends\nThe timeline of humanitarian security incidents in Somalia reflects the cyclical intensity of conflict linked to Al-Shabaab’s activity:\n\n2006–2008: A sharp spike in incidents corresponds to Ethiopia’s invasion and Al-Shabaab’s rise, culminating in their peak territorial control by 2008.\n2011–2013: After the creation of AMISOM and major Mogadishu truck bombings, violence fluctuates but remains high.\n2017–2020: A period of relative stabilization is followed by renewed violence after declared “total war” against Al-Shabaab.\n2023: A final spike appears to be driven more by climate-related emergencies, including devastating floods, complicating the humanitarian environment further.\n\nThis pattern shows how armed group dynamics, regional interventions, and environmental crises all contribute to fluctuations in humanitarian risk across time."
+  },
+  {
+    "objectID": "somolia.html#predominant-attack-types",
+    "href": "somolia.html#predominant-attack-types",
+    "title": "Security Incidents in Somolia: Trends and Patterns",
+    "section": "4.1 Predominant Attack Types",
+    "text": "4.1 Predominant Attack Types\n\n\n\n\n                                                \n\n\nFigure 2: Most common types of attacks\n\n\n\n\n\n4.1.1 Analysis of Attack Methods\nShooting is by far the most common method of attack, reflecting the dominance of small-arms conflict in Somalia’s security environment. Kidnapping is the second most frequent, underscoring the targeting of humanitarian staff for leverage or ransom."
+  },
+  {
+    "objectID": "somolia.html#attack-contexts",
+    "href": "somolia.html#attack-contexts",
+    "title": "Security Incidents in Somolia: Trends and Patterns",
+    "section": "4.2 Attack Contexts",
+    "text": "4.2 Attack Contexts\n\n\n\n\n                                                \n\n\nFigure 3: Security incidents by attack context\n\n\n\n\n\n4.2.1 Analysis of Attack Contexts\nAmbushes are the most frequent attack context, indicating a high level of premeditated violence, especially along transit routes and during routine movements. Individual attacks rank closely behind, suggesting targeted incidents against specific staff or facilities rather than broad confrontations.\nThe relatively high number of unknown contexts suggests a need for improved field reporting and classification. Raids and combat/crossfire represent organized or opportunistic engagements, while mob violence and detention appear far less frequently but may reflect localized tensions or government involvement.\nThis pattern reinforces the operational necessity of route planning, protective protocols for national staff, and scenario-specific security training that prepares personnel for both ambush-style and individualized threats."
+  },
+  {
+    "objectID": "somolia.html#location-of-attack",
+    "href": "somolia.html#location-of-attack",
+    "title": "Security Incidents in Somolia: Trends and Patterns",
+    "section": "4.3 Location of Attack",
+    "text": "4.3 Location of Attack\n\n\n\n\n                                                \n\n\nFigure 4: Security incidents by attack locations\n\n\n\n\n\n4.3.1 Analysis of Attack Locations\nMost humanitarian incidents occurred on roads and in public locations, with a notable portion lacking location details."
+  },
+  {
+    "objectID": "somolia.html#casualties-by-category",
+    "href": "somolia.html#casualties-by-category",
+    "title": "Security Incidents in Somolia: Trends and Patterns",
+    "section": "5.1 Casualties by Category",
+    "text": "5.1 Casualties by Category\n\n\n\n\n                                                \n\n\nFigure 5: Total casualties in Palestine by category\n\n\n\n\n\n5.1.1 Analysis of Casualty Patterns\nThe data reveals a stark disparity in impact: national staff account for the vast majority of casualties, including deaths, injuries, and kidnappings. This reflects their greater exposure on the ground, often serving in front-line or field-based roles where risks are highest.\nWhile international staff are affected, their casualty numbers remain comparatively low—likely due to stricter security protocols, evacuation mechanisms, and lower operational presence in high-risk zones."
+  },
+  {
+    "objectID": "somolia.html#top-5-most-impactful-security-incidents",
+    "href": "somolia.html#top-5-most-impactful-security-incidents",
+    "title": "Security Incidents in Somolia: Trends and Patterns",
+    "section": "6.1 Top 5 Most Impactful Security Incidents",
+    "text": "6.1 Top 5 Most Impactful Security Incidents\n\n\n\n\nTable 1\n\n\n\n                                                \n\n\n\n\n\n\n6.1.1 Analysis of Major Incidents\nThe most impactful security incidents in Somalia span over two decades, highlighting the enduring nature of risk across different periods and settings:\n\nThe deadliest incident, in 2022, involved an ambush on a road that killed all 14 people affected—illustrating the extreme lethality of roadside attacks.\nA 2017 raid at a public location resulted in 18 total casualties, the highest overall toll, with a large number wounded.\nOther major incidents occurred at office compounds and on roads, reaffirming that both operational facilities and transportation routes remain highly vulnerable.\nAll top 5 incidents involved non-state armed groups, underscoring their persistent threat across time.\nThe recurrence of raids and ambushes in high-impact events reflects the dominance of tactical surprise and mobility in attack methods.\n\nThese findings reinforce the need for proactive security protocols, especially for field sites and ground travel routes.\nFor more detailed information on the Somolian conflict timeline, see the Council on Foreign Relations Conflict Tracker."
+  },
+  {
+    "objectID": "somolia.html#for-security-planning",
+    "href": "somolia.html#for-security-planning",
+    "title": "Security Incidents in Somolia: Trends and Patterns",
+    "section": "7.1 For Security Planning",
+    "text": "7.1 For Security Planning\n\nRoutinely map ambush-prone roadways and update movement protocols for affected corridors.\nReinforce compound perimeters and conduct regular drills for shelter-in-place or raid response.\nEstablish early-warning systems tied to Al-Shabaab activity, especially before declared offensives or rainy seasons."
+  },
+  {
+    "objectID": "somolia.html#for-humanitarian-organizations",
+    "href": "somolia.html#for-humanitarian-organizations",
+    "title": "Security Incidents in Somolia: Trends and Patterns",
+    "section": "7.2 For Humanitarian Organizations",
+    "text": "7.2 For Humanitarian Organizations\n\nPrioritize national staff protection with tailored training, protective gear, and mental health services.\nBuild contingency supply caches in stable regions to reduce dependence on insecure roads.\nStrengthen coordination with local security actors and community leaders in high-risk areas."
+  },
+  {
+    "objectID": "somolia.html#for-future-research",
+    "href": "somolia.html#for-future-research",
+    "title": "Security Incidents in Somolia: Trends and Patterns",
+    "section": "7.3 For Future Research",
+    "text": "7.3 For Future Research\n\nExamine links between climate shocks (e.g., floods, droughts) and violence escalation.\nAnalyze the evolution of Al-Shabaab’s targeting tactics across operational zones.\nEvaluate the long-term impact of AMISOM and other interventions on humanitarian access and staff safety."
+  },
+  {
+    "objectID": "llm.html",
+    "href": "llm.html",
+    "title": "Large Language Model Log",
+    "section": "",
+    "text": "1 🤖 LLM Use Log\nUsed a large language model (LLM) as a collaborative tool to support various aspects of the analysis and presentation. Specifically:\n\nUsed the LLM to reword and refine my own ideas, helping to express complex concepts more clearly while maintaining the original intent and tone.\nLLM’s assisted in interpreting timelines and summarizing key events drawn from conflict tracker websites. This was particularly helpful when organizing country-specific narratives and understanding overlapping crises.\nLeveraged the LLM to brainstorm and debug advanced interactive visualizations, especially those involving animation, filtering, and custom styling. While the model provided guidance, I actively engaged in the coding process and deepened my understanding of the tools and techniques involved.\n\nOverall, the LLM served as a learning companion, offering support without replacing the analytical or creative thinking that went into the work."
+  },
+  {
+    "objectID": "data_cleaning.html#introduction",
+    "href": "data_cleaning.html#introduction",
+    "title": "Security Incidents Data Cleaning",
+    "section": "1. Introduction",
+    "text": "1. Introduction\nThis document outlines the data cleaning process for the security incidents dataset. We’ll examine the data structure, identify and address missing values, and prepare the dataset for analysis of broad trends in aid worker incidents by country, year, and organization type.\nThe cleaning process follows a systematic approach:\n\nLoading and initial inspection\nHandling missing values\nDuplicate detection and removal\nData type optimization\nOutlier analysis and handling\nGeographic data validation\nFinal dataset preparation"
+  },
+  {
+    "objectID": "data_cleaning.html#loading-and-initial-inspection",
+    "href": "data_cleaning.html#loading-and-initial-inspection",
+    "title": "Security Incidents Data Cleaning",
+    "section": "2. Loading and Initial Inspection",
+    "text": "2. Loading and Initial Inspection\nFirst, let’s load the dataset and standardize the column names for consistency.\n\n\nCode\nimport pandas as pd\nimport matplotlib.pyplot as plt\nimport numpy as np\nimport seaborn as sns\n\ndf = pd.read_csv(\"data/security_incidents.csv\")\n\ndf.columns = df.columns.str.strip().str.lower().str.replace(\" \", \"_\")\n\ndf.head(1)\n\n\n\n\n\n\n\n\n\nincident_id\nyear\nmonth\nday\ncountry_code\ncountry\nregion\ndistrict\ncity\nun\n...\nattack_context\nlocation\nlatitude\nlongitude\nmotive\nactor_type\nactor_name\ndetails\nverified\nsource\n\n\n\n\n0\n1\n1997\n1.0\nNaN\nKH\nCambodia\nBanteay Meanchey\nNaN\nNaN\n0\n...\nUnknown\nUnknown\n14.070929\n103.099916\nUnknown\nUnknown\nUnknown\n1 ICRC national staff killed while working in ...\nArchived\nArchived\n\n\n\n\n1 rows × 41 columns\n\n\n\n\n\nCode\nrows, cols = df.shape\nprint(f\"The dataset contains {rows} rows and {cols} columns.\")\n\n\nThe dataset contains 4337 rows and 41 columns."
+  },
+  {
+    "objectID": "data_cleaning.html#handling-missing-values",
+    "href": "data_cleaning.html#handling-missing-values",
+    "title": "Security Incidents Data Cleaning",
+    "section": "3. Handling Missing Values",
+    "text": "3. Handling Missing Values\nTo better understand which variables have missing values, we’ll create a visualization showing the percentage of missing values per column.\n\n\nCode\nmissing_values = df.isnull().sum()\nmissing_percent = (missing_values / len(df) * 100).round(2)\n\nmissing_df = pd.DataFrame({\n    'Missing Values': missing_values,\n    'Percentage': missing_percent\n})\n\nprint(\"Columns with missing values:\")\nmissing_df[missing_df['Missing Values'] &gt; 0].sort_values('Missing Values', ascending=False)\n\nif missing_values.sum() &gt; 0:\n    plt.figure(figsize=(12, 6))\n    sns.heatmap(df.isnull(), cbar=False, cmap='viridis', yticklabels=False)\n    plt.title('Missing Values Heatmap')\n    plt.tight_layout()\n    plt.show()\n\n\nColumns with missing values:\n\n\n\n\n\n\n\n\n\n\n\nCode\nmissing_percent = (df.isna().sum() / len(df)) * 100\nmissing_percent = missing_percent[missing_percent &gt; 0].sort_values(ascending=True)\n\nplt.figure(figsize=(7, 4))\nmissing_percent.plot(kind='barh', color='#64C1FF')\nplt.title(\"Percentage of Missing Values per Column\")\nplt.xlabel(\"Percent Missing (%)\")\nplt.tight_layout()\nplt.grid(axis='x', linestyle='--', alpha=0.5)\nplt.show()\n\n\n\n\n\n\n\n\n\n\n3.1 Strategy for Missing Values\nBased on our exploration, we have identified several columns with high proportions of missing values:\n\nCity (over 20% missing)\nDistrict, Day, and Region (significant proportions missing)\n\nSince our analysis focus is on broad trends by country, year, and organization type, we will:\n\nRemove granular fields with limited analytical value for our specific goals\nLeave the remaining minimal missing values as-is, as they’re sparse and likely random\n\n\n\nCode\nimport matplotlib.pyplot as plt\n\ncolumns_to_drop = ['day', 'month', 'district', 'city', 'region', 'country_code', 'incident_id']\ndf.drop(columns=columns_to_drop, inplace=True)\n\n# Recalculate missing values after dropping columns\nmissing_percent = (df.isna().sum() / len(df)) * 100\nmissing_percent = missing_percent[missing_percent &gt; 0].sort_values(ascending=True)\n\n# Visualize the remaining missing values\nplt.figure(figsize=(7, 4))\nmissing_percent.plot(kind='barh', color='#64C1FF')\nplt.title(\"Percentage of Missing Values After Column Removal\")\nplt.xlabel(\"Percent Missing (%)\")\nplt.tight_layout()\nplt.grid(axis='x', linestyle='--', alpha=0.5)\nplt.show()\n\n\n\n\n\n\n\n\n\n\n\nCode\nmissing_values = df.isnull().sum()\nmissing_percent = (missing_values / len(df) * 100).round(2)\n\nmissing_df = pd.DataFrame({\n    'Missing Values': missing_values,\n    'Percentage': missing_percent\n})\n\nprint(\"Columns with missing values:\")\nmissing_df[missing_df['Missing Values'] &gt; 0].sort_values('Missing Values', ascending=False)\n\n# Visualize missing values if any exist\nif missing_values.sum() &gt; 0:\n    plt.figure(figsize=(12, 6))\n    sns.heatmap(df.isnull(), cbar=False, cmap='viridis', yticklabels=False)\n    plt.title('Missing Values Heatmap')\n    plt.tight_layout()\n    plt.show()\n\n\nColumns with missing values:\n\n\n\n\n\n\n\n\n\n\n\n3.2 Missing Values Decision\nSince the highest missing value percentage is now less than 0.5%, and the remaining missing data is sparse, likely random, and not concentrated in critical columns, we’ve decided:\n\nNo imputation is necessary\nLeave these values as-is (NaN), as most analysis tools handle them gracefully\nImputing could introduce unnecessary bias given the small percentage"
+  },
+  {
+    "objectID": "data_cleaning.html#handling-duplicates",
+    "href": "data_cleaning.html#handling-duplicates",
+    "title": "Security Incidents Data Cleaning",
+    "section": "4. Handling Duplicates",
+    "text": "4. Handling Duplicates\nLet’s identify and remove duplicate records that could skew our analysis.\n\n\nCode\nduplicated_mask = df.duplicated(keep=False)\nduplicates = df[duplicated_mask]\n\nduplicate_count = len(duplicates)\nprint(f\"Total number of duplicated rows: {duplicate_count}\")\n\nduplicate_patterns = df[duplicated_mask].groupby(df.columns.tolist()).size().reset_index()\nduplicate_patterns = duplicate_patterns.rename(columns={0: 'occurrence_count'})\n\nduplicate_patterns = duplicate_patterns.sort_values('occurrence_count', ascending=False)\n\nunique_duplicate_patterns = len(duplicate_patterns)\nprint(f\"Number of unique duplicate patterns: {unique_duplicate_patterns}\")\n\noccurrence_summary = duplicate_patterns['occurrence_count'].value_counts().sort_index()\nprint(\"\\nOccurrence pattern summary:\")\nfor count, frequency in occurrence_summary.items():\n    print(f\"  {frequency} record(s) appear {count} times each\")\n\n\nTotal number of duplicated rows: 28\nNumber of unique duplicate patterns: 5\n\nOccurrence pattern summary:\n  3 record(s) appear 2 times each\n  1 record(s) appear 9 times each\n  1 record(s) appear 13 times each\n\n\nBased on the duplicate analysis results, we need to remove duplicates from the dataset. The pattern of duplications (with some records appearing up to 13 times) suggests systematic duplication issues that could significantly skew our analysis.\n\n\nCode\noriginal_count = len(df)\n\ndf = df.drop_duplicates()\n\nremoved_count = original_count - len(df)\nremoval_percentage = (removed_count / original_count) * 100\n\nprint(f\"Removed {removed_count} duplicate rows ({removal_percentage:.2f}% of dataset)\")\nprint(f\"Dataset now contains {len(df)} unique records\")\n\n\nRemoved 23 duplicate rows (0.53% of dataset)\nDataset now contains 4314 unique records"
+  },
+  {
+    "objectID": "data_cleaning.html#data-type-optimization",
+    "href": "data_cleaning.html#data-type-optimization",
+    "title": "Security Incidents Data Cleaning",
+    "section": "5. Data Type Optimization",
+    "text": "5. Data Type Optimization\nMost data types in this dataset are appropriate, but there are a few minor adjustments that could be made for consistency:\n\n\nCode\ndf.dtypes\n\n\nyear                          int64\ncountry                      object\nun                            int64\ningo                          int64\nicrc                        float64\nnrcs_and_ifrc               float64\nnngo                        float64\nother                         int64\nnationals_killed              int64\nnationals_wounded             int64\nnationals_kidnapped           int64\ntotal_nationals               int64\ninternationals_killed         int64\ninternationals_wounded        int64\ninternationals_kidnapped      int64\ntotal_internationals          int64\ntotal_killed                  int64\ntotal_wounded                 int64\ntotal_kidnapped               int64\ntotal_affected                int64\ngender_male                   int64\ngender_female                 int64\ngender_unknown                int64\nmeans_of_attack              object\nattack_context               object\nlocation                     object\nlatitude                    float64\nlongitude                   float64\nmotive                       object\nactor_type                   object\nactor_name                   object\ndetails                      object\nverified                     object\nsource                       object\ndtype: object\n\n\n\n5.1 Data Type Conversion\nThe following columns could benefit from data type conversion:\n\n\n\n\n\n\n\n\n\nColumn\nCurrent\nSuggested\nReason\n\n\n\n\nicrc\nfloat64\nint64\nCounts should be integers\n\n\nnrcs_and_ifrc\nfloat64\nint64\nCounts should be integers\n\n\nnngo\nfloat64\nint64\nCounts should be integers\n\n\n\n\n\nCode\ncount_columns = ['icrc', 'nrcs_and_ifrc', 'nngo']\nfor col in count_columns:\n    if col in df.columns:\n        df[col] = df[col].fillna(0).astype(int)\n\ndf[count_columns].dtypes\n\n\nicrc             int64\nnrcs_and_ifrc    int64\nnngo             int64\ndtype: object"
+  },
+  {
+    "objectID": "data_cleaning.html#outlier-analysis-and-handling",
+    "href": "data_cleaning.html#outlier-analysis-and-handling",
+    "title": "Security Incidents Data Cleaning",
+    "section": "6. Outlier Analysis and Handling",
+    "text": "6. Outlier Analysis and Handling\nLet’s identify and visualize outliers in the dataset to better understand extreme values in our security incidents data.\n\n\nCode\nimport warnings\nwarnings.filterwarnings('ignore', category=FutureWarning)\n# Function to detect outliers using IQR method\ndef detect_outliers(df, column):\n    q1 = df[column].quantile(0.25)\n    q3 = df[column].quantile(0.75)\n    iqr = q3 - q1\n    lower_bound = q1 - 1.5 * iqr\n    upper_bound = q3 + 1.5 * iqr\n    \n    outliers = df[(df[column] &lt; lower_bound) | (df[column] &gt; upper_bound)]\n    return outliers, lower_bound, upper_bound\n\nexcluded_cols = ['year']\nnumeric_cols = df.select_dtypes(include=['int64', 'float64']).columns\nnumeric_cols = [col for col in numeric_cols if col not in excluded_cols]\n\noutlier_summary = pd.DataFrame(columns=['Column', 'Total', 'Outliers', 'Percentage'])\n\nfor col in numeric_cols:\n    outliers, _, _ = detect_outliers(df, col)\n    \n    new_row = {\n        'Column': col,\n        'Total': len(df),\n        'Outliers': len(outliers),\n        'Percentage': len(outliers) / len(df) * 100\n    }\n    outlier_summary = pd.concat([outlier_summary, pd.DataFrame([new_row])], ignore_index=True)\n\noutlier_summary = outlier_summary.sort_values('Percentage', ascending=True)\n\nplt.figure(figsize=(7,4))\nplt.barh(outlier_summary['Column'], outlier_summary['Percentage'], color='#64C1FF')\nplt.title('Percentage of Outliers by Column')\nplt.xlabel('Percentage of Values Identified as Outliers')\nplt.grid(axis='x', linestyle='--', alpha=0.7)\nplt.tight_layout()\nplt.show()\n\n\n\n\n\n\n\n\n\n\n6.1 Visualization of Key Outliers\nLet’s visualize the distribution and outliers for the most important columns:\n\n\nCode\ntop_cols = outlier_summary.head(6)['Column'].tolist()\n\n# Create boxplots for top outlier columns\nplt.figure(figsize=(10, 6))\nfor i, col in enumerate(top_cols, 1):\n    plt.subplot(2, 3, i)\n    sns.boxplot(y=df[col], color='#64C1FF')\n    plt.title(f'Box Plot: {col}')\n    plt.grid(linestyle='--', alpha=0.7)\nplt.tight_layout()\nplt.show()\n\n\n\n\n\n\n\n\n\n\n\n6.2 Outlier Handling Strategy\nIn security incident data, outliers often represent real extreme events (like major attacks) rather than errors. For our analysis:\n\nWe’ll flag high-impact incidents rather than removing them\nThis allows us to analyze with or without extreme events as needed\n\n\n\nCode\ndf['high_impact'] = False\n\nfor col in ['total_killed', 'total_wounded', 'total_kidnapped', 'total_affected']:\n    if col in df.columns:\n        threshold = df[col].quantile(0.99)\n        df.loc[df[col] &gt; threshold, 'high_impact'] = True\n\nhigh_impact_count = df['high_impact'].sum()\nprint(f\"Flagged {high_impact_count} high-impact incidents ({high_impact_count/len(df)*100:.2f}% of dataset)\")\n\nif 'total_affected' in df.columns:\n    print(\"\\nTop 5 most severe incidents:\")\n    display(df.sort_values('total_affected', ascending=False).head(5)[\n        ['year', 'country', 'total_affected', 'total_killed', 'total_wounded', 'total_kidnapped']])\n\n\nFlagged 123 high-impact incidents (2.85% of dataset)\n\nTop 5 most severe incidents:\n\n\n\n\n\n\n\n\n\nyear\ncountry\ntotal_affected\ntotal_killed\ntotal_wounded\ntotal_kidnapped\n\n\n\n\n3857\n2023\nOccupied Palestinian Territories\n92\n70\n22\n0\n\n\n1989\n2015\nAfghanistan\n49\n14\n35\n0\n\n\n3920\n2023\nOccupied Palestinian Territories\n46\n41\n5\n0\n\n\n1189\n2011\nNigeria\n46\n9\n37\n0\n\n\n3936\n2023\nOccupied Palestinian Territories\n31\n31\n0\n0"
+  },
+  {
+    "objectID": "data_cleaning.html#geographic-data-validation",
+    "href": "data_cleaning.html#geographic-data-validation",
+    "title": "Security Incidents Data Cleaning",
+    "section": "7. Geographic Data Validation",
+    "text": "7. Geographic Data Validation\nLet’s verify that our latitude and longitude values are within valid ranges.\n\n\nCode\n# Check if latitude and longitude values are within valid ranges\n# Valid ranges: Latitude (-90 to 90), Longitude (-180 to 180)\n\ninvalid_lat = df[(df['latitude'] &lt; -90) | (df['latitude'] &gt; 90)].shape[0]\ninvalid_lon = df[(df['longitude'] &lt; -180) | (df['longitude'] &gt; 180)].shape[0]\n\nprint(f\"Invalid latitude values (outside -90 to 90): {invalid_lat}\")\nprint(f\"Invalid longitude values (outside -180 to 180): {invalid_lon}\")\n\nlat_min, lat_max = df['latitude'].min(), df['latitude'].max()\nlon_min, lon_max = df['longitude'].min(), df['longitude'].max()\n\nprint(f\"\\nLatitude range: {lat_min} to {lat_max}\")\nprint(f\"Longitude range: {lon_min} to {lon_max}\")\n\nplt.figure(figsize=(7,4))\nplt.scatter(df['longitude'], df['latitude'], alpha=0.5, s=3)\nplt.title('Geographic Distribution of Incidents')\nplt.xlabel('Longitude')\nplt.ylabel('Latitude')\nplt.xlim(-180, 180)\nplt.ylim(-90, 90)\nplt.grid(True)\nplt.tight_layout()\nplt.show()\n\n\nInvalid latitude values (outside -90 to 90): 0\nInvalid longitude values (outside -180 to 180): 0\n\nLatitude range: -34.883611 to 52.253183\nLongitude range: -102.283333 to 179.0122737\n\n\n\n\n\n\n\n\n\nThere are 0 invalid latitudes and longitudes, so we do not have to handle those outliers. All geographic coordinates are within valid ranges and suitable for mapping and spatial analysis."
+  },
+  {
+    "objectID": "data_cleaning.html#final-dataset-summary",
+    "href": "data_cleaning.html#final-dataset-summary",
+    "title": "Security Incidents Data Cleaning",
+    "section": "8. Final Dataset Summary",
+    "text": "8. Final Dataset Summary\nLet’s examine our cleaned dataset:\n\n\nCode\nprint(f\"Final dataset shape: {df.shape}\")\nprint(\"\\nColumns in the cleaned dataset:\")\nprint(df.columns.tolist())\nprint(\"\\nSummary statistics:\")\ndf.describe()\n\n\nFinal dataset shape: (4314, 35)\n\nColumns in the cleaned dataset:\n['year', 'country', 'un', 'ingo', 'icrc', 'nrcs_and_ifrc', 'nngo', 'other', 'nationals_killed', 'nationals_wounded', 'nationals_kidnapped', 'total_nationals', 'internationals_killed', 'internationals_wounded', 'internationals_kidnapped', 'total_internationals', 'total_killed', 'total_wounded', 'total_kidnapped', 'total_affected', 'gender_male', 'gender_female', 'gender_unknown', 'means_of_attack', 'attack_context', 'location', 'latitude', 'longitude', 'motive', 'actor_type', 'actor_name', 'details', 'verified', 'source', 'high_impact']\n\nSummary statistics:\n\n\n\n\n\n\n\n\n\nyear\nun\ningo\nicrc\nnrcs_and_ifrc\nnngo\nother\nnationals_killed\nnationals_wounded\nnationals_kidnapped\n...\ntotal_internationals\ntotal_killed\ntotal_wounded\ntotal_kidnapped\ntotal_affected\ngender_male\ngender_female\ngender_unknown\nlatitude\nlongitude\n\n\n\n\ncount\n4314.000000\n4314.000000\n4314.000000\n4314.000000\n4314.000000\n4314.000000\n4314.000000\n4314.000000\n4314.000000\n4314.000000\n...\n4314.000000\n4314.000000\n4314.000000\n4314.000000\n4314.000000\n4314.000000\n4314.000000\n4314.000000\n4301.000000\n4301.000000\n\n\nmean\n2015.245712\n0.411683\n0.812471\n0.051229\n0.116365\n0.476124\n0.024339\n0.645109\n0.631433\n0.410987\n...\n0.204682\n0.701205\n0.695874\n0.495132\n1.892211\n0.894529\n0.139314\n0.857904\n16.693709\n36.486580\n\n\nstd\n6.804200\n2.107963\n1.651766\n0.420239\n0.780231\n1.192180\n0.224018\n1.772060\n1.464470\n1.242489\n...\n0.772268\n1.818565\n1.517728\n1.366215\n2.665913\n1.217483\n0.471608\n2.531503\n14.481132\n30.046441\n\n\nmin\n1997.000000\n0.000000\n0.000000\n0.000000\n0.000000\n0.000000\n0.000000\n0.000000\n0.000000\n0.000000\n...\n0.000000\n0.000000\n0.000000\n0.000000\n0.000000\n0.000000\n0.000000\n0.000000\n-34.883611\n-102.283333\n\n\n25%\n2010.000000\n0.000000\n0.000000\n0.000000\n0.000000\n0.000000\n0.000000\n0.000000\n0.000000\n0.000000\n...\n0.000000\n0.000000\n0.000000\n0.000000\n1.000000\n0.000000\n0.000000\n0.000000\n5.835800\n28.729977\n\n\n50%\n2016.000000\n0.000000\n0.000000\n0.000000\n0.000000\n0.000000\n0.000000\n0.000000\n0.000000\n0.000000\n...\n0.000000\n0.000000\n0.000000\n0.000000\n1.000000\n1.000000\n0.000000\n0.000000\n13.426301\n34.450000\n\n\n75%\n2021.000000\n0.000000\n1.000000\n0.000000\n0.000000\n1.000000\n0.000000\n1.000000\n1.000000\n0.000000\n...\n0.000000\n1.000000\n1.000000\n0.000000\n2.000000\n1.000000\n0.000000\n1.000000\n32.887222\n45.400000\n\n\nmax\n2025.000000\n92.000000\n49.000000\n8.000000\n19.000000\n15.000000\n5.000000\n70.000000\n37.000000\n19.000000\n...\n15.000000\n70.000000\n37.000000\n20.000000\n92.000000\n17.000000\n7.000000\n92.000000\n52.253183\n179.012274\n\n\n\n\n8 rows × 24 columns"
+  },
+  {
+    "objectID": "data_cleaning.html#conclusion",
+    "href": "data_cleaning.html#conclusion",
+    "title": "Security Incidents Data Cleaning",
+    "section": "9. Conclusion",
+    "text": "9. Conclusion\nThe data cleaning process for the security incidents dataset has:\n\nStandardized column names for consistency\nRemoved granular fields with limited analytical value\nAddressed minimal remaining missing values by leaving them as-is\nRemoved 28 duplicate records from 5 unique patterns\nOptimized data types for count-based columns\nIdentified and flagged high-impact incidents for flexible analysis\nValidated geographic coordinates, confirming all are within valid ranges\n\nThe dataset is now ready for exploratory data analysis and modeling to identify trends in aid worker security incidents by country, year, and organization type."
+  },
+  {
+    "objectID": "eda.html",
+    "href": "eda.html",
+    "title": "Security Incidents Analysis: Global Patterns and Trends",
+    "section": "",
+    "text": "This analysis explores patterns and trends in global security incidents, identifying hotspots and tracking how they’ve evolved over time. By examining data on security incidents from around the world, we can better understand which regions face the greatest challenges and how these challenges have shifted in recent years.\nThe distribution of security incidents distribution isn’t uniform across the globe so understanding these patterns can help security professionals, policymakers, and researchers allocate resources effectively and develop targeted strategies to mitigate risks.\nThe following analysis uses data visualization techniques to uncover insights about:\n\nThe geographic distribution of security incidents\nHow incident patterns have changed over time\nWhich countries represent security hotspots, both historically and recently\nThe nature and impact of different incident types\n\n\n\nOur analysis begins with a cleaned dataset of security incidents collected from the Aid Worker Security Database (AWSD). Let’s examine the scope of our data:\n\n\nCode\nprint(f\"Dataset contains {len(df)} incidents across {df['country'].nunique()} countries\")\nprint(f\"Time period covered: {df['year'].min()} to {df['year'].max()}\")\n\n\nDataset contains 4314 incidents across 95 countries\nTime period covered: 1997 to 2025\n\n\nThis extensive dataset allows us to perform comprehensive analysis across both geographic and temporal dimensions. The data has been preprocessed to ensure consistency in country names, coordinate information, and incident classifications."
+  },
+  {
+    "objectID": "eda.html#dataset-overview",
+    "href": "eda.html#dataset-overview",
+    "title": "Security Incidents Analysis: Global Patterns and Trends",
+    "section": "",
+    "text": "Our analysis begins with a cleaned dataset of security incidents collected from the Aid Worker Security Database (AWSD). Let’s examine the scope of our data:\n\n\nCode\nprint(f\"Dataset contains {len(df)} incidents across {df['country'].nunique()} countries\")\nprint(f\"Time period covered: {df['year'].min()} to {df['year'].max()}\")\n\n\nDataset contains 4314 incidents across 95 countries\nTime period covered: 1997 to 2025\n\n\nThis extensive dataset allows us to perform comprehensive analysis across both geographic and temporal dimensions. The data has been preprocessed to ensure consistency in country names, coordinate information, and incident classifications."
+  },
+  {
+    "objectID": "eda.html#interactive-global-incident-map",
+    "href": "eda.html#interactive-global-incident-map",
+    "title": "Security Incidents Analysis: Global Patterns and Trends",
+    "section": "2.1 Interactive Global Incident Map",
+    "text": "2.1 Interactive Global Incident Map\nThe map below displays incidents across the globe, with colors indicating the severity based on the number of people affected:\n\nBlue: No reported casualties\nGreen: 1-5 affected individuals\nOrange: 6-20 affected individuals\nRed: More than 20 affected individuals\n\nClustering is used to manage dense areas where multiple incidents occurred in close proximity.\n\n\nMake this Notebook Trusted to load map: File -&gt; Trust Notebook\n\n\nThe interactive map reveals several important patterns:\n\nIncidents tend to cluster in certain regions\nUrban centers often show higher concentrations of incidents\nThe distribution of high-severity incidents (red markers) isn’t uniform, suggesting regional differences in the nature of security threats\n\nYou can zoom in on specific regions and click on individual markers to get more details about each incident, such as the country, year, total affected, and attack type."
+  },
+  {
+    "objectID": "eda.html#incidents-by-country-over-time",
+    "href": "eda.html#incidents-by-country-over-time",
+    "title": "Security Incidents Analysis: Global Patterns and Trends",
+    "section": "3.1 Incidents by Country Over Time",
+    "text": "3.1 Incidents by Country Over Time\nThe animated choropleth map below shows how the distribution of security incidents has shifted over the years. Darker colors indicate higher numbers of incidents.\n\n\nCode\nincidents_by_year_country = df.groupby(['year', 'country']).size().reset_index(name='incidents')\nyear_totals = incidents_by_year_country.groupby('year')['incidents'].sum().reset_index().sort_values('year')\n\n# Updated colorscale using the colors from the image\ncustom_colorscale = [\n    [0, \"#F99301\"],     # Dark Orange\n    [0.33, \"#F56300\"],  # Safety Orange\n    [0.66, \"#A1083B\"],  # Jazzberry Jam\n    [1, \"#541743\"]      # Pompadour\n]\n\nfig = px.choropleth(\n    incidents_by_year_country,\n    locations='country',\n    locationmode='country names',\n    color='incidents',\n    animation_frame='year',\n    color_continuous_scale=custom_colorscale,\n    range_color=[0, incidents_by_year_country['incidents'].max()],\n    height=600\n)\n\nfig.update_layout(\n    title={\n        'text': 'Security Incidents by Country Over Time',\n        'y': 0.95,\n        'x': 0.5,\n        'xanchor': 'center',\n        'yanchor': 'top',\n        'font': {'size': 24}\n    },\n    coloraxis_colorbar=dict(title='Number of Incidents'),\n    geo=dict(showframe=False, showcoastlines=True, projection_type='natural earth'),\n    margin=dict(t=100)\n)\n\nfig.layout.updatemenus[0].buttons[0].args[1]['frame']['duration'] = 1000\nfig.layout.updatemenus[0].buttons[0].args[1]['transition']['duration'] = 500\n\nfor i, year in enumerate(year_totals['year'].unique()):\n    year_total = year_totals.loc[year_totals['year'] == year, 'incidents'].values[0]\n    fig.frames[i].layout.annotations = [\n        dict(\n            x=0.5,\n            y=0.87,\n            xref='paper',\n            yref='paper',\n            text=f'Total Incidents in {year}: {year_total}',\n            showarrow=False,\n            font=dict(size=18)\n        )\n    ]\n\nlatest_year = year_totals['year'].max()\nlatest_total = year_totals.loc[year_totals['year'] == latest_year, 'incidents'].values[0]\nfig.update_layout(annotations=[\n    dict(\n        x=0.5,\n        y=0.87,\n        xref='paper',\n        yref='paper',\n        text=f'Total Incidents in {latest_year}: {latest_total}',\n        showarrow=False,\n        font=dict(size=18)\n    )\n])\n\nfig.write_html(\"images/interactive_incidents_over_time.html\")\nfig.show()\n\n\n                                                \n\n\nThis visualization reveals several insights:\n\nThe global distribution of security incidents has shifted significantly over time\nSome countries that were previously security hotspots have shown improvement\nNew areas of concern have emerged in recent years\nThe total number of recorded incidents shows notable year-to-year variation\n\nYou can use the play button to animate the map through time, or manually select specific years using the slider."
+  },
+  {
+    "objectID": "eda.html#annual-incident-trends",
+    "href": "eda.html#annual-incident-trends",
+    "title": "Security Incidents Analysis: Global Patterns and Trends",
+    "section": "3.2 Annual Incident Trends",
+    "text": "3.2 Annual Incident Trends\nTo better understand the overall temporal pattern of security incidents, we can examine the yearly totals across all countries.\n\n\n                                                \n\n\nThe interactive bar chart shows:\n\nSecurity incidents are increasing over time\nYears with notable spikes in security incidents\n\nSeveral factors might explain the patterns observed, including:\n\nMajor global events and conflicts\nChanges in reporting practices\nImplementation of new security measures\nShifts in geopolitical landscapes"
+  },
+  {
+    "objectID": "eda.html#countries-with-most-incidents-all-time-analysis",
+    "href": "eda.html#countries-with-most-incidents-all-time-analysis",
+    "title": "Security Incidents Analysis: Global Patterns and Trends",
+    "section": "4.1 Countries with Most Incidents: All-Time Analysis",
+    "text": "4.1 Countries with Most Incidents: All-Time Analysis\nFirst, let’s look at which countries have experienced the most security incidents over the entire period covered by our dataset:\n\n\nCode\ntotal_by_country = df.groupby('country').size().reset_index(name='total_incidents')\ntotal_by_country = total_by_country.sort_values('total_incidents', ascending=False)\ntop15_countries = total_by_country.head(8)\n\nfig_top_all_time = px.bar(\n    top15_countries,\n    x='country',\n    y='total_incidents',\n    labels={'total_incidents': 'Number of Incidents', 'country': 'Country'},\n    height=450\n)\n\nfig_top_all_time.update_traces(marker_color=palette[\"primary\"])\n\nfig_top_all_time.update_layout(\n    title={\n        'text': 'Top Countries by Security Incidents (All Time)',\n        'y': 1.0,\n        'x': 0.5,\n        'xanchor': 'center',\n        'yanchor': 'top',\n        'font': {'size': 17}\n    },\n    xaxis={'categoryorder': 'total descending', 'tickangle': 45}\n)\n\nfig_top_all_time.show()\n\nfig_top_all_time.write_html(\"images/top_countries_all_time.html\")\n\n\n                                                \n\n\nThis visualization highlights the countries that have historically been most affected by security incidents. Several factors might contribute to a country appearing on this list:\n\nLong-standing regional conflicts\nPolitical instability\nHigher population (which can increase the absolute number of incidents)\nMore comprehensive reporting of incidents"
+  },
+  {
+    "objectID": "eda.html#countries-with-most-incidents-recent-trends",
+    "href": "eda.html#countries-with-most-incidents-recent-trends",
+    "title": "Security Incidents Analysis: Global Patterns and Trends",
+    "section": "4.2 Countries with Most Incidents: Recent Trends",
+    "text": "4.2 Countries with Most Incidents: Recent Trends\nHistorical patterns don’t always reflect current realities. To identify emerging security hotspots, we need to focus on more recent data. The following analysis examines incident patterns over the past 10 years:\n\n\nCode\ncurrent_year = df['year'].max()\nten_years_ago = current_year - 10\nrecent_df = df[df['year'] &gt;= ten_years_ago]\n\nrecent_by_country = recent_df.groupby('country').size().reset_index(name='recent_incidents')\nrecent_by_country = recent_by_country.sort_values('recent_incidents', ascending=False)\ntop15_recent = recent_by_country.head(8)\n\nfig_top_recent = px.bar(\n    top15_recent,\n    x='country',\n    y='recent_incidents',\n    labels={'recent_incidents': 'Number of Incidents', 'country': 'Country'},\n    height=500\n)\n\nfig_top_recent.update_traces(marker_color=palette[\"primary\"])\n\nfig_top_recent.update_layout(\n    title={\n        'text': f'Top Countries by Security Incidents (Last 10 Years: {ten_years_ago}-{current_year})',\n        'y': 1.0,\n        'x': 0.5,\n        'xanchor': 'center',\n        'yanchor': 'top',\n        'font': {'size': 17}\n    },\n    xaxis={'categoryorder': 'total descending', 'tickangle': 45}\n)\n\nfig_top_recent.show()\n\nfig_top_recent.write_html(\"images/top_countries_recent.html\")\n\n\n                                                \n\n\nThis recent trends analysis shows:\n\nCountries that have experienced deteriorating security situations in the past decade\nAn Emerging hotspot (Mali) that did not appear in historical data\n\nBy comparing this visualization with the all-time analysis, we can identify significant shifts in global security patterns."
+  },
+  {
+    "objectID": "eda.html#common-injury-types-and-their-characteristics",
+    "href": "eda.html#common-injury-types-and-their-characteristics",
+    "title": "Security Incidents Analysis: Global Patterns and Trends",
+    "section": "5.1 Common Injury Types and Their Characteristics",
+    "text": "5.1 Common Injury Types and Their Characteristics\n\nShooting: Use of firearms targeting individuals or convoys; often linked to ambushes or intimidation of aid workers.\nKidnapping: Abduction of humanitarian personnel, sometimes for ransom, political leverage, or forced collaboration.\nBodily Assault: Physical attacks without weapons (e.g., beatings); may occur during looting, protests, or personal confrontations.\nUnknown: Incident occurred but details about the type of attack are missing or unverified.\nAerial Bombardment: Attacks from aircraft (e.g., jets, drones); can unintentionally hit aid convoys, clinics, or camps, especially in conflict zones.\n\nShelling: Use of heavy artillery (like mortars) in conflict areas, sometimes striking aid facilities unintentionally or as collateral damage.\n\nKidnap-killing: Victims are abducted and then killed; used as a method of terror or retaliation against perceived foreign involvement.\n\nVehicle-borne IED (Improvised Explosive Device): Bombs placed in vehicles; may target aid convoys or checkpoints.\nRoadside IED: Explosives placed along roads; often used to target military or NGO vehicles in volatile regions.\n\nOther Explosives: Includes grenades, mines, or suicide vests; less common but still a serious risk in some areas."
+  },
+  {
+    "objectID": "eda.html#when-different-injury-types-occur",
+    "href": "eda.html#when-different-injury-types-occur",
+    "title": "Security Incidents Analysis: Global Patterns and Trends",
+    "section": "5.2 When Different Injury Types Occur",
+    "text": "5.2 When Different Injury Types Occur\nCertain injury patterns are more likely in specific contexts:\n\nCombat/Crossfire Situations: Primarily involve ballistic trauma and injuries from explosives.\nTargeted Attacks: Commonly result from firearms or explosive devices aimed at specific individuals or groups.\nCivil Unrest: Typically leads to blunt trauma and injuries from less-lethal weapons such as rubber bullets or tear gas canisters.\nTerrorist Incidents: Often produce complex injury patterns due to explosives and coordinated, multi-method attacks.\nDetention: Injuries are usually associated with blunt force trauma or forms of torture.\n\nUnderstanding these patterns allows for appropriate medical preparedness, including: - Proper training of medical personnel - Stockpiling appropriate medical supplies - Developing contextually appropriate evacuation protocols - Creating specialized treatment facilities in high-risk areas"
+  },
+  {
+    "objectID": "eda.html#analysis-of-attack-contexts",
+    "href": "eda.html#analysis-of-attack-contexts",
+    "title": "Security Incidents Analysis: Global Patterns and Trends",
+    "section": "6.1 Analysis of Attack Contexts",
+    "text": "6.1 Analysis of Attack Contexts\nThe distribution of security incidents across different attack contexts reveals important patterns:\n\n6.1.1 Combat/Crossfire\n\nIndividuals are caught in direct fighting between armed forces or groups\n\n\n\n6.1.2 Individual Attacks\n\nTargeted violence against specific individuals or small groups\nMay be politically, criminally, or personally motivated\n\n\n\n6.1.3 Ambushes\n\nPlanned attacks often targeting mobile personnel\nParticularly dangerous due to the element of surprise\nCan be mitigated through route analysis and convoy procedures\n\n\n\n6.1.4 Raids\n\nOrganized attacks against specific facilities or compounds\nOften involve multiple attackers and coordinated tactics\nPhysical security measures and response protocols are critical countermeasures\n\n\n\n6.1.5 Detention\n\nFormal or informal holding of personnel by various actors\nMay involve legal or extra-legal processes\nCan lead to prolonged security incidents with complex resolution requirements\n\nThis understanding of attack contexts helps security managers develop appropriate: - Training programs tailored to likely threat scenarios - Standard operating procedures for different contexts - Resource allocation based on context-specific risks - Coordination mechanisms with relevant security actors"
+  },
+  {
+    "objectID": "eda.html#analysis-of-casualty-patterns",
+    "href": "eda.html#analysis-of-casualty-patterns",
+    "title": "Security Incidents Analysis: Global Patterns and Trends",
+    "section": "7.1 Analysis of Casualty Patterns",
+    "text": "7.1 Analysis of Casualty Patterns\nThe comparison between nationals and internationals reveals several important patterns:\n\n7.1.1 Disparity in Impact\n\nLocal nationals typically suffer significantly higher casualties than international personnel\nThis disparity applies across all types of harm (killed, wounded, kidnapped)\n\n\n\n7.1.2 Factors Contributing to Disparity\n\nNumbers and Exposure: Locals far outnumber internationals in most areas\nAccess to Protection: Internationals often have enhanced security measures and evacuation options\nTargeting Patterns: Some actors specifically avoid targeting internationals due to potential international consequences\nRisk Profiles: Internationals may have more restricted movement in high-threat areas\n\n\n\n7.1.3 Kidnapping Trends\n\nKidnapping represents a relatively small proportion of overall casualties\nHowever, internationals face a disproportionate kidnapping risk in many contexts due to:\n\nHigher perceived ransom value\nPolitical leverage potential\nMedia attention\n\n\n\n\n7.1.4 Implications for Security Planning\n\nDifferent security protocols may be needed for national and international staff\nNeed for context-specific risk assessments\nImportance of inclusive security measures that protect all personnel"
+  },
+  {
+    "objectID": "eda.html#analysis-of-gender-patterns",
+    "href": "eda.html#analysis-of-gender-patterns",
+    "title": "Security Incidents Analysis: Global Patterns and Trends",
+    "section": "9.1 Analysis of Gender Patterns",
+    "text": "9.1 Analysis of Gender Patterns\nThe gender distribution of individuals affected by security incidents reveals several significant patterns:\n\n9.1.1 Male Predominance\n\nMales constitute the majority of individuals affected by security incidents\nThe disparity may reflect different exposure levels due to gender roles in some contexts\n\n\n\n9.1.2 Contributing Factors\n\nOccupational Exposure: Males may be overrepresented in certain high-risk professions. Armed groups may specifically target men for recruitment, detention, or elimination as potential threats.\nMobility Patterns: Gender differences in freedom of movement may affect exposure to risks.\nTargeting Patterns: In some contexts, males may be specifically targeted.\nReporting Biases: Incidents affecting females may be underreported in some settings. This data may underrepresent violence against women, particularly sexual violence, is often underreported in conflict zones due to stigma and limited access to reporting mechanisms.\n\n\n\n9.1.3 Implications for Protection\n\nTraining should address the specific needs and vulnerabilities of different gender groups\n\nUnderstanding these gender dimensions helps organizations develop more effective and inclusive security strategies that protect all personnel regardless of gender."
+  },
+  {
+    "objectID": "eda.html#organizational-risk-profiles",
+    "href": "eda.html#organizational-risk-profiles",
+    "title": "Security Incidents Analysis: Global Patterns and Trends",
+    "section": "10.1 Organizational Risk Profiles",
+    "text": "10.1 Organizational Risk Profiles\nDifferent organizations face varying security risks based on numerous factors:\n\nInternational NGO: A non-governmental organization that operates across multiple countries, providing humanitarian aid, development support, or advocacy on global issues.\nNational NGO: A non-governmental organization that operates primarily within a single country, addressing local or national humanitarian, social, or development needs.\n\nUnited Nations (UN): An international organization made up of member states, working to maintain peace, provide humanitarian aid, and promote human rights and development worldwide.\n\nNational Red Cross / Red Crescent: Independent national societies that are part of the International Red Cross and Red Crescent Movement, providing emergency response, disaster relief, and health services within their own countries.\nRed Cross: A neutral, impartial humanitarian organization focused on protecting and assisting victims of armed conflict and promoting international humanitarian law.\n\n\n10.1.1 Security Implications by Organization Type\n\nOrganization-specific protocols: Security measures should be tailored to each organization’s unique risk profile\nResource allocation: Security resources should be distributed equitably based on risk\nCoordination mechanisms: Inter-organizational security collaboration enhances protection for all\nTraining requirements: Staff need organization-specific security training"
+  },
+  {
+    "objectID": "eda.html#analysis-of-actor-responsibility",
+    "href": "eda.html#analysis-of-actor-responsibility",
+    "title": "Security Incidents Analysis: Global Patterns and Trends",
+    "section": "11.1 Analysis of Actor Responsibility",
+    "text": "11.1 Analysis of Actor Responsibility\nThis analysis focuses specifically on two major actor types responsible for security incidents: Host State forces and Foreign/coalition forces. This comparison reveals important patterns:\n\n11.1.1 Host State vs. Foreign Forces\n\nHost State: The national government or military of the country where a humanitarian operation or conflict is taking place.\nForeign or Coalition Force: Military forces from one or more countries operating in a foreign nation, often as part of international coalitions or peacekeeping missions.\n\n\n\n11.1.2 Implications for Security Planning\n\nContext-specific approaches: Security strategies should reflect the predominant actor types in each area\nEngagement strategies: Different approaches may be needed when engaging with different security"
+  },
+  {
+    "objectID": "syria.html",
+    "href": "syria.html",
+    "title": "Security Incidents in Syrian Arab Republic: Trends and Patterns",
+    "section": "",
+    "text": "In the Syrian Arab Republic...\n  289 humanitarian workers have died,\n  228 humanitarian workers have been wounded,\n  70 humanitarian workers have been kidnapped."
+  },
+  {
+    "objectID": "syria.html#historical-context",
+    "href": "syria.html#historical-context",
+    "title": "Security Incidents in Syrian Arab Republic: Trends and Patterns",
+    "section": "2.1 Historical Context",
+    "text": "2.1 Historical Context\nThe Syrian conflict represents one of the most devastating and complex crises of the 21st century. Beginning as peaceful pro-democracy protests in 2011 during the Arab Spring, it rapidly escalated into a full-scale civil war when the Bashar al-Assad regime responded with violent crackdowns (Foreign Relations 2024). The conflict evolved into a multi-sided proxy war with international powers backing different factions:\n\n2011: Protests against Assad’s authoritarian regime met with violent government response\n2012-2013: Formation of rebel groups and escalation to full civil war\n2014-2015: Rise of ISIS capturing significant Syrian territory\n2015: Russian military intervention supporting the Assad regime\n2016-2019: Government forces recapture key cities including Aleppo and eastern Ghouta\n2019-2020: Turkish operations against Kurdish forces in northern Syria\n2020-2023: Relatively frozen conflict lines with occasional flare-ups"
+  },
+  {
+    "objectID": "syria.html#recent-escalation",
+    "href": "syria.html#recent-escalation",
+    "title": "Security Incidents in Syrian Arab Republic: Trends and Patterns",
+    "section": "2.2 Recent Escalation",
+    "text": "2.2 Recent Escalation\nThe Syrian conflict entered a dramatic new phase in late 2024 with the sudden collapse of the Assad regime after 50 years of family rule. This upheaval has fundamentally altered the dynamics of the war:\n\nNovember 30, 2024: Rebel forces led by Hayat Tahrir al-Sham (HTS) and the Turkish-backed Syrian National Army (SNA) seized Aleppo\nDecember 8, 2024: Damascus fell to rebel forces, ending the Assad dynasty with Bashar al-Assad fleeing to Moscow\n600,000+ estimated deaths since the beginning of the conflict\n6.9 million internally displaced persons\n5.4 million refugees abroad\nMultiple concurrent conflicts continuing across Syrian territory:\n\nKurdish forces clashing with Arab tribes in northeast\nIslamic State maintaining presence and launching attacks\nIsraeli strikes against Iranian and Syrian military positions\nIran-backed militias targeting U.S. forces in eastern Syria\n\n\n\nMap of Incidents \n\n\n\nMake this Notebook Trusted to load map: File -&gt; Trust Notebook"
+  },
+  {
+    "objectID": "syria.html#incident-frequency-over-time",
+    "href": "syria.html#incident-frequency-over-time",
+    "title": "Security Incidents in Syrian Arab Republic: Trends and Patterns",
+    "section": "3.1 Incident Frequency Over Time",
+    "text": "3.1 Incident Frequency Over Time\n\n\n\n\n                                                \n\n\nFigure 1: Security incidents in Syria from 2011 to 2025\n\n\n\n\n\n3.1.1 Analysis of Incident Trends\nThe incident timeline in Syria reveals a strong link between major geopolitical events and spikes in humanitarian security threats:\n\n2011–2013: The Syrian uprising and subsequent use of chemical weapons mark a dramatic rise in conflict intensity, with incidents peaking during ISIS’s territorial expansion.\n2015: A sharp drop in incidents follows, coinciding with the start of Russian intervention, likely signaling a shift in control and tactics.\n2016–2018: Conflict intensifies again with the fall of Aleppo and the US withdrawal from northeast Syria, resulting in the highest recorded incident levels.\n2020–2021: A steep decline occurs as territorial control consolidates.\n2023–2024: A brief resurgence follows the devastating earthquake and eventual collapse of the Assad regime, reflecting renewed instability.\n\nThese trends highlight how international involvement, regime change, and territorial shifts consistently shape the security landscape for humanitarian operations in Syria."
+  },
+  {
+    "objectID": "syria.html#predominant-attack-types",
+    "href": "syria.html#predominant-attack-types",
+    "title": "Security Incidents in Syrian Arab Republic: Trends and Patterns",
+    "section": "4.1 Predominant Attack Types",
+    "text": "4.1 Predominant Attack Types\n\n\n\n\n                                                \n\n\nFigure 2: Most common types of attacks\n\n\n\n\n\n4.1.1 Analysis of Attack Methods\nAerial bombardment is the most frequently reported attack method, followed by shelling, making Syria unique among conflict zones where indirect fire and airstrikes dominate the threat landscape. These tactics reflect state-level military engagement and urban warfare dynamics, especially during regime offensives. Shooting and kidnapping also appear prominently, pointing to both conventional ground combat and targeted abduction of humanitarian personnel.\nThis distribution underscores the need for protective infrastructure in high-risk areas, early-warning systems during aerial campaigns, and mobility protocols to avoid exposure during bombardments and shelling."
+  },
+  {
+    "objectID": "syria.html#attack-contexts",
+    "href": "syria.html#attack-contexts",
+    "title": "Security Incidents in Syrian Arab Republic: Trends and Patterns",
+    "section": "4.2 Attack Contexts",
+    "text": "4.2 Attack Contexts\n\n\n\n\n                                                \n\n\nFigure 3: Security incidents by attack context\n\n\n\n\n\n4.2.1 Analysis of Attack Contexts\nCombat or crossfire is by far the most common context of security incidents in Syria, reflecting the country’s prolonged urban warfare and front-line volatility. This indicates that many humanitarian actors are unintentionally caught in large-scale hostilities, rather than being directly targeted."
+  },
+  {
+    "objectID": "syria.html#location-of-attack",
+    "href": "syria.html#location-of-attack",
+    "title": "Security Incidents in Syrian Arab Republic: Trends and Patterns",
+    "section": "4.3 Location of Attack",
+    "text": "4.3 Location of Attack\n\n\n\n\n                                                \n\n\nFigure 4: Most common attack locations\n\n\n\n\n\n4.3.1 Analysis of Attack Locations\nMost attacks occurred at project sites, on roads, and in public locations, highlighting the widespread insecurity across operational, transit, and civilian spaces."
+  },
+  {
+    "objectID": "syria.html#casualties-by-category",
+    "href": "syria.html#casualties-by-category",
+    "title": "Security Incidents in Syrian Arab Republic: Trends and Patterns",
+    "section": "5.1 Casualties by Category",
+    "text": "5.1 Casualties by Category\n\n\n\n\n                                                \n\n\nFigure 5: Total casualties in Palestine by category\n\n\n\n\n\n5.1.1 Analysis of Casualty Patterns\nThe overwhelming majority of casualties in Syria are nationals, who account for nearly all reported deaths, injuries, and kidnappings. The high number of national fatalities suggests that many incidents are either highly lethal or occur in areas with limited access to emergency care."
+  },
+  {
+    "objectID": "syria.html#top-5-most-impactful-security-incidents",
+    "href": "syria.html#top-5-most-impactful-security-incidents",
+    "title": "Security Incidents in Syrian Arab Republic: Trends and Patterns",
+    "section": "6.1 Top 5 Most Impactful Security Incidents",
+    "text": "6.1 Top 5 Most Impactful Security Incidents\n\n\n\n\nTable 1\n\n\n\n                                                \n\n\n\n\n\n\n6.1.1 Analysis of Major Incidents\nThe most severe incidents in Syria primarily occurred at project sites, with nearly all involving combat or crossfire:\n\nThe deadliest incidents occurred in 2016 and 2017, each resulting in 9 fatalities with no survivors—highlighting the intensity of direct armed clashes.\nThe highest total casualty incident in 2013 left 11 people wounded at a project site, suggesting exposure to indiscriminate violence rather than targeted attack.\n\nThese events emphasize the critical need for conflict-sensitive planning, real-time situational awareness, and investment in protective infrastructure at operational sites.\nFor more detailed information on the Syrian conflict timeline, see the Council on Foreign Relations Conflict Tracker."
+  },
+  {
+    "objectID": "syria.html#for-security-planning",
+    "href": "syria.html#for-security-planning",
+    "title": "Security Incidents in Syrian Arab Republic: Trends and Patterns",
+    "section": "7.1 For Security Planning",
+    "text": "7.1 For Security Planning\n\nMap and monitor high-risk areas near frontlines, with live updates on aerial activity and shelling zones.\nEstablish hardened infrastructure and underground shelters at compounds and project sites.\nDevelop rapid evacuation protocols tailored to conflict escalation patterns."
+  },
+  {
+    "objectID": "syria.html#for-humanitarian-organizations",
+    "href": "syria.html#for-humanitarian-organizations",
+    "title": "Security Incidents in Syrian Arab Republic: Trends and Patterns",
+    "section": "7.2 For Humanitarian Organizations",
+    "text": "7.2 For Humanitarian Organizations\n\nProvide personal protective equipment and conflict awareness training to national staff in volatile areas.\nStrengthen coordination with local actors and communities to improve incident reporting and early warnings.\nScale up remote programming in areas with ongoing aerial bombardment or crossfire."
+  },
+  {
+    "objectID": "syria.html#for-future-research",
+    "href": "syria.html#for-future-research",
+    "title": "Security Incidents in Syrian Arab Republic: Trends and Patterns",
+    "section": "7.3 For Future Research",
+    "text": "7.3 For Future Research\n\nAnalyze how territorial control shifts impact humanitarian security in real time.\nInvestigate long-term mental health outcomes for frontline national staff.\nStudy the role of infrastructure damage (e.g., hospitals, water, roads) on aid delivery and mobility."
+  },
+  {
+    "objectID": "unknown.html#background",
+    "href": "unknown.html#background",
+    "title": "Missing Data Patterns in Humanitarian Security Incidents",
+    "section": "2.1 Background",
+    "text": "2.1 Background\nHumanitarian security incident data provide crucial insights into patterns of violence in conflict zones, helping organizations protect staff, allocate resources, and advocate for civilian protection. However, these datasets often contain substantial information gaps due to access limitations, security concerns, and reporting infrastructure challenges.\nThis analysis explores patterns of missing data across different countries and incident attributes, revealing how information gaps may affect our understanding of humanitarian crises. By identifying where data is most consistently missing, we can better contextualize findings and understand the limitations of conflict monitoring systems."
+  },
+  {
+    "objectID": "unknown.html#methodology",
+    "href": "unknown.html#methodology",
+    "title": "Missing Data Patterns in Humanitarian Security Incidents",
+    "section": "2.2 Methodology",
+    "text": "2.2 Methodology\nThis study analyzes a dataset of humanitarian security incidents across eight conflict-affected countries. Missing information is identified through “Unknown” values in six key fields:\n\nmeans_of_attack: How the attack was carried out\nattack_context: Circumstances surrounding the incident\nlocation: Specific place where the incident occurred\nmotive: Apparent reason behind the attack\nactor_type: Category of perpetrator (e.g., military, non-state armed group)\nactor_name: Specific identity of the perpetrator\n\nFor each country and field, we calculate the percentage of incidents with “Unknown” values. This allows us to identify patterns in data completeness and potential systematic biases in reporting."
+  },
+  {
+    "objectID": "unknown.html#gender-analysis",
+    "href": "unknown.html#gender-analysis",
+    "title": "Missing Data Patterns in Humanitarian Security Incidents",
+    "section": "3.1 Gender Analysis",
+    "text": "3.1 Gender Analysis\nThe chart reveals critical gaps in gender data collection across conflict-affected countries, with Sudan exhibiting the highest level of missing information. Syria leads in data completeness, yet nearly one-fifth of gender records remain undocumented.\n\n\n\n\n\n\n\n\n\nEmergency Response Priorities: During humanitarian crises, responders often prioritize basic needs (e.g., food, water, shelter) over detailed demographic tracking.\nReporting Biases: Incidents affecting females may be underreported in some settings. This data may underrepresent violence against women, particularly sexual violence, is often underreported in conflict zones due to stigma and limited access to reporting mechanisms."
+  },
+  {
+    "objectID": "southsudan.html",
+    "href": "southsudan.html",
+    "title": "Security Incidents in South Sudan: Trends and Patterns",
+    "section": "",
+    "text": "In South Sudan...\n  267 humanitarian workers have died,\n  466 humanitarian workers have been wounded,\n  158 humanitarian workers have been kidnapped."
+  },
+  {
+    "objectID": "southsudan.html#historical-context",
+    "href": "southsudan.html#historical-context",
+    "title": "Security Incidents in South Sudan: Trends and Patterns",
+    "section": "2.1 Historical Context",
+    "text": "2.1 Historical Context\nSudan gained independence in 1956, but long-standing divisions between the north and south led to decades of conflict. After two civil wars, South Sudan became an independent nation in 2011 following an overwhelming vote for separation. However, the country soon fell into crisis as political rivalry and ethnic tensions sparked a brutal civil war in 2013. Despite a peace agreement in 2018 and the formation of a unity government in 2020, the conflict has left deep scars, with widespread displacement, violence against civilians, and ongoing instability."
+  },
+  {
+    "objectID": "southsudan.html#recent-escalation",
+    "href": "southsudan.html#recent-escalation",
+    "title": "Security Incidents in South Sudan: Trends and Patterns",
+    "section": "2.2 Recent Escalation",
+    "text": "2.2 Recent Escalation\nSince early 2024, South Sudan has seen a sharp decline in security and humanitarian conditions. Intercommunal violence escalated, prompting the deployment of additional peacekeepers, while fighting in neighboring Sudan disrupted a key oil pipeline, slashing state revenue. In 2025, clashes between government and opposition forces intensified. South Sudan has experienced a dramatic deterioration in security and humanitarian conditions:\n\n7.7+ million people facing severe food insecurity—the worst in the country’s history\nWidespread flooding since May 2024 threatening millions more\nElections postponed to 2026 amid growing political tensions\nPossible spillover from Sudan’s conflict into border regions\n\n\nMap of Incidents \n\n\n\nMake this Notebook Trusted to load map: File -&gt; Trust Notebook"
+  },
+  {
+    "objectID": "southsudan.html#incident-frequency-over-time",
+    "href": "southsudan.html#incident-frequency-over-time",
+    "title": "Security Incidents in South Sudan: Trends and Patterns",
+    "section": "3.1 Incident Frequency Over Time",
+    "text": "3.1 Incident Frequency Over Time\n\n\n\n\n                                                \n\n\nFigure 1: Security incidents\n\n\n\n\n\n3.1.1 Analysis of Incident Trends\nThe line chart reveals dramatic fluctuations in security incidents affecting humanitarian operations in South Sudan:\n\nPre-independence period (1996-2010): Security incidents were minimal before South Sudan’s independence, with near-zero recorded incidents during this period when the region was still part of Sudan.\nPost-independence volatility (2011-2013): Following independence in 2011, incidents began a gradual increase, reflecting the fragility of the new state and emerging tensions between political factions.\nCivil war eruption (2013-2015): A sharp spike followed the outbreak of civil war in December 2013, with incidents more than tripling as violence spread along ethnic lines between forces loyal to President Kiir and former Vice President Machar.\nFailed peace attempts (2015-2018): Despite the first peace agreement, incident levels remained high with significant fluctuations, demonstrating the agreement’s limited effectiveness in improving security.\nPost-peace agreement surge (2018-2021): Contrary to expectations, the 2018 revitalized peace agreement and 2020 unity government formation coincided with the highest recorded levels of incidents, peaking at over 60 annual incidents in 2021.\nRecent dramatic decline (2022-2025): A precipitous drop occurred after 2022, with incidents falling to single digits by 2025 following Machar’s house arrest. This decline likely reflects reduced humanitarian presence rather than genuine security improvements, as it coincides with increased intercommunal violence and restricted access.\n\nThis pattern illustrates how formal political agreements in South Sudan have often failed to translate into improved security for humanitarian operations, with peaks in incidents paradoxically occurring during supposed “peace” periods, while recent declines may mask deteriorating conditions and shrinking humanitarian space."
+  },
+  {
+    "objectID": "southsudan.html#predominant-attack-types",
+    "href": "southsudan.html#predominant-attack-types",
+    "title": "Security Incidents in South Sudan: Trends and Patterns",
+    "section": "4.1 Predominant Attack Types",
+    "text": "4.1 Predominant Attack Types\n\n\n\n\n                                                \n\n\nFigure 2: Most common types of attacks\n\n\n\n\n\n4.1.1 Analysis of Attack Methods\nThe predominance of shootings and bodily assaults reflects the nature of the conflict in South Sudan, characterized by armed confrontations between government forces, opposition forces, and communal militias."
+  },
+  {
+    "objectID": "southsudan.html#attack-contexts",
+    "href": "southsudan.html#attack-contexts",
+    "title": "Security Incidents in South Sudan: Trends and Patterns",
+    "section": "4.2 Attack Contexts",
+    "text": "4.2 Attack Contexts\n\n\n\n\n                                                \n\n\nFigure 3: Security incidents by attack context\n\n\n\n\n\n4.2.1 Analysis of Attack Contexts\nThe prevalence of ambushes highlights the tactical nature of much of the violence in South Sudan, suggesting organized planning rather than spontaneous outbreaks. Ambushes are typically employed by armed groups with some level of military training and coordination, which aligns with the involvement of both formal military forces (SSPDF) and organized opposition groups (SPLA/IO)."
+  },
+  {
+    "objectID": "southsudan.html#location-of-attack",
+    "href": "southsudan.html#location-of-attack",
+    "title": "Security Incidents in South Sudan: Trends and Patterns",
+    "section": "4.3 Location of Attack",
+    "text": "4.3 Location of Attack\n\n\n\n\n                                                \n\n\nFigure 4: Security incidents by attack locations\n\n\n\n\n\n4.3.1 Analysis of Attack Locations\nThe majority of attacks on humanitarian workers occurred on roads, followed by public locations, highlighting extreme vulnerability during travel and in everyday environments."
+  },
+  {
+    "objectID": "southsudan.html#casualties-by-category",
+    "href": "southsudan.html#casualties-by-category",
+    "title": "Security Incidents in South Sudan: Trends and Patterns",
+    "section": "5.1 Casualties by Category",
+    "text": "5.1 Casualties by Category\n\n\n\n\n                                                \n\n\nFigure 5: Total casualties by category\n\n\n\n\n\n5.1.1 Analysis of Casualty Patterns\nThe dramatic disparity highlights how South Sudanese civilians bear the overwhelming burden of the conflict. While international aid workers and peacekeepers face significant risks (as shown by the approximately 75 casualties), the impact on the local population is more than ten times greater."
+  },
+  {
+    "objectID": "southsudan.html#top-5-most-impactful-security-incidents",
+    "href": "southsudan.html#top-5-most-impactful-security-incidents",
+    "title": "Security Incidents in South Sudan: Trends and Patterns",
+    "section": "6.1 Top 5 Most Impactful Security Incidents",
+    "text": "6.1 Top 5 Most Impactful Security Incidents\n\n\n\n\nTable 1\n\n\n\n                                                \n\n\n\n\n\n\n6.1.1 Analysis of Major Incidents\nRoad ambushes appear to be a common tactic, with three significant incidents on roads in 2018 affecting 10-12 people each. This aligns with the earlier analysis showing ambushes as the most frequent attack method. The sample shows multiple significant incidents in 2018, which aligns with the period following the signing of the Revitalized Peace Agreement. This suggests that despite political agreements at the national level, security incidents continued to threaten civilians and aid operations on the ground.\nFor more detailed information on the South Sudan conflict timeline, see the Council on Foreign Relations Conflict Tracker."
+  },
+  {
+    "objectID": "southsudan.html#for-security-planning",
+    "href": "southsudan.html#for-security-planning",
+    "title": "Security Incidents in South Sudan: Trends and Patterns",
+    "section": "7.1 For Security Planning",
+    "text": "7.1 For Security Planning\n\nDevelop specialized road movement protocols with multiple alternative routes when possible\nEstablish robust communications systems that function in remote areas with limited infrastructure\nCreate context-specific security trainings focusing on ambush prevention and response\nImplement staff tracking systems with regular check-in procedures during field movements\nInstall additional physical protection for vehicles operating in high-risk areas"
+  },
+  {
+    "objectID": "southsudan.html#for-humanitarian-organizations",
+    "href": "southsudan.html#for-humanitarian-organizations",
+    "title": "Security Incidents in South Sudan: Trends and Patterns",
+    "section": "7.2 For Humanitarian Organizations",
+    "text": "7.2 For Humanitarian Organizations\n\nEmphasize community acceptance strategies to mitigate targeting risks\nInvest in national staff security with equal protection measures and evacuation planning\nDevelop flexible programming modalities that can adapt to rapid security changes\nConsider operational partnerships that expand access while maintaining security standards\nBalance risk mitigation with humanitarian imperatives through principled engagement\n\n\n7.2.1 For Future Research\n\nInvestigate the relationship between political transitions and security incident patterns\nAnalyze the changing targeting patterns between national and international personnel\nExamine community-based protection mechanisms that have proven effective\nStudy the effectiveness of different security approaches in the South Sudan context\nExplore correlations between food insecurity and security incidents\n\nBy providing a data-driven understanding of security patterns in South Sudan, this analysis aims to contribute to safer and more effective operations in this challenging environment."
+  },
+  {
+    "objectID": "intro.html#research-questions",
+    "href": "intro.html#research-questions",
+    "title": "Humanitarian Aid Under Fire",
+    "section": "2.1 Research Questions",
+    "text": "2.1 Research Questions\n\n\n\nThis research seeks to answer four fundamental questions about humanitarian security:\n\n\n\n\n\nflowchart TD\n    classDef primary fill:#e1f5fe,stroke:#0288d1,stroke-width:2px\n    classDef secondary fill:#f0f4f8,stroke:#4682b4,stroke-width:1px\n    classDef highlight fill:#fce4ec,stroke:#d81b60,stroke-width:2px\n\n    title[(\"Security Incident Analysis&lt;br&gt;Research Questions\")] \n    title --&gt; A & B & C & D\n    \n    A[\"What types of attacks are&lt;br&gt;most common?\"]:::primary\n    \n    B[\"How does violence vary by&lt;br&gt;year and political event?\"]:::primary\n    \n    C[\"How does risk differ for national&lt;br&gt;vs. international staff?\"]:::primary\n    \n    D[\"What contextual factors shape&lt;br&gt;security patterns?\"]:::primary"
+  },
+  {
+    "objectID": "intro.html#methodology",
+    "href": "intro.html#methodology",
+    "title": "Humanitarian Aid Under Fire",
+    "section": "2.2 Methodology",
+    "text": "2.2 Methodology\nThis project is broken into three main parts. First, we conduct a global analysis of all countries to uncover global trends in humanitarian security incidents. Next, we take a closer look at eight contemporary conflict hotspots—Afghanistan, Democratic Republic of Congo (DRC), Mali, Palestine, Somalia, South Sudan, Sudan, and Syria—to explore country-specific patterns and challenges. Lastly, throughout our analysis, we encountered a significant number of unknown values; we examine the implications of this missing data and reflect on how uncertainty shapes our understanding of humanitarian risk."
+  },
+  {
+    "objectID": "intro.html#why-these-eight-countries",
+    "href": "intro.html#why-these-eight-countries",
+    "title": "Humanitarian Aid Under Fire",
+    "section": "3.1 Why These Eight Countries?",
+    "text": "3.1 Why These Eight Countries?\n\nThese countries consistently rank among those with the highest security incident rates, both historically and over the past 15 years. Mali emerges as a major hotspot primarily in the past 15 years.\n\n\n\n\n\n\n\n\n\nAlthough they represent just 8.4% of the countries in the dataset, these eight countries account for 63.8% of all recorded incidents.\n\n\n\n5,375 humanitarian aid workers have been affected by the violence in these countries."
+  },
+  {
+    "objectID": "intro.html#key-findings",
+    "href": "intro.html#key-findings",
+    "title": "Humanitarian Aid Under Fire",
+    "section": "3.2 Key Findings",
+    "text": "3.2 Key Findings\n\n3.2.1 Staff Nationality and Casualty Patterns\nThere is a consistent disparity in security incidents affecting national versus international staff:\n\nNational staff account for a significant amount of all casualities (killed, wounded, and kidnapped)\n\nThis pattern represents both an operational challenge and an ethical concern for humanitarian organizations attempting to manage risk equitably.\n\n\n\n\n    Humanitarian Security Incidents by Country\n\n\n\n\n\n\n\n\n3.2.2 Attack Methods, Contexts, and Locations\nAttack methods, contexts, and locations vary significantly across these eight conflict zones, reflecting differences in conflict dynamics, armed actor capabilities, and tactical objectives:\n\n\n\n\n    Top Three Attack Methods, Contexts & Locations by Country\n\n\n    0–49\n    50–99\n    100–149\n    150+\n\n\n\n\n\n\nHumanitarian security threats vary widely, with common attack methods including kidnappings, ambushes, shootings, and exposure to crossfire. These threats often occur during travel or in insecure compounds, highlighting the need for context-specific strategies. Ambushes require secure movement planning, crossfire zones need early warning systems and shelter, and areas prone to kidnappings or compound attacks demand staff training and physical site protection. Road travel remains especially risky, emphasizing the importance of route assessments and convoy protocols to safeguard aid workers.\n\n\n3.2.3 Political Transitions Create Vulnerability Windows\nSecurity incidents consistently spike during political turmoil. Contributing factors identified in our analysis include:\n\nPeace agreements\nCoups and regime changes\nTerritorial control shifts\n\n\n\n\n  Select a country below to learn more about the conflict it has faced.\n\n\n\n  \n    \n      Syria\n    \n  \n  \n  \n    \n      Occupied Palestinian Territories\n    \n  \n  \n  \n    \n      Afghanistan\n    \n  \n  \n  \n    \n      Somalia\n    \n  \n  \n  \n    \n      South Sudan\n    \n  \n  \n  \n    \n      Sudan\n    \n  \n  \n  \n    \n      DR Congo\n    \n  \n  \n  \n    \n      Mali\n    \n  \n\n\n\n\n\n3.2.4 Missing Context, Hidden Risks\nMissing data remains a major challenge. In several countries, over one-third of incidents lack key contextual information—limiting our ability to fully understand patterns of violence and potentially underrepresenting specific threats.\n\n\n\n\n\n\n\n\n\nDue to uneven documentation quality, we prioritized variables with higher data completeness—namely location, means of attack, and attack context—as the main points of analysis, reflecting a reporting emphasis on “what” happened rather than “who” was responsible."
+  },
+  {
+    "objectID": "intro.html#implications-from-key-findings",
+    "href": "intro.html#implications-from-key-findings",
+    "title": "Humanitarian Aid Under Fire",
+    "section": "4.1 Implications from Key Findings",
+    "text": "4.1 Implications from Key Findings\n\nSecurity strategies must be context-specific\nPatterns of violence vary widely by country—kidnappings, ambushes, aerial bombardments—making one-size-fits-all protocols ineffective.\nNational staff face disproportionate risk\nAcross all regions, national personnel experience more casualties than international staff, raising urgent ethical and operational concerns.\nPolitical transitions increase risk\nSecurity incidents often spike during leadership changes, peace deals, or shifts in territorial control, creating windows of heightened vulnerability.\nLower incident counts don’t always signal improvement\nA decline in reported attacks may reflect aid withdrawal or underreporting, especially in high-unknown-data contexts—not necessarily increased safety.\nData gaps obscure key risks\nIn many countries, records lack crucial context, limiting the ability to design fully informed security strategies."
+  },
+  {
+    "objectID": "intro.html#recommendations-for-humanitarian-organizations",
+    "href": "intro.html#recommendations-for-humanitarian-organizations",
+    "title": "Humanitarian Aid Under Fire",
+    "section": "4.2 Recommendations for Humanitarian Organizations",
+    "text": "4.2 Recommendations for Humanitarian Organizations\n\n4.2.1 Security Planning\n\nDevelop country-specific protocols based on the dominant attack methods and risk contexts.\nEnsure equity in protection policies, providing national staff with safety measures equivalent to those of international personnel.\nIntegrate early warning systems tied to political events and local shifts in control.\nImprove data collection and completeness to better understand risk environments and adapt security policies in real time.\n\n\n\n4.2.2 Context-Specific Security Measures\n\nIn ambush-heavy settings (e.g., Sudan, South Sudan, DRC, Mali): Prioritize secure transportation, journey management, and convoy procedures.\nIn urban conflict or aerial threat zones (e.g., Syria, Palestine): Invest in shelter infrastructure and real-time conflict tracking.\nIn high kidnap-risk regions (e.g., Afghanistan, Somalia, Mali): Emphasize low-profile operations, staff movement protocols, and abduction response training."
+  },
+  {
+    "objectID": "intro.html#recommendations-for-future-research",
+    "href": "intro.html#recommendations-for-future-research",
+    "title": "Humanitarian Aid Under Fire",
+    "section": "4.3 💡 Recommendations for Future Research",
+    "text": "4.3 💡 Recommendations for Future Research\n\nInvestigate differences in outcomes and risk between local and international personnel.\nEvaluate which security practices are most effective across different conflict types.\nExplore how climate stressors intersect with violence and impact aid operations."
+  },
+  {
+    "objectID": "af.html",
+    "href": "af.html",
+    "title": "Security Incidents in Afghanistan: Trends and Patterns",
+    "section": "",
+    "text": "In Afghanistan...\n  486 humanitarian workers have died,\n  396 humanitarian workers have been wounded,\n  472 humanitarian workers have been kidnapped."
+  },
+  {
+    "objectID": "af.html#historical-context",
+    "href": "af.html#historical-context",
+    "title": "Security Incidents in Afghanistan: Trends and Patterns",
+    "section": "2.1 Historical Context",
+    "text": "2.1 Historical Context\nAfghanistan has experienced over four decades of continuous conflict since the Soviet invasion in 1979. Following the Soviet withdrawal in 1989, the country descended into civil war, eventually leading to Taliban rule from 1996 to 2001. After the September 11, 2001 attacks, a US-led coalition overthrew the Taliban regime, establishing the Islamic Republic of Afghanistan. The subsequent two decades saw ongoing insurgency, with the Taliban gradually regaining control of territory despite the presence of international forces (Foreign Relations 2024). Key developments included:\n\n2001-2014: NATO-led International Security Assistance Force (ISAF) mission\n2014-2021: NATO Resolute Support Mission focused on training Afghan forces\n2020: US-Taliban peace agreement signed in Doha, Qatar\nAugust 2021: Taliban takeover following US and NATO withdrawal"
+  },
+  {
+    "objectID": "af.html#recent-escalation",
+    "href": "af.html#recent-escalation",
+    "title": "Security Incidents in Afghanistan: Trends and Patterns",
+    "section": "2.2 Recent Escalation",
+    "text": "2.2 Recent Escalation\nFollowing the Taliban’s return to power in August 2021, Afghanistan has faced multiple interconnected crises:\n\nApproximately 28 million people requiring humanitarian assistance\nPolitical transformation under Taliban governance\nEconomic collapse and banking sector crisis\nSevere humanitarian emergency affecting most of the population\nIncreasing security threats from ISIS-Khorasan (ISIS-K)\nNatural disasters including earthquakes and drought\nInternational isolation and sanctions affecting aid delivery\n\nThese factors have created a challenging operational environment for humanitarian organizations, with significant implications for security risk management.\n\nMap of Incidents \n\n\n\nMake this Notebook Trusted to load map: File -&gt; Trust Notebook"
+  },
+  {
+    "objectID": "af.html#incident-frequency-over-time",
+    "href": "af.html#incident-frequency-over-time",
+    "title": "Security Incidents in Afghanistan: Trends and Patterns",
+    "section": "3.1 Incident Frequency Over Time",
+    "text": "3.1 Incident Frequency Over Time\n\n\n\n\n                                                \n\n\nFigure 1: Security incidents\n\n\n\n\n\n3.1.1 Analysis of Incident Trends\nThe line chart reveals a distinctive pattern in security incidents in Afghanistan:\n\nInitial low levels (1996-2002): Following Taliban rule and early in the US invasion, security incidents affecting humanitarian workers remained relatively low.\nSteady increase (2003-2009): A gradual rise in incidents coincided with expanding insurgency operations and the US troop surge, reflecting deteriorating security conditions.\nPeak period (2010-2014): Incident levels reached their highest point during the later years of NATO combat operations, with a dramatic spike in 2013 representing the most dangerous period for humanitarian operations.\nSharp decline (2015-2016): Following the transition to the NATO Resolute Support Mission and reduced international military footprint, incidents declined significantly.\nFluctuating lower levels (2017-2025): Despite periodic increases, incidents have generally remained lower than during the peak conflict years, with a continued downward trend following the Taliban’s return to power in 2021.\n\nThis pattern suggests that humanitarian security incidents were paradoxically more frequent during periods of intensive international military operations than during Taliban governance, challenging conventional assumptions about operational security risk factors in Afghanistan."
+  },
+  {
+    "objectID": "af.html#predominant-attack-types",
+    "href": "af.html#predominant-attack-types",
+    "title": "Security Incidents in Afghanistan: Trends and Patterns",
+    "section": "4.1 Predominant Attack Types",
+    "text": "4.1 Predominant Attack Types\n\n\n\n\n                                                \n\n\nFigure 2: Most common types of attacks\n\n\n\n\n\n4.1.1 Analysis of Attack Methods\n\nKidnapping dominance: The high frequency of kidnapping incidents reflects Afghanistan’s complex security environment where abductions serve multiple purposes - from financial gain through ransoms to political leverage. This creates significant risks for both international and local personnel.\nArmed violence: Shooting incidents represent the second most frequent attack type, indicating the widespread availability of firearms and their regular use in security incidents. This aligns with Afghanistan’s history of armed conflict and the proliferation of weapons."
+  },
+  {
+    "objectID": "af.html#attack-contexts",
+    "href": "af.html#attack-contexts",
+    "title": "Security Incidents in Afghanistan: Trends and Patterns",
+    "section": "4.2 Attack Contexts",
+    "text": "4.2 Attack Contexts\n\n\n\n\n                                                \n\n\nFigure 3: Security incidents by attack context\n\n\n\n\n\n4.2.1 Analysis of Attack Contexts\n\nAmbushes represent a significant proportion of incidents, indicating the ongoing active conflict environment\nDirect targeted attacks and raids account for many incidents, showing deliberate targeting rather than collateral impact"
+  },
+  {
+    "objectID": "af.html#location-of-attack",
+    "href": "af.html#location-of-attack",
+    "title": "Security Incidents in Afghanistan: Trends and Patterns",
+    "section": "4.3 Location of Attack",
+    "text": "4.3 Location of Attack\n\n\n\n\n                                                \n\n\nFigure 4: Most common attack locations\n\n\n\n\n\n4.3.1 Analysis of Attack Locations\n\nRoads are the most common setting for incidents, underscoring ongoing risks associated with travel.\nA significant number of incidents are marked as unknown, revealing critical gaps in situational reporting and data collection."
+  },
+  {
+    "objectID": "af.html#casualties-by-category",
+    "href": "af.html#casualties-by-category",
+    "title": "Security Incidents in Afghanistan: Trends and Patterns",
+    "section": "5.1 Casualties by Category",
+    "text": "5.1 Casualties by Category\n\n\n\n\n                                                \n\n\nFigure 5: Total casualties by category\n\n\n\n\n\n5.1.1 Analysis of Casualty Patterns\nThe stacked bar chart reveals a stark disparity in how security incidents affect different population groups in Afghanistan:\n\nAfghan nationals have suffered significantly higher casualties across all categories\n\nThis pattern is not unusual in conflict zones, where local populations typically bear the brunt of violence. However, the scale of the difference is notable."
+  },
+  {
+    "objectID": "af.html#top-5-most-impactful-security-incidents",
+    "href": "af.html#top-5-most-impactful-security-incidents",
+    "title": "Security Incidents in Afghanistan: Trends and Patterns",
+    "section": "6.1 Top 5 Most Impactful Security Incidents",
+    "text": "6.1 Top 5 Most Impactful Security Incidents\n\n\n\n\nTable 1\n\n\n\n                                                \n\n\n\n\n\n\n6.1.1 Analysis of Major Incidents\nThe table above highlights the five most impactful security incidents in Afghanistan based on the total number of people affected. These high-casualty events reveal several important patterns:\n\nThe most severe incident occurred in 2015 at a project site, resulting in 49 casualties (14 killed and 35 wounded), indicating the vulnerability of development projects in Afghanistan\nThe incidents span from 2009 to 2021, demonstrating that high-impact security events have been a persistent feature of the Afghan security landscape across different phases of the conflict\nThree of the five top incidents resulted in fatalities, while two incidents (both with 12 affected individuals) show no deaths or injuries, suggesting these were likely kidnapping incidents\n\nThese high-impact events, while relatively rare, account for a disproportionate share of total casualties.\nFor more detailed information on the Afghanistan conflict timeline, see the Council on Foreign Relations Conflict Tracker."
+  },
+  {
+    "objectID": "af.html#for-security-planning",
+    "href": "af.html#for-security-planning",
+    "title": "Security Incidents in Afghanistan: Trends and Patterns",
+    "section": "7.1 For Security Planning",
+    "text": "7.1 For Security Planning\n\nImplement robust physical security measures for compounds and offices\nDevelop comprehensive convoy security protocols with route risk assessments\nMaintain low-profile operations in high-risk areas\nEstablish clear kidnapping prevention and response procedures"
+  },
+  {
+    "objectID": "af.html#for-humanitarian-organizations",
+    "href": "af.html#for-humanitarian-organizations",
+    "title": "Security Incidents in Afghanistan: Trends and Patterns",
+    "section": "7.2 For Humanitarian Organizations",
+    "text": "7.2 For Humanitarian Organizations\n\nBalance operational effectiveness with security considerations when determining fixed vs. mobile programming\nInvest in local acceptance strategies, especially given the changing political landscape\nDevelop contingency plans for periods of heightened risk"
+  },
+  {
+    "objectID": "af.html#for-future-research",
+    "href": "af.html#for-future-research",
+    "title": "Security Incidents in Afghanistan: Trends and Patterns",
+    "section": "7.3 For Future Research",
+    "text": "7.3 For Future Research\n\nExamine the relationship between political transitions and security incident patterns\nInvestigate the effectiveness of different security approaches in the post-2021 context\nCompare security incidents affecting humanitarian versus development actors\n\nBy providing a data-driven understanding of security patterns in Afghanistan, this analysis aims to contribute to safer and more effective operations in this challenging environment."
+  },
+  {
+    "objectID": "palestine.html",
+    "href": "palestine.html",
+    "title": "Security Incidents in Palestine: Trends and Patterns",
+    "section": "",
+    "text": "In Palestine...\n  431 humanitarian workers have died,\n  146 humanitarian workers have been wounded,\n  2 humanitarian workers have been kidnapped."
+  },
+  {
+    "objectID": "palestine.html#historical-context",
+    "href": "palestine.html#historical-context",
+    "title": "Security Incidents in Palestine: Trends and Patterns",
+    "section": "2.1 Historical Context",
+    "text": "2.1 Historical Context\nPalestine has experienced a complex and turbulent history of conflict that has significantly intensified in recent times (Foreign Relations 2024). The current crisis stems from decades of territorial disputes and failed peace efforts:\n\n1948: Israel displaced hundreds of thousands of Palestinians\n1967: Six-Day War led to Israeli control of Gaza Strip, West Bank, and East Jerusalem\n1990s: Oslo Accords established limited Palestinian self-governance\n2006: Hamas won Palestinian elections and took control of Gaza\n2014 & 2021: Major confrontations between Hamas and Israel"
+  },
+  {
+    "objectID": "palestine.html#recent-escalation",
+    "href": "palestine.html#recent-escalation",
+    "title": "Security Incidents in Palestine: Trends and Patterns",
+    "section": "2.2 Recent Escalation",
+    "text": "2.2 Recent Escalation\nThe situation dramatically escalated on October 7, 2023, when Hamas launched a surprise attack on Israel, killing over 1,300 Israelis and taking hundreds hostage. Israel responded with a full-scale war in Gaza that has had devastating humanitarian consequences:\n\nApproximately 90% of Gaza’s population displaced\nOver 46,000 Palestinian casualties reported\nDestruction of essential infrastructure including hospitals\nSevere humanitarian crisis with widespread food insecurity\nLimited access to humanitarian aid\n\nA ceasefire was brokered in January 2025, but its implementation remains uncertain amid ongoing political tensions.\n\nMap of Incidents \n\n\n\nMake this Notebook Trusted to load map: File -&gt; Trust Notebook"
+  },
+  {
+    "objectID": "palestine.html#incident-frequency-over-time",
+    "href": "palestine.html#incident-frequency-over-time",
+    "title": "Security Incidents in Palestine: Trends and Patterns",
+    "section": "3.1 Incident Frequency Over Time",
+    "text": "3.1 Incident Frequency Over Time\n\n\n\n\n                                                \n\n\nFigure 1: Security incidents\n\n\n\n\n\n3.1.1 Analysis of Incident Trends\nThe line chart reveals a striking pattern in security incidents in the Occupied Palestinian Territories:\n\nRelative stability (2002-2022): For nearly two decades, incident levels remained relatively stable, typically below 10 incidents per year with occasional modest spikes around 2010, 2014, and 2020, corresponding to periods of heightened tension.\nUnprecedented surge (2023-2024): A dramatic shift occurred after the October 7, 2023 Hamas attack, with incidents surging to 68 in 2024 - representing approximately 43% of all recorded incidents in the entire dataset.\nHistorical context: While periodic cycles of violence have occurred historically, the 2023-2024 escalation represents a significant departure from previous patterns in both scale and intensity.\n\nThis finding highlights the unprecedented nature of the current conflict, which has fundamentally altered security dynamics throughout the Palestinian territories."
+  },
+  {
+    "objectID": "palestine.html#predominant-attack-types",
+    "href": "palestine.html#predominant-attack-types",
+    "title": "Security Incidents in Palestine: Trends and Patterns",
+    "section": "4.1 Predominant Attack Types",
+    "text": "4.1 Predominant Attack Types\n\n\n\n\n                                                \n\n\nFigure 2: Most common types of attacks\n\n\n\n\n\n4.1.1 Analysis of Attack Methods\nAerial bombardment is the most common type of attack in the Occupied Palestinian Territories, followed by shooting incidents. This distribution offers important insights:\n\nMilitary nature of conflict: The predominance of aerial bombardment suggests a significant role of military forces with air capabilities in the conflict.\nDiversity of threats: Beyond the top two methods, the data shows a range of attack types including shelling, bodily assault, and various forms of explosives.\nCivilian vulnerability: Many of these attack types affect wide areas, putting humanitarian aid at significant risk even when not directly targeted."
+  },
+  {
+    "objectID": "palestine.html#attack-contexts",
+    "href": "palestine.html#attack-contexts",
+    "title": "Security Incidents in Palestine: Trends and Patterns",
+    "section": "4.2 Attack Contexts",
+    "text": "4.2 Attack Contexts\n\n\n\n\n                                                \n\n\nFigure 3: Security incidents by attack context\n\n\n\n\n\n4.2.1 Analysis of Attack Contexts\nCombat/Crossfire is overwhelmingly the most common context for security incidents, accounting for over 100 incidents. This finding has important implications:\n\nCollateral impact: Many incidents occur during active combat situations where individuals are caught between opposing forces rather than being directly targeted.\nConflict zone risks: Being in or near active conflict zones represents the greatest security risk in the region.\nSecurity planning: Different contexts require different security approaches - avoiding combat zones entirely may be more effective than other security measures."
+  },
+  {
+    "objectID": "palestine.html#location-of-attack",
+    "href": "palestine.html#location-of-attack",
+    "title": "Security Incidents in Palestine: Trends and Patterns",
+    "section": "4.3 Location of Attack",
+    "text": "4.3 Location of Attack\n\n\n\n\n                                                \n\n\nFigure 4: Security incidents by attack location\n\n\n\n\n\n4.3.1 Analysis of Attack Locations\nMost incidents occurred at project sites, on roads, and in public spaces, though a significant portion remain at unidentified locations."
+  },
+  {
+    "objectID": "palestine.html#casualties-by-category",
+    "href": "palestine.html#casualties-by-category",
+    "title": "Security Incidents in Palestine: Trends and Patterns",
+    "section": "5.1 Casualties by Category",
+    "text": "5.1 Casualties by Category\n\n\n\n\n                                                \n\n\nFigure 5: Total casualties by category\n\n\n\n\n\n5.1.1 Analysis of Casualty Patterns\nThere is a disparity in the impact of security incidents on different population groups:\n\nDisproportionate local impact: Nationals (local Palestinians) have suffered significantly higher casualties compared to international personnel, in both fatalities and injuries.\nMinimal kidnapping incidents: Kidnapping appears to be exceedingly rare, with only one recorded case involving international personnel and none for nationals.\nScale of humanitarian crisis: The high casualty figures for nationals underscore the severe humanitarian impact of the conflict on local populations.\n\nThis pattern is not unusual in conflict zones, where local populations typically bear the brunt of violence. However, the scale of the difference is notable and has important implications for civilian protection and humanitarian programming."
+  },
+  {
+    "objectID": "palestine.html#top-5-most-impactful-security-incidents",
+    "href": "palestine.html#top-5-most-impactful-security-incidents",
+    "title": "Security Incidents in Palestine: Trends and Patterns",
+    "section": "6.1 Top 5 Most Impactful Security Incidents",
+    "text": "6.1 Top 5 Most Impactful Security Incidents\n\n\n\n\nTable 1\n\n\n\n                                                \n\n\n\n\n\n\n6.1.1 Analysis of Major Incidents\nThe table above highlights the five most impactful security incidents in the Occupied Palestinian Territories based on the total number of people affected. The most severe incident occurred in October 2023, coinciding with the Hamas attack on October 7th and the subsequent Israeli military response.\nThese major incidents share several characteristics:\n\nRecent escalation: Most of the high-impact incidents occurred during the 2023-2024 conflict escalation.\nHigh casualty rates: These incidents resulted in significant casualties, showing the intensity of the recent conflict.\nCombat contexts: Most occurred in combat/crossfire situations, consistent with the broader pattern of incidents in the region.\n\nFor more detailed information on the Israeli-Palestinian conflict timeline, see the Council on Foreign Relations Conflict Tracker."
+  },
+  {
+    "objectID": "palestine.html#for-security-planning",
+    "href": "palestine.html#for-security-planning",
+    "title": "Security Incidents in Palestine: Trends and Patterns",
+    "section": "7.1 For Security Planning",
+    "text": "7.1 For Security Planning\n\nDevelop protocols specifically addressing risks from aerial bombardment and crossfire situations\nImplement enhanced early warning systems to monitor combat zone developments\nEstablish clear evacuation procedures for areas at high risk of becoming combat zones"
+  },
+  {
+    "objectID": "palestine.html#for-humanitarian-organizations",
+    "href": "palestine.html#for-humanitarian-organizations",
+    "title": "Security Incidents in Palestine: Trends and Patterns",
+    "section": "7.2 For Humanitarian Organizations",
+    "text": "7.2 For Humanitarian Organizations\n\nPrioritize protection measures for local staff, who face disproportionate security risks"
+  },
+  {
+    "objectID": "palestine.html#for-future-research",
+    "href": "palestine.html#for-future-research",
+    "title": "Security Incidents in Palestine: Trends and Patterns",
+    "section": "7.3 For Future Research",
+    "text": "7.3 For Future Research\n\nContinue monitoring security trends, especially given the recent escalation\nInvestigate the specific factors contributing to the disproportionate impact on local populations\nExamine the effectiveness of different security measures in reducing casualties\n\nBy providing a data-driven understanding of security patterns in the Occupied Palestinian Territories, this analysis aims to contribute to safer and more effective operations in this challenging environment."
+  },
+  {
+    "objectID": "international.html#annual-trends-at-a-glance",
+    "href": "international.html#annual-trends-at-a-glance",
+    "title": "Security Incidents Analysis: Global Patterns and Trends",
+    "section": "4.1 Annual Trends at a Glance",
+    "text": "4.1 Annual Trends at a Glance\nThe chart below offers a simple view of yearly totals across all countries, showing how global incident volume has risen over time.\n\n\n                                                \n\n\nThe bar chart shows:\n\nA general upward trend in reported incidents\nDistinct spikes likely linked to global conflicts or regional escalations\nPossible influence from improved data collection and reporting\n\nTogether, these visuals underscore how fluid the security landscape is—and why real-time analysis and localized response strategies matter."
+  },
+  {
+    "objectID": "international.html#regional-trends-at-a-glance",
+    "href": "international.html#regional-trends-at-a-glance",
+    "title": "Security Incidents Analysis: Global Patterns and Trends",
+    "section": "4.2 Regional Trends at a Glance",
+    "text": "4.2 Regional Trends at a Glance\nBy examining individual countries, we can pinpoint emerging hotspots as well as regions showing signs of improved security.\nThe animated choropleth map below shows how the distribution of security incidents has shifted over the years. Darker colors indicate higher numbers of incidents.\n\n\n                                                \n\n\n\nThis visualization reveals several insights:\n\nSome countries that were previously security hotspots have shown improvement\nNew areas of concern have emerged in recent years\nThe total number of recorded incidents shows notable year-to-year variation\n\nYou can use the play button to animate the map through time, or manually select specific years using the slider."
+  },
+  {
+    "objectID": "international.html#analyze-individual-countries",
+    "href": "international.html#analyze-individual-countries",
+    "title": "Security Incidents Analysis: Global Patterns and Trends",
+    "section": "8.1 Analyze Individual Countries",
+    "text": "8.1 Analyze Individual Countries\nThe next phase of our analysis dives deeper into individual country reports. These pages explore national-level trends, highlight localized patterns of violence, and provide tailored insights for each context. Click any country below to explore its specific security profile.\n\nPalestine\nAfghanistan\nDR Congo\nSyria\nSomalia\nMali\nSouth Sudan\nSudan"
+  },
+  {
+    "objectID": "appendix.html",
+    "href": "appendix.html",
+    "title": "Appendix",
+    "section": "",
+    "text": "Executive Summary\nOverview of the project goals, data source (AWSD), key research questions, and why analyzing violence against aid workers matters.\nData Cleaning\nDetails on how the raw data was processed for analysis, including missing value handling and variable selection.\nGlobal Analysis\nA global-level analysis of trends, followed by the identification of countries with the highest number of security incidents for deeper investigation.\nExploring the Unknown\nInvestigates patterns of missing or “Unknown” data in security reports, revealing systematic information gaps by country and attribute.\n\n\n\n\nCountry-specific deep dives, each including historical context, temporal and spatial trends, attack characteristics, casualty patterns, and strategic recommendations:\n\n🇵🇸 Palestine\nFocus on the October 2023 escalation and impacts of aerial bombardment on aid operations in Gaza and the West Bank.\n🇦🇫 Afghanistan\nTracks violence across regimes—from Taliban rule to NATO presence to the current Islamic Emirate—highlighting shifts in targeting patterns.\n🇨🇩 DR Congo\nExplores complex violence in eastern DRC driven by armed groups, with a focus on mobility risks and localized conflict dynamics.\n🇸🇾 Syria\nAnalyzes conflict phases from civil war to regime collapse in 2024, with emphasis on aerial attacks and frontline crossfire incidents.\n🇸🇴 Somalia\nDetails threats from Al-Shabaab, patterns of ambushes and kidnappings, and the impact of climate shocks on humanitarian security.\n🇲🇱 Mali\nHighlights post-coup violence, the rise in kidnapping, and the shift from international to local staff exposure following MINUSMA withdrawal.\n🇸🇸 South Sudan\nInvestigates intercommunal conflict, targeted attacks on convoys, and the relationship between aid presence and violence.\n🇸🇩 Sudan\nFocuses on the humanitarian fallout from the 2023 civil war, including documentation challenges and increasing targeting of aid facilities.\n\n\n\n\n\nLLM Log\nA running log of how large language models were used throughout the project for analysis, text generation, and research assistance."
+  },
+  {
+    "objectID": "appendix.html#project-sections",
+    "href": "appendix.html#project-sections",
+    "title": "Appendix",
+    "section": "",
+    "text": "Executive Summary\nOverview of the project goals, data source (AWSD), key research questions, and why analyzing violence against aid workers matters.\nData Cleaning\nDetails on how the raw data was processed for analysis, including missing value handling and variable selection.\nGlobal Analysis\nA global-level analysis of trends, followed by the identification of countries with the highest number of security incidents for deeper investigation.\nExploring the Unknown\nInvestigates patterns of missing or “Unknown” data in security reports, revealing systematic information gaps by country and attribute.\n\n\n\n\nCountry-specific deep dives, each including historical context, temporal and spatial trends, attack characteristics, casualty patterns, and strategic recommendations:\n\n🇵🇸 Palestine\nFocus on the October 2023 escalation and impacts of aerial bombardment on aid operations in Gaza and the West Bank.\n🇦🇫 Afghanistan\nTracks violence across regimes—from Taliban rule to NATO presence to the current Islamic Emirate—highlighting shifts in targeting patterns.\n🇨🇩 DR Congo\nExplores complex violence in eastern DRC driven by armed groups, with a focus on mobility risks and localized conflict dynamics.\n🇸🇾 Syria\nAnalyzes conflict phases from civil war to regime collapse in 2024, with emphasis on aerial attacks and frontline crossfire incidents.\n🇸🇴 Somalia\nDetails threats from Al-Shabaab, patterns of ambushes and kidnappings, and the impact of climate shocks on humanitarian security.\n🇲🇱 Mali\nHighlights post-coup violence, the rise in kidnapping, and the shift from international to local staff exposure following MINUSMA withdrawal.\n🇸🇸 South Sudan\nInvestigates intercommunal conflict, targeted attacks on convoys, and the relationship between aid presence and violence.\n🇸🇩 Sudan\nFocuses on the humanitarian fallout from the 2023 civil war, including documentation challenges and increasing targeting of aid facilities.\n\n\n\n\n\nLLM Log\nA running log of how large language models were used throughout the project for analysis, text generation, and research assistance."
+  },
+  {
+    "objectID": "delete.html",
+    "href": "delete.html",
+    "title": "Security Incidents Analysis: Global Patterns and Trends",
+    "section": "",
+    "text": "make an interactive map where i can add my own image as a marker for a security incident"
+  },
+  {
+    "objectID": "dr.html",
+    "href": "dr.html",
+    "title": "Security Incidents in Democratic Republic of Congo: Trends and Patterns",
+    "section": "",
+    "text": "In the Dominican Republic of Congo...\n  107 humanitarian workers have died,\n  129 humanitarian workers have been wounded,\n  212 humanitarian workers have been kidnapped."
+  },
+  {
+    "objectID": "dr.html#historical-context",
+    "href": "dr.html#historical-context",
+    "title": "Security Incidents in Democratic Republic of Congo: Trends and Patterns",
+    "section": "2.1 Historical Context",
+    "text": "2.1 Historical Context\nThe conflict in the Democratic Republic of Congo represents one of Africa’s most complex and enduring crises. Rooted in the aftermath of the 1994 Rwandan Genocide, the violence has evolved through two major regional wars—the First Congo War (1996-1997) and the Second Congo War (1998-2003)—which collectively resulted in millions of deaths. Despite formal peace agreements, eastern DRC has remained unstable, with over 120 different armed groups competing for territory, resources, and influence in the mineral-rich regions of North Kivu, South Kivu, and Ituri provinces (Foreign Relations 2024)."
+  },
+  {
+    "objectID": "dr.html#recent-escalation",
+    "href": "dr.html#recent-escalation",
+    "title": "Security Incidents in Democratic Republic of Congo: Trends and Patterns",
+    "section": "2.2 Recent Escalation",
+    "text": "2.2 Recent Escalation\nIn early 2025, M23 rebels, backed by Rwandan troops, captured Goma in eastern DRC, killing between 900-2,000 civilians and triggering mass displacement. This represented the culmination of escalating violence that began with M23’s resurgence in 2022 and their steady territorial gains throughout 2023. The situation had already deteriorated significantly following DRC’s contested December 2023 elections, which sparked nationwide unrest. During 2024, the humanitarian situation worsened dramatically, with:\n\n358,000 newly displaced people\n30% rise in violations against children\nFailure of the U.S.-brokered peace agreement from late 2023\nIntensification of conflict despite international diplomatic efforts\nSevere humanitarian access constraints in M23-controlled territories\n\n\nMap of Incidents \n\n\n\nMake this Notebook Trusted to load map: File -&gt; Trust Notebook"
+  },
+  {
+    "objectID": "dr.html#incident-frequency-over-time",
+    "href": "dr.html#incident-frequency-over-time",
+    "title": "Security Incidents in Democratic Republic of Congo: Trends and Patterns",
+    "section": "3.1 Incident Frequency Over Time",
+    "text": "3.1 Incident Frequency Over Time\n\n\n\n\n                                                \n\n\nFigure 1: Security incidents\n\n\n\n\n\n3.1.1 Analysis of Incident Trends\nThe line chart reveals a complex pattern of security incidents in the Democratic Republic of Congo:\n\nPost-war stabilization (2003-2006): Following the end of the Second Congo War, incidents remained relatively low but persistent, suggesting continued insecurity despite formal peace agreements.\nFirst wave of M23 (2008-2013): The emergence of the M23 rebellion in 2012 corresponded with fluctuating incident levels, though the defeat of M23 by UN forces in 2013 didn’t immediately reduce security incidents.\nDramatic surge (2018-2020): The most striking feature is the sharp spike in incidents following Felix Tshisekedi taking power in 2019, with incidents peaking at 27 in 2020 - the highest recorded level in the entire period.\nSteady decline with volatility (2020-2023): The M23 resurgence in 2022 and contested elections in 2023 corresponded with declining yet volatile incident patterns, suggesting changing rather than improving security dynamics.\nRecent drop (2025): The sharp decline in incidents following the M23 capture of Goma is notable, potentially indicating reduced humanitarian presence in conflict areas rather than improved security conditions.\n\nThis pattern highlights the complex relationship between political transitions, armed group activities, and humanitarian security incidents in DRC, where periods of apparent stability can mask underlying tensions that later erupt into violence."
+  },
+  {
+    "objectID": "dr.html#predominant-attack-types",
+    "href": "dr.html#predominant-attack-types",
+    "title": "Security Incidents in Democratic Republic of Congo: Trends and Patterns",
+    "section": "4.1 Predominant Attack Types",
+    "text": "4.1 Predominant Attack Types\n\n\n\n\n                                                \n\n\nFigure 2: Most common types of attacks\n\n\n\n\n\n4.1.1 Analysis of Attack Methods\nKidnapping and shooting are the predominant attack methods in the DRC conflict. Bodily assault represents the third most common tactic. The high prevalence of kidnappings aligns with documented tactics by armed groups in eastern DRC, particularly by militia groups seeking ransom or using abductions to intimidate local populations and establish territorial control."
+  },
+  {
+    "objectID": "dr.html#attack-contexts",
+    "href": "dr.html#attack-contexts",
+    "title": "Security Incidents in Democratic Republic of Congo: Trends and Patterns",
+    "section": "4.2 Attack Contexts",
+    "text": "4.2 Attack Contexts\n\n\n\n\n                                                \n\n\nFigure 3: Security incidents by attack context\n\n\n\n\n\n4.2.1 Analysis of Attack Contexts\nThe prevalence of ambushes reflects the tactical approach of armed groups operating in the DRC. The high number of ambushes aligns with the geographical characteristics of the conflict zone, where dense forests and limited road infrastructure create ideal conditions for surprise attacks by M23 rebels and other armed groups. The substantial number of unknown contexts points to the challenges in documenting incidents in remote areas with limited monitoring presence."
+  },
+  {
+    "objectID": "dr.html#location-of-attack",
+    "href": "dr.html#location-of-attack",
+    "title": "Security Incidents in Democratic Republic of Congo: Trends and Patterns",
+    "section": "4.3 Location of Attack",
+    "text": "4.3 Location of Attack\n\n\n\n\n                                                \n\n\nFigure 4: Most common attack locations\n\n\n\n\n\n4.3.1 Analysis of Attack Locations\nMost incidents occurred on roads, followed by a high proportion of unknown locations, highlighting both the risks of transit and limitations in reporting."
+  },
+  {
+    "objectID": "dr.html#casualties-by-category",
+    "href": "dr.html#casualties-by-category",
+    "title": "Security Incidents in Democratic Republic of Congo: Trends and Patterns",
+    "section": "5.1 Casualties by Category",
+    "text": "5.1 Casualties by Category\n\n\n\n\n                                                \n\n\nFigure 5: Total casualties by category\n\n\n\n\n\n5.1.1 Analysis of Casualty Patterns\nThe significantly higher rate of kidnappings among nationals compared to other casualty types reflects a tactical choice by armed groups in eastern DRC, who frequently use abductions to control territory, extract resources, and recruit fighters. This pattern aligns with reports from UN agencies documenting extensive use of kidnapping by the various groups. The disproportionate impact on nationals versus internationals highlights how Congolese civilians bear the overwhelming burden of the conflict. source"
+  },
+  {
+    "objectID": "dr.html#top-5-most-impactful-security-incidents",
+    "href": "dr.html#top-5-most-impactful-security-incidents",
+    "title": "Security Incidents in Democratic Republic of Congo: Trends and Patterns",
+    "section": "6.1 Top 5 Most Impactful Security Incidents",
+    "text": "6.1 Top 5 Most Impactful Security Incidents\n\n\n\n\nTable 1\n\n\n\n                                                \n\n\n\n\n\n\n6.1.1 Analysis of Major Incidents\nThe table reveals a pattern of security incidents in the DRC spanning two decades (1997-2017). The deadliest incident occurred during the 1997 First Congo War period with 10 fatalities.\nFor more detailed information on the Israeli-Palestinian conflict timeline, see the Council on Foreign Relations Conflict Tracker."
+  },
+  {
+    "objectID": "dr.html#for-security-planning",
+    "href": "dr.html#for-security-planning",
+    "title": "Security Incidents in Democratic Republic of Congo: Trends and Patterns",
+    "section": "7.1 For Security Planning",
+    "text": "7.1 For Security Planning\n\nImplement comprehensive journey management protocols with real-time risk assessments\nEstablish robust communication networks with regular check-in procedures during movements\nDevelop specific anti-kidnapping protocols and train staff on prevention and response\nConsider armed escorts on high-risk routes where appropriate and legally permissible"
+  },
+  {
+    "objectID": "dr.html#for-humanitarian-organizations",
+    "href": "dr.html#for-humanitarian-organizations",
+    "title": "Security Incidents in Democratic Republic of Congo: Trends and Patterns",
+    "section": "7.2 For Humanitarian Organizations",
+    "text": "7.2 For Humanitarian Organizations\n\nBalance operational presence with a thorough understanding of conflict dynamics in each area\nConsider remote programming models in areas with highest kidnapping risks\nPrioritize national staff security with equal investment in protection measures\nDevelop context-specific security training focusing on ambush prevention and response"
+  },
+  {
+    "objectID": "dr.html#for-future-research",
+    "href": "dr.html#for-future-research",
+    "title": "Security Incidents in Democratic Republic of Congo: Trends and Patterns",
+    "section": "7.3 For Future Research",
+    "text": "7.3 For Future Research\n\nAnalyze the effectiveness of different security approaches in reducing kidnapping risks\nExamine the long-term trends in security following major political transitions\nResearch community-based protection mechanisms that have proven effective in the DRC context\n\nBy providing a data-driven understanding of security patterns in the DR Congo, this analysis aims to contribute to safer and more effective operations in this challenging environment."
+  }
+]

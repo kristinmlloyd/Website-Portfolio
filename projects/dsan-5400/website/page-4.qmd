@@ -1,0 +1,62 @@
+---
+title: "Topic Modeling"
+format: 
+  html:
+    code-fold: true
+    toc: true
+execute:
+  warning: false
+  message: false
+---
+
+![](images/topic.png){width=200px}
+
+## Introduction
+
+In this analysis, we explore the dominant topics and themes covered by three major news sources. What do they emphasize? What subjects appear most frequently in their reporting? And what might these patterns reveal about potential media bias? To investigate these questions, we apply topic modeling—an unsupervised machine learning technique used to uncover hidden thematic structures within large collections of text.
+
+Specifically, we use **Latent Dirichlet Allocation (LDA)**, a widely used topic modeling algorithm that probabilistically assigns words to topics and identifies topic distributions across documents. For this project, we applied LDA to article headlines, identifying the top three most prominent topics for each news source, across each month and year. This allowed us to surface the most frequently discussed themes over time, within defined temporal and editorial contexts.
+
+LDA produced highly interpretable results and effectively distinguished between overlapping topics. For instance, it was able to differentiate between:
+
+- *trump/biden*
+- *impeachment/trump*
+
+—two topics centered on the same political figure but rooted in distinct narratives.
+
+The heatmaps below summarize these results, displaying the ten most common topics that appeared across the top three monthly topics for each source throughout the dataset. The top ten topics are displayed on the vertical axis, and the years (2015-2025) are on the horizontal, so the heatmap allows us to understand temporal patterns-- which topics appeared the most in which years? Let’s dive into what these patterns reveal.
+
+
+## ABC
+
+![](../results/topic_modeling/figures/abc_headline_topics_sklearn.png)
+
+
+ABC appears to report on a balanced set of topics, ranging from social issues regarding the police, domestic politics, and international news. This heatmap allows us to see that the topic police/shooting has appeared quite consistently over many years-- signaling that unfortunately, gun violence and police issues have persisted as a problem in this country. Other topics, such as covid/covid19 and russia/ukraine, *spiked* at certain points in time-- reflecting the timeliness and context of their importance.
+
+## FOX News
+
+![](../results/topic_modeling/figures/fox_headline_topics_sklearn.png)
+
+The most common topic that FOX News reported on over the years was biden/trump. Here, we see that FOX News reports far more exclusively on U.S. politics than ABC News.
+
+
+## MSNBC 
+
+![](../results/topic_modeling/figures/msnbc_headline_topics_sklearn.png)
+
+
+Again, MSNBC reports mostly exclusively on U.S. politics. And not just that-- it reports almost exclusively on the *other political side*. Nine out of the top ten topics included "trump". This is far more than the other two sources.
+
+<figure>
+ <iframe src="images/trump_coverage_table.html" width="100%" height="250px" frameborder="0"></iframe>
+</figure>
+
+
+# Findings
+
+- The politically leaning sources report on U.S. politics far more than any other subject, whereas ABC represented a more balanced and overarching news view
+- MSNBC reported on Trump far more than the other sources. 
+- There are interesting temporal trends in coverage, which we will further explore in the next page through half-life modeling!
+
+You can also explore these topics on the home page interactive calendar. Select a month, and check out the top three topics each source was reporting on in that snippet of time!

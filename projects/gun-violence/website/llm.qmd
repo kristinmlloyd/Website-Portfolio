@@ -1,0 +1,29 @@
+---
+title: "LLM Usage Log"
+format: 
+  html:
+    code-fold: true
+    toc: true
+---
+
+Throughout the development of this firearm mortality analysis project, we utilized large language models as a supplementary tool. This brief log documents how LLMs were incorporated while maintaining the educational value and originality of the work.
+
+### How LLMs Were Used
+
+- **Code assistance**: Helped troubleshoot errors and suggest syntax improvements for statistical analyses
+- **Visualization enhancements**: Provided ideas for clearer data visualizations
+- **Interpretation suggestions**: Offered alternative ways to interpret statistical findings
+- **Document organization**: Assisted with structuring the Quarto documents
+
+### Learning Process
+
+While LLMs provided technical assistance, they functionally served as an interactive reference rather than replacing the learning process. Throughout this project:
+
+- We developed a deeper understanding of regression techniques and their applications
+- We made all key analytical decisions and interpretations based on my understanding of the data
+- We critically evaluated LLM suggestions rather than implementing them without consideration
+- The conceptualization of the project and research questions remained entirely our own
+
+### Added Value Without Replacing Creativity
+
+The use of LLMs enhanced the project's execution without diminishing its educational or creative aspects.

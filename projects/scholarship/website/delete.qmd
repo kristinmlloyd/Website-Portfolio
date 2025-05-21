@@ -1,0 +1,47 @@
+---
+title: "Security Incidents Analysis: Global Patterns and Trends"
+format: 
+  html:
+    code-fold: true
+    toc: true
+    toc-depth: 3
+    number-sections: true
+    theme: cosmo
+    fig-width: 9
+    fig-height: 6
+    fig-dpi: 300
+    self-contained: true
+execute:
+  warning: false
+  message: false
+---
+
+```{python}
+#| label: setup
+#| include: false
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+import folium
+from folium.plugins import MarkerCluster
+from matplotlib.colors import LinearSegmentedColormap
+import warnings
+import plotly.express as px
+import plotly.graph_objects as go
+from IPython.display import display
+
+plt.rcParams['figure.figsize'] = (10, 6)
+warnings.filterwarnings('ignore', category=FutureWarning)
+sns.set_theme(style="whitegrid")
+
+palette = {"primary": "#FFBD59", "secondary": "#64C1FF", "danger": "#FF5252"}
+
+df = pd.read_csv("data/security_incidents_cleaned.csv")
+country_data = df[df['country'] == 'Occupied Palestinian Territories']
+
+```
+
+make an interactive map where i can add my own image as a marker for a security incident
+

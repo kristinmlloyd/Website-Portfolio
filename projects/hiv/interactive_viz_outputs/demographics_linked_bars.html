@@ -1,0 +1,543 @@
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Interactive HIV Visualization</title>
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 20px;
+                background-color: #121212;
+                color: white;
+            }
+            .chart-container {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-around;
+                width: 100%;
+            }
+            .chart {
+                width: 32%;
+                height: 500px;
+                margin-bottom: 20px;
+            }
+            .title {
+                text-align: center;
+                font-size: 24px;
+                margin-bottom: 20px;
+            }
+            .subtitle {
+                text-align: center;
+                font-size: 18px;
+                color: #cccccc;
+                margin-bottom: 10px;
+            }
+            .reset-btn {
+                display: block;
+                margin: 0 auto 20px;
+                padding: 10px 20px;
+                background-color: #f44336;
+                color: white;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                font-size: 16px;
+            }
+            .reset-btn:hover {
+                background-color: #d32f2f;
+            }
+            .filter-info {
+                text-align: center;
+                font-size: 16px;
+                margin-bottom: 20px;
+                min-height: 20px;
+                color: #cccccc;
+            }
+            .filter-list {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                margin-bottom: 20px;
+            }
+            .filter-tag {
+                background-color: #2a2a2a;
+                color: white;
+                padding: 5px 10px;
+                margin: 5px;
+                border-radius: 20px;
+                font-size: 14px;
+                display: flex;
+                align-items: center;
+            }
+            .remove-filter {
+                margin-left: 5px;
+                color: #f44336;
+                cursor: pointer;
+                font-weight: bold;
+            }
+            .chart-container {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                gap: 20px;
+                width: 100%;
+            }
+            .chart {
+                height: 500px;
+                width: 100%;
+            }
+            @media (max-width: 999px) {
+                .chart-container {
+                    grid-template-columns: 1fr;
+                }
+            }
+            @media (min-width: 1000px) and (max-width: 1399px) {
+                .chart-container {
+                    grid-template-columns: repeat(2, 1fr);
+                }
+                .chart:nth-child(3) {
+                    grid-column: span 2;
+                }
+            }
+            @media (min-width: 1400px) {
+                .chart-container {
+                    grid-template-columns: repeat(3, 1fr);
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="title">Demographic Breakdown: New HIV Diagnoses in the U.S., 2018</div>
+        <div class="subtitle">Click on any bar to filter it out from the visualization</div>
+        <button class="reset-btn" onclick="resetFilters()">Reset Filters</button>
+        <div id="filter-info" class="filter-info">No filters applied</div>
+        <div id="filter-list" class="filter-list"></div>
+        <div class="chart-container">
+            <div id="age-chart" class="chart"></div>
+            <div id="sex-chart" class="chart"></div>
+            <div id="race-chart" class="chart"></div>
+        </div>
+
+        <script>
+            // Store the data
+            const baseData = {
+                age: [{"Age": "13-24", "Count": 7964.0}, {"Age": "25-34", "Count": 13425.0}, {"Age": "35-44", "Count": 7165.0}, {"Age": "45-54", "Count": 5242.0}, {"Age": "55-64", "Count": 2886.0}, {"Age": "65+", "Count": 888.0}],
+                sex: [{"Sex": "Female", "Count": 7081.0}, {"Sex": "Male", "Count": 30489.0}],
+                race: [{"Race": "Black", "Count": 15388.0}, {"Race": "Hispanic", "Count": 10367.0}, {"Race": "White", "Count": 9218.0}, {"Race": "Multiple Races", "Count": 1541.0}, {"Race": "Asian", "Count": 837.0}, {"Race": "American Indian/Alaska Native", "Count": 166.0}, {"Race": "Native Hawaiian/Other Pacific Islander", "Count": 53.0}]
+            };
+
+            // Define colors
+            const colors = {
+                age: '#f9e6e6', // very pale pink
+                sex: '#fc9097', // as specified
+                race: '#ff0000', // red
+                filtered: '#444444', // darker gray for filtered bars on dark background
+                background: '#121212', // dark background
+                text: '#ffffff', // white text
+                gridLines: '#333333' // dark grid lines
+            };
+
+            // Store the total counts for reference
+            const totalCounts = {
+                total: 37570.0,
+                age: {},
+                sex: {},
+                race: {}
+            };
+
+            // Fill in demographic totals
+            baseData.age.forEach(item => { totalCounts.age[item.Age] = item.Count; });
+            baseData.sex.forEach(item => { totalCounts.sex[item.Sex] = item.Count; });
+            baseData.race.forEach(item => { totalCounts.race[item.Race] = item.Count; });
+
+            // Store the filters
+            let activeFilters = [];
+
+            // Initial render
+            renderCharts();
+
+            // Function to render the charts
+            function renderCharts() {
+                // Calculate data based on current filters
+                let data = calculateData();
+
+                // Common layout elements for all charts
+                const commonLayout = {
+                    plot_bgcolor: colors.background,
+                    paper_bgcolor: colors.background,
+                    font: {
+                        color: colors.text
+                    },
+                    xaxis: {
+                        gridcolor: colors.gridLines
+                    },
+                    yaxis: {
+                        gridcolor: colors.gridLines
+                    }
+                };
+
+                // Render age chart
+                const ageData = [{
+                    x: data.age.map(d => d.Age),
+                    y: data.age.map(d => d.Count),
+                    type: 'bar',
+                    marker: {
+                        color: data.age.map(d => {
+                            // Check if this age is filtered
+                            const isFiltered = activeFilters.some(f => f.type === 'age' && f.value === d.Age);
+                            return isFiltered ? colors.filtered : colors.age;
+                        })
+                    }
+                }];
+
+                const ageLayout = {
+                    ...commonLayout,
+                    title: {
+                        text: 'By Age Group',
+                        font: { color: colors.text }
+                    },
+                    xaxis: {
+                        ...commonLayout.xaxis,
+                        title: {
+                            text: 'Age Group',
+                            font: { color: colors.text }
+                        }
+                    },
+                    yaxis: {
+                        ...commonLayout.yaxis,
+                        title: {
+                            text: 'Count',
+                            font: { color: colors.text }
+                        }
+                    }
+                };
+
+                Plotly.newPlot('age-chart', ageData, ageLayout);
+
+                // Add click event for age chart
+                document.getElementById('age-chart').on('plotly_click', function(data) {
+                    const age = data.points[0].x;
+                    toggleFilter('age', age);
+                });
+
+                // Render sex chart
+                const sexData = [{
+                    x: data.sex.map(d => d.Sex),
+                    y: data.sex.map(d => d.Count),
+                    type: 'bar',
+                    marker: {
+                        color: data.sex.map(d => {
+                            // Check if this sex is filtered
+                            const isFiltered = activeFilters.some(f => f.type === 'sex' && f.value === d.Sex);
+                            return isFiltered ? colors.filtered : colors.sex;
+                        })
+                    }
+                }];
+
+                const sexLayout = {
+                    ...commonLayout,
+                    title: {
+                        text: 'By Sex',
+                        font: { color: colors.text }
+                    },
+                    xaxis: {
+                        ...commonLayout.xaxis,
+                        title: {
+                            text: 'Sex',
+                            font: { color: colors.text }
+                        }
+                    },
+                    yaxis: {
+                        ...commonLayout.yaxis,
+                        title: {
+                            text: 'Count',
+                            font: { color: colors.text }
+                        }
+                    }
+                };
+
+                Plotly.newPlot('sex-chart', sexData, sexLayout);
+
+                // Add click event for sex chart
+                document.getElementById('sex-chart').on('plotly_click', function(data) {
+                    const sex = data.points[0].x;
+                    toggleFilter('sex', sex);
+                });
+
+                // Render race chart
+                const raceData = [{
+                    x: data.race.map(d => d.Race),
+                    y: data.race.map(d => d.Count),
+                    type: 'bar',
+                    marker: {
+                        color: data.race.map(d => {
+                            // Check if this race is filtered
+                            const isFiltered = activeFilters.some(f => f.type === 'race' && f.value === d.Race);
+                            return isFiltered ? colors.filtered : colors.race;
+                        })
+                    }
+                }];
+
+                const raceLayout = {
+                    ...commonLayout,
+                    title: {
+                        text: 'By Race',
+                        font: { color: colors.text }
+                    },
+                    xaxis: {
+                        ...commonLayout.xaxis,
+                        title: {
+                            text: 'Race',
+                            font: { color: colors.text }
+                        },
+                        tickangle: 45
+                    },
+                    yaxis: {
+                        ...commonLayout.yaxis,
+                        title: {
+                            text: 'Count',
+                            font: { color: colors.text }
+                        }
+                    }
+                };
+
+                Plotly.newPlot('race-chart', raceData, raceLayout);
+
+                // Add click event for race chart
+                document.getElementById('race-chart').on('plotly_click', function(data) {
+                    const raceLabel = data.points[0].x;
+                    // Map abbreviated labels back to original values
+                    let race = raceLabel;
+                    if (raceLabel === "AI/AN") race = "American Indian/Alaska Native";
+                    if (raceLabel === "NH/PI") race = "Native Hawaiian/Pacific Islander";
+
+                    toggleFilter('race', race);
+                });
+
+                // Update filter info and list
+                updateFilterDisplay();
+            }
+
+            // Function to calculate data based on filters
+            function calculateData() {
+                if (activeFilters.length === 0) {
+                    return JSON.parse(JSON.stringify(baseData)); // Deep copy
+                }
+
+                // Create a deep copy of base data
+                const result = JSON.parse(JSON.stringify(baseData));
+
+                // Apply each filter one by one
+                activeFilters.forEach(filter => {
+                    if (filter.type === 'age') {
+                        const ageToFilter = filter.value;
+                        const filterCount = totalCounts.age[ageToFilter];
+
+                        // Zero out the filtered age bar
+                        result.age.forEach(item => {
+                            if (item.Age === ageToFilter) {
+                                item.Count = 0;
+                            }
+                        });
+
+                        // For sex chart, subtract the appropriate proportion
+                        result.sex.forEach(item => {
+                            // Calculate what proportion of this sex's cases come from the filtered age group
+                            const proportion = filterCount / totalCounts.total;
+                            const reductionAmount = Math.round(totalCounts.sex[item.Sex] * proportion);
+                            item.Count = Math.max(0, item.Count - reductionAmount);
+                        });
+
+                        // Similarly for race chart
+                        result.race.forEach(item => {
+                            const proportion = filterCount / totalCounts.total;
+                            const reductionAmount = Math.round(totalCounts.race[item.Race] * proportion);
+                            item.Count = Math.max(0, item.Count - reductionAmount);
+                        });
+                    }
+                    else if (filter.type === 'sex') {
+                        const sexToFilter = filter.value;
+                        const filterCount = totalCounts.sex[sexToFilter];
+
+                        // Zero out the filtered sex bar
+                        result.sex.forEach(item => {
+                            if (item.Sex === sexToFilter) {
+                                item.Count = 0;
+                            }
+                        });
+
+                        // For age chart, subtract the appropriate proportion
+                        result.age.forEach(item => {
+                            const proportion = filterCount / totalCounts.total;
+                            const reductionAmount = Math.round(totalCounts.age[item.Age] * proportion);
+                            item.Count = Math.max(0, item.Count - reductionAmount);
+                        });
+
+                        // Similarly for race chart
+                        result.race.forEach(item => {
+                            const proportion = filterCount / totalCounts.total;
+                            const reductionAmount = Math.round(totalCounts.race[item.Race] * proportion);
+                            item.Count = Math.max(0, item.Count - reductionAmount);
+                        });
+                    }
+                    else if (filter.type === 'race') {
+                        const raceToFilter = filter.value;
+                        const filterCount = totalCounts.race[raceToFilter];
+
+                        // Zero out the filtered race bar
+                        result.race.forEach(item => {
+                            if (item.Race === raceToFilter) {
+                                item.Count = 0;
+                            }
+                        });
+
+                        // For age chart, subtract the appropriate proportion
+                        result.age.forEach(item => {
+                            const proportion = filterCount / totalCounts.total;
+                            const reductionAmount = Math.round(totalCounts.age[item.Age] * proportion);
+                            item.Count = Math.max(0, item.Count - reductionAmount);
+                        });
+
+                        // Similarly for sex chart
+                        result.sex.forEach(item => {
+                            const proportion = filterCount / totalCounts.total;
+                            const reductionAmount = Math.round(totalCounts.sex[item.Sex] * proportion);
+                            item.Count = Math.max(0, item.Count - reductionAmount);
+                        });
+                    }
+                });
+
+                return result;
+            }
+
+            // Function to toggle a filter
+            function toggleFilter(type, value) {
+                // Check if this filter already exists
+                const existingIndex = activeFilters.findIndex(f => f.type === type && f.value === value);
+
+                if (existingIndex !== -1) {
+                    // Remove the filter
+                    activeFilters.splice(existingIndex, 1);
+                } else {
+                    // Add the filter
+                    activeFilters.push({ type, value });
+                }
+
+                // Re-render the charts with animation
+                renderChartsWithTransition();
+            }
+
+            // Function to remove a specific filter by index
+            function removeFilter(index) {
+                activeFilters.splice(index, 1);
+                renderChartsWithTransition();
+            }
+
+            // Function to reset filters
+            function resetFilters() {
+                activeFilters = [];
+                renderChartsWithTransition();
+            }
+
+            // Function to render charts with transition
+            function renderChartsWithTransition() {
+                const data = calculateData();
+
+                // Update age chart with transition
+                Plotly.animate('age-chart', {
+                    data: [{
+                        x: data.age.map(d => d.Age),
+                        y: data.age.map(d => d.Count),
+                        marker: {
+                            color: data.age.map(d => {
+                                const isFiltered = activeFilters.some(f => f.type === 'age' && f.value === d.Age);
+                                return isFiltered ? colors.filtered : colors.age;
+                            })
+                        }
+                    }]
+                }, {
+                    transition: {
+                        duration: 500,
+                        easing: 'cubic-in-out'
+                    },
+                    frame: {
+                        duration: 500
+                    }
+                });
+
+                // Update sex chart with transition
+                Plotly.animate('sex-chart', {
+                    data: [{
+                        x: data.sex.map(d => d.Sex),
+                        y: data.sex.map(d => d.Count),
+                        marker: {
+                            color: data.sex.map(d => {
+                                const isFiltered = activeFilters.some(f => f.type === 'sex' && f.value === d.Sex);
+                                return isFiltered ? colors.filtered : colors.sex;
+                            })
+                        }
+                    }]
+                }, {
+                    transition: {
+                        duration: 500,
+                        easing: 'cubic-in-out'
+                    },
+                    frame: {
+                        duration: 500
+                    }
+                });
+
+                // Update race chart with transition
+                Plotly.animate('race-chart', {
+                    data: [{
+                        x: data.race.map(d => d.Race),
+                        y: data.race.map(d => d.Count),
+                        marker: {
+                            color: data.race.map(d => {
+                                const isFiltered = activeFilters.some(f => f.type === 'race' && f.value === d.Race);
+                                return isFiltered ? colors.filtered : colors.race;
+                            })
+                        }
+                    }]
+                }, {
+                    transition: {
+                        duration: 500,
+                        easing: 'cubic-in-out'
+                    },
+                    frame: {
+                        duration: 500
+                    }
+                });
+
+                // Update filter info and list
+                updateFilterDisplay();
+            }
+
+            // Function to update filter info and filter list
+            function updateFilterDisplay() {
+                const filterInfo = document.getElementById('filter-info');
+                const filterList = document.getElementById('filter-list');
+
+                if (activeFilters.length === 0) {
+                    filterInfo.textContent = 'No filters applied';
+                    filterList.innerHTML = ''; // Clear filter list
+                } else {
+                    filterInfo.textContent = `${activeFilters.length} filter(s) applied`;
+
+                    // Update filter list
+                    filterList.innerHTML = '';
+                    activeFilters.forEach((filter, index) => {
+                        const filterTag = document.createElement('div');
+                        filterTag.className = 'filter-tag';
+                        filterTag.innerHTML = `
+                            ${filter.type.charAt(0).toUpperCase() + filter.type.slice(1)}: ${filter.value}
+                            <span class="remove-filter" onclick="removeFilter(${index})">×</span>
+                        `;
+                        filterList.appendChild(filterTag);
+                    });
+                }
+            }
+        </script>
+    </body>
+    </html>
+    

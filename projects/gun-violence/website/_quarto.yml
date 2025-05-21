@@ -1,0 +1,37 @@
+project:
+  type: website
+
+website:
+  title: "Gun Violence in the U.S."
+  favicon: "images/gu.png"
+  navbar:
+    search: true
+    left:
+      - href: index.qmd
+        text: Executive Summary
+      - href: eda.qmd
+        text: EDA
+      - href: linear_regression.qmd
+        text: Linear Regression
+      - href: logistic_regression.qmd
+        text: Logistic Regression
+      - href: appendix.qmd
+        text: Appendix
+      - href: llm.qmd
+        text: LLM Log
+
+    right:
+      - icon: github
+        href: "https://github.com/kristinmlloyd/Mini_Project"
+  page-footer:
+    center: "© 2025 Statistics Project"
+
+format:
+  html:
+    theme: 
+      - flatly
+    css: styles.css
+    toc: true
+    toc-depth: 2
+    code-copy: true
+    code-overflow: wrap

@@ -1,0 +1,286 @@
+---
+title: "Firearm Mortality in the United States"
+subtitle: "A Data-Driven Analysis of Gun Deaths and Policy Effectiveness"
+format: 
+  html:
+    code-fold: true
+    toc: true
+    toc-depth: 3
+    number-sections: true
+    theme: cosmo
+    fig-width: 3  # Drastically reduced from original 9
+    fig-height: 2  # Drastically reduced from original 6
+    fig-dpi: 150  # Reduced DPI
+    self-contained: true
+execute:
+  warning: false
+  message: false
+bibliography: references.bib
+nocite: "@*"
+csl: apa.csl
+---
+
+![](images/gun.png)
+```{python}
+#| echo: false
+
+import geopandas as gpd
+import requests
+import zipfile
+import io
+import os
+
+states_map = gpd.read_file("data/cb_2018_us_state_20m/cb_2018_us_state_20m.shp")
+# Optional: Convert names to lowercase for merges
+states_map["region"] = states_map["NAME"].str.lower()
+# Convert geometry to WKT format
+states_map["geometry"] = states_map["geometry"].apply(lambda geom: geom.wkt)
+# Select relevant columns
+states_map = states_map[["NAME", "geometry"]]  # You can add more columns if needed
+# Save as CSV
+states_map.to_csv("data/us_states_geodata.csv", index=False)
+```
+
+# Problem & Objectives
+
+Firearm mortality remains a pressing public health issue in the United States, with gun-related deaths accounting for a significant portion of homicides, suicides, and accidental fatalities. The complexity of this issue extends beyond crime statistics, encompassing social, economic, and policy-driven factors that influence gun violence trends. This project aims to analyze firearm mortality rates across U.S. states and examine the impact of gun control policies, domestic violence-related firearm deaths, and access to mental health resources. By identifying key contributing factors, this study seeks to provide insights into the effectiveness of existing regulations and potential strategies to mitigate firearm-related deaths. This project will contribute to the broader discourse on public safety and policy effectiveness in reducing gun violence.
+
+```{python}
+import pandas as pd
+import geopandas as gpd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from mpl_toolkits.axes_grid1 import make_axes_locatable
+from matplotlib.colors import LinearSegmentedColormap
+
+# Load dataset
+gun_deaths = pd.read_csv("data/merged_data.csv")
+
+# Ensure state names are lowercase for merging
+gun_deaths["State"] = gun_deaths["State"].str.lower()
+
+# Define mortality bins and labels
+mortality_bins = [0, 10, 15, 20, 25, float("inf")]
+mortality_labels = [1, 2, 3, 4, 5]
+
+# Assign states into mortality categories
+gun_deaths["mortality_score"] = pd.cut(
+    gun_deaths["firearm_mortality_by_state_2022"], 
+    bins=mortality_bins, 
+    labels=mortality_labels,
+    right=False
+).astype(float)
+
+states_map = gpd.read_file("data/cb_2018_us_state_20m/cb_2018_us_state_20m.shp")
+
+# Ensure lowercase for merging
+states_map["region"] = states_map["NAME"].str.lower()
+
+# Remove Alaska to prevent distortion of the map
+states_map = states_map[states_map["region"] != "alaska"]
+
+# Merge state map with gun deaths data
+map_data = states_map.merge(gun_deaths, left_on="region", right_on="State", how="left")
+
+# Define color map
+colors = ["#68bb59", "#acdf87", "#fab733", "#ff6242", "#c61a09"]
+cmap = LinearSegmentedColormap.from_list("custom_cmap", colors)
+
+# Plot Gun Deaths by State
+fig, ax = plt.subplots(figsize=(4.5, 3.5))  # Drastically reduced figure size
+divider = make_axes_locatable(ax)
+cax = divider.append_axes("right", size="2%", pad=0.05)  # Minimal padding
+
+# Plot states
+map_data.plot(column="mortality_score", cmap=cmap, linewidth=0.1, edgecolor="black", ax=ax, legend=True, cax=cax)
+
+# Customize plot
+ax.set_title("Firearm Mortality by State (2022)", fontsize=6)  # Tiny font
+ax.set_xticks([])
+ax.set_yticks([])
+ax.set_frame_on(False)
+
+# Add custom legend labels
+cbar = plt.gcf().axes[-1]  # Get the colorbar axis
+tick_labels = ["Very Low", "Low", "Moderate", "High", "Very High"]
+cbar.set_yticks([1.4, 2.2, 3.0, 3.8, 4.6])  # Position the ticks
+cbar.set_yticklabels(tick_labels, fontsize=4)  # Tiny font for labels
+cbar.tick_params(labelsize=4)  # Tiny tick labels
+
+plt.tight_layout()
+plt.show()
+```
+
+As we can see, firearm mortality rates tend to be higher in parts of the South and West, while the Northeast and the far West Coast generally experience much lower rates.
+
+```{python}
+#| error: false
+#| warning: false
+#| message: false
+
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Load data
+gun_deaths = pd.read_csv("data/merged_data.csv")
+
+# Define bins and labels
+bins = [0, 10, 15, 20, 25, float('inf')]
+labels = ["Very Low", "Low", "Moderate", "High", "Very High"]
+
+# Assign bins, ensuring no overlap (excluding the right endpoint)
+gun_deaths['mortality_bin'] = pd.cut(
+    gun_deaths['firearm_mortality_by_state_2022'], bins=bins, labels=labels, right=False
+)
+
+# Count states in each bin
+gun_death_distribution = gun_deaths['mortality_bin'].value_counts().sort_index().reset_index()
+gun_death_distribution.columns = ['mortality_bin', 'State_Count']
+
+# Define colors
+colors = {
+    "Very Low": "#68bb59",
+    "Low": "#acdf87",
+    "Moderate": "#fab733",
+    "High": "#ff6242",
+    "Very High": "#c61a09"
+}
+
+# Plot
+title = "Firearm Mortality by State (2022)"
+subtitle = "Number of States in Each Mortality Range"
+plt.figure(figsize=(3.5, 2.5))  # Drastically reduced figure size
+ax = sns.barplot(
+    y='mortality_bin', x='State_Count', data=gun_death_distribution,
+    order=labels, palette=colors, edgecolor='black', linewidth=0.2  # Extremely thin border
+)
+
+# Add labels with tiny font and closer to bars
+for index, value in enumerate(gun_death_distribution['State_Count']):
+    ax.text(value + 0.2, index, str(value), va='center', ha='left', fontsize=5, color='black')
+
+plt.title(f"{title}\n{subtitle}", fontsize=6, weight='normal')  # Tiny title
+plt.xlabel("")
+plt.ylabel("")
+plt.xticks(fontsize=4)  # Tiny tick labels
+plt.yticks(fontsize=4)  # Tiny tick labels
+plt.grid(axis='x', linestyle="--", alpha=0.5, linewidth=0.5)  # Thinner grid lines
+plt.xlim(0, gun_death_distribution['State_Count'].max() + 3)  # Less padding
+
+# Tighter layout
+plt.tight_layout()
+plt.show()
+```
+
+- A majority of states (30 out of 51, or nearly 60%) fall into the Low or Moderate categories, suggesting that many parts of the country experience mid-range firearm mortality levels.
+- Only a small number of states (4) face very high firearm mortality, highlighting a concentrated burden in specific regions.
+- The Very Low mortality group is notably smaller, with just 8 states, mostly concentrated in the Northeast and along the Pacific Coast.
+- These findings suggest that regional factors, possibly including policy strength, socioeconomic conditions, or cultural differences, may play a role in shaping firearm mortality outcomes.
+
+```{python}
+# Create Map for Gun Policy Strength Scores
+import pandas as pd
+import geopandas as gpd
+import matplotlib.pyplot as plt
+from mpl_toolkits.axes_grid1 import make_axes_locatable
+from matplotlib.colors import LinearSegmentedColormap
+
+# Load dataset (same as before)
+gun_deaths = pd.read_csv("data/merged_data.csv")
+gun_deaths["State"] = gun_deaths["State"].str.lower()
+
+# Load U.S. state shapefile (without Alaska)
+states_map = gpd.read_file("data/cb_2018_us_state_20m/cb_2018_us_state_20m.shp")
+states_map["region"] = states_map["NAME"].str.lower()
+states_map = states_map[states_map["region"] != "alaska"]  # Remove Alaska
+
+# Merge state map with gun deaths data
+map_data = states_map.merge(gun_deaths, left_on="region", right_on="State", how="left")
+
+# Define policy strength bins
+policy_bins = [0, 20, 40, 60, 80, 100]
+policy_labels = [1, 2, 3, 4, 5]
+
+# Assign states into policy categories
+map_data["policy_score"] = pd.cut(
+    map_data["gun_policy_strength"], 
+    bins=policy_bins, 
+    labels=policy_labels,
+    right=True
+).astype(float)
+
+# Define color map (reversed from mortality map to show stronger policies as better)
+policy_colors = ["#c61a09", "#ff6242", "#fab733", "#acdf87", "#68bb59"]
+policy_cmap = LinearSegmentedColormap.from_list("policy_cmap", policy_colors)
+
+# Plot Gun Policy Strength by State
+fig, ax = plt.subplots(figsize=(4.5, 3.5))  # Drastically reduced figure size
+divider = make_axes_locatable(ax)
+cax = divider.append_axes("right", size="2%", pad=0.05)  # Minimal padding
+
+# Plot states
+map_data.plot(column="policy_score", cmap=policy_cmap, linewidth=0.1, edgecolor="black", 
+              ax=ax, legend=True, cax=cax, missing_kwds={"color": "lightgray"})
+
+# Customize plot
+ax.set_title("Gun Policy Strength by State (0-100 Scale)", fontsize=6)  # Tiny font
+ax.set_xticks([])
+ax.set_yticks([])
+ax.set_frame_on(False)
+
+# Add custom legend labels
+cbar = plt.gcf().axes[-1]  # Get the colorbar axis
+policy_tick_labels = ["Very Weak", "Weak", "Moderate", "Strong", "Very Strong"]  # Shortened labels
+cbar.set_yticks([1.4, 2.2, 3.0, 3.8, 4.6])  # Position the ticks
+cbar.set_yticklabels(policy_tick_labels, fontsize=4)  # Tiny font for labels
+cbar.tick_params(labelsize=4)  # Tiny tick labels
+
+plt.tight_layout()
+plt.show()
+```
+
+Interestingly, a large number of states have very weak gun policy strength scores, which is somewhat surprising given the public health risks associated with firearm mortality. This suggests a potential disconnect between the severity of firearm-related outcomes and the strength of preventive legislation in many regions.
+
+# Motivation and Case Studies
+
+Gun violence remains a critical public health issue in the U.S., with over **48,000 deaths in 2022**—a rate of one every 11 minutes. The majority of these deaths are from **suicide (55%)** and **homicide (41%)**, with additional cases stemming from **unintentional injuries** and **police shootings** [@jhu2023gunviolence]. Over **200 people are treated daily** for nonfatal firearm injuries.
+
+**Key Drivers of Gun Violence:**
+
+* **Firearm Ownership**: The U.S. holds 46% of the world's civilian guns. States with higher gun ownership consistently report higher firearm mortality [@jhu2023gunviolence].
+* **Geographic Disparities**: Gun deaths are concentrated in the South and Mountain West, where gun laws are weaker, and are lowest in the Northeast, where regulations are stricter [@jhu2023gunviolence].
+* **Policy Gaps**: Lax laws on public carry, firearm storage, and background checks correlate with more homicides, child shootings, and police-involved deaths [@jhu2023gunviolence].
+
+**Gun Safety Laws: Impact and Patterns**
+
+* States with stronger gun safety laws have gun death rates less than half of those with the weakest laws [@everytown2025rankings].
+* Weaker law states face significantly higher firearm mortality, often exacerbated by interstate gun trafficking from lenient states—a phenomenon seen in Illinois and Maryland [@everytown2025rankings].
+* The "iron pipeline" continues to funnel guns from states without background checks into more regulated regions, undermining local safety efforts [@everytown2025rankings].
+
+**Conclusion**
+
+Gun policy strength is a critical factor in reducing firearm violence. States with stronger legislation—especially around storage, background checks, and public carry—see lower mortality rates, while weaker states face higher rates and spillover effects into neighboring regions.
+
+# Research Questions
+
+**Data Science Question:** How do social, economic, and policy-related factors influence firearm mortality rates across U.S. states?
+
+**Subquestions:**
+
+1. **Continuous Predictors (Linear Regression):**
+* To what extent do continuous variables—such as incarceration rate, teen birth rate, and education attainment—predict variation in state-level firearm mortality?
+* Are certain socioeconomic indicators (e.g., poverty, unemployment, alcohol-related death rates) more strongly associated with higher firearm mortality?
+
+2. **Binary Predictors (Logistic Regression):**
+   * How do the presence or absence of specific gun control policies (e.g., assault weapon bans, background checks, domestic violence restrictions) relate to the likelihood of a state falling into a high vs. low mortality category?
+   * Which policies appear most protective when controlling for other state-level characteristics?
+   
+3. **Modeling Approach:**
+   * How do different linear regression models compare with eachother in terms of performance?
+   * How do different logistic regression models compare with eachother in terms of performance?
+
+# References
+
+::: {#refs}
+:::

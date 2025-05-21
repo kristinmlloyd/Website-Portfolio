@@ -1,0 +1,401 @@
+---
+format: 
+  html:
+    embed-resources: true
+    code-fold: true
+    css: styles.css
+    toc-location: right
+    page-layout: full
+bibliography: references.bib
+nocite: "@*"
+csl: apa.csl
+---
+
+# Misconception #1
+
+<h2 style="color: #e53935; text-align: center;">HIV and AIDS are the same thing</h2>
+
+### What is HIV:
+
+HIV (human immunodeficiency virus) is a virus that attacks the body's immune system. Once someone acquires HIV, they live with it for life, there is no cure. Without treatment, HIV gradually weakens the immune system. With consistent antiretroviral therapy (ART), however, the virus can be suppressed to undetectable levels. People on effective treatment stay healthy and cannot sexually transmit HIV to others (Undetectable = Untransmittable).
+
+### What is AIDS:
+
+AIDS (acquired immunodeficiency syndrome) is the final stage of HIV infection. It is diagnosed when the immune system is severely damaged, typically when immune response cell counts fall below a critical threshold or certain infections appear that a healthy immune system would normally prevent. Thanks to modern antiretroviral therapy in the U.S., most people living with HIV who follow their treatment regimen never progress to this stage.
+
+### Prevention and living with HIV: 
+
+Highly effective tools now exist to prevent HIV transmission: using condoms correctly every time, never sharing needles or other injection equipment, and taking pre‑exposure prophylaxis (PrEP) or post‑exposure prophylaxis (PEP) as recommended  (medication taken before and after potential exposure). For those who are HIV‑positive, staying on ART to maintain an undetectable viral load protects their health and prevents onward transmission (@cdc2025about).
+
+<figure>
+ <iframe src="../interactive_viz_outputs/final_styled_hiv_aids_flow_diagram.html" width="100%" height="780px" frameborder="0"></iframe>
+ <figcaption style="text-align: left; margin-top: 10px;">
+    <strong>Figure 1:</strong> Sankey diagram of HIV/AIDS global impact. <em>Data source: @2024factsheetunaids</em>
+ </figcaption>
+</figure>
+
+The proportion of HIV cases resulting in AIDS-related deaths has declined sharply over time, over the globe—from 7.1% in 2004–2005 to just 1.6% in 2023. Thanks to advances in treatment and expanded access to care, far fewer infections progress to AIDS, and people living with HIV are now able to lead longer, healthier lives.
+
+
+# Misconception #2
+
+<h2 style="color: #e53935; text-align: center;">HIV is spread through casual contact</h2>
+
+### How is HIV Spread: 
+
+HIV transmissions only happens when specific body fluid: blood, semen,	pre‑seminal fluid, rectal fluid or vaginal fluid enter the body through a mucous membrane, damaged tissue or direct injection. The most common routes are unprotected anal or vaginal intercourse and sharing needles or syringes for drug use. Factors such as a person’s viral load, co‑existing sexually transmitted infections, and the use of alcohol or other drugs can further increase the likelihood of passing HIV on or acquiring it. Many people develop flu-like symptoms 2-4 weeks after exposure, but some never notice any symptoms. The only way to know for sure is to undergo an HIV test (@state2024pepfar). 
+
+
+![](../interactive_viz_outputs/hiv_transmission_risks_visualization.png)
+ <figcaption style="text-align: left; margin-top: 10px;">
+    <strong>Figure 2:</strong> Flow diagram of specific HIV transmission risk. <em>Data Sources: @powers2014hivtransmission, @aidsmap2025risk</em>
+ </figcaption>
+
+
+
+# Misconception #3
+
+<h2 style="color: #e53935; text-align: center;">HIV is a gay disease</h2>
+
+**Not a gay disease**: Anyone can get HIV. While rates are higher among the LGBTQ+ community, nearly ¼ of all cases are transmitted through heterosexual contact. Risk is driven by specific behaviors, not by your sexual orientation. Challenging stigma and focusing on prevention and testing for everyone strengthens our ability to protect individuals and communities.
+
+::: {.content-visible when-format="html"}
+```{=html}
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #121212;
+            color: white;
+        }
+        h1 {
+            margin-bottom: 20px;
+            color: white;
+        }
+        .description {
+            margin-bottom: 20px;
+            color: white;
+        }
+        #ribbon-container {
+            width: 100%;
+            height: 500px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            background-color: #121212;
+            transition: opacity 1.2s ease-out;
+        }
+        #ribbon-image {
+            max-height: 300px;
+            transition: transform 0.3s ease;
+        }
+        #ribbon-image:hover {
+            transform: scale(1.05);
+        }
+        #chart-container {
+            width: 100%;
+            height: 700px;
+            opacity: 0;
+            display: none; /* Hidden initially */
+            background-color: #121212;
+            transition: opacity 1.5s ease-in;
+        }
+        .click-message {
+            text-align: center;
+            font-style: italic;
+            color: #999;
+            margin-top: 10px;
+        }
+        .key-insights {
+            margin-top: 30px;
+            color: white;
+        }
+        .key-insights h2 {
+            margin-bottom: 10px;
+            color: white;
+        }
+        .key-insights ul {
+            padding-left: 20px;
+            color: white;
+        }
+        .key-insights li {
+            margin-bottom: 8px;
+        }
+        .data-source {
+            margin-top: 30px;
+            font-size: 0.8em;
+            color: #999;
+        }
+        .fadeOut {
+            opacity: 0;
+        }
+        .fadeIn {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Initially visible ribbon image -->
+<div id="ribbon-container">
+    <div>
+        <img id="ribbon-image" src="images/hiv_ribbon.png" alt="Red AIDS Awareness Ribbon">
+        <div class="click-message">Click on the ribbon to see detailed data</div>
+    </div>
+</div>
+
+<!-- Hidden initially -->
+<div id="chart-container"></div>
+
+<div class="data-source">
+    <p> </p>
+</div>
+
+<script>
+// Store the data for the visualization
+const data = {
+    byTransmission: {
+        labels: ["MSM", "Heterosexual Contact", "IDU", "MSM/IDU", "Other"],
+        values: [24611, 8781, 2531, 1576, 71],
+        percentages: [
+            "65.5%",
+            "23.4%",
+            "6.7%",
+            "4.2%",
+            "0.2%"
+        ],
+        colors: ["#FF8C8C", "#FFA5A5", "#FFBFBF", "#FFD8D8", "#FFF0F0"]
+    }
+};
+
+// Add click event to the ribbon
+document.getElementById('ribbon-container').addEventListener('click', function() {
+    // Start fade out of ribbon
+    const ribbonContainer = document.getElementById('ribbon-container');
+    ribbonContainer.style.opacity = "0";
+    
+    // Show chart container but keep it invisible initially
+    const chartContainer = document.getElementById('chart-container');
+    chartContainer.style.display = 'block';
+    
+    // Wait for ribbon to fade out
+    setTimeout(function() {
+        // Hide ribbon completely
+        ribbonContainer.style.display = 'none';
+        
+        // Create the chart
+        createChart();
+        
+        // Start fade in of chart
+        setTimeout(function() {
+            chartContainer.style.opacity = "1";
+        }, 100);
+    }, 1200);
+});
+
+function createChart() {
+    const chartContainer = document.getElementById('chart-container');
+    
+    // Determine which slices should have inside vs outside text
+    const textPositions = [];
+    const pullValues = [];
+    
+    for (let i = 0; i < data.byTransmission.labels.length; i++) {
+        // Only MSM and Heterosexual will have inside text
+        if (i <= 1) {
+            textPositions.push('inside');
+            pullValues.push(0);
+        } else {
+            textPositions.push('outside');
+            pullValues.push(0.1); // Pull smaller slices out slightly
+        }
+    }
+    
+    // Create a pie chart
+    const pieData = [{
+        type: 'pie',
+        labels: data.byTransmission.labels,
+        values: data.byTransmission.values,
+        text: data.byTransmission.percentages,
+        textinfo: 'label+text',
+        textposition: textPositions,
+        texttemplate: '%{text}',
+        textfont: {color: 'white',
+            size: 16
+        },
+        marker: {
+            colors: data.byTransmission.colors,
+            line: {
+                color: '#121212',
+                width: 1.5
+            }
+        },
+        pull: pullValues,
+        direction: 'clockwise',
+        hoverinfo: 'label+value+percent',
+        hovertemplate: '<b>%{label}</b><br>Count: %{value:,}<br>Percent: %{text}<extra></extra>'
+    }];
+    
+    // Create legend annotation
+    const legendAnnotation = {
+        x: 0.99,
+        y: 0.99,
+        xref: 'paper',
+        yref: 'paper',
+        text: '<b>MSM</b>: Men who have Sex with Men<br><b>IDU</b>: Injection Drug Use',
+        showarrow: false,
+        font: {color: 'white', size: 12},
+        align: 'right',
+        bgcolor: '#121212',
+        bordercolor: 'white',
+        borderwidth: 2,
+        borderpad: 6,
+        opacity: 0.8
+    };
+    
+    // Layout configuration
+    const layout = {
+        title: {
+            text: 'HIV Cases by Transmission Mode: New Cases in USA, 2018',
+            font: {
+                color: 'white',
+                size: 24
+            },
+            x: 0.5
+        },
+        font: {
+            color: 'white'
+        },
+        plot_bgcolor: '#121212',
+        paper_bgcolor: '#121212',
+        margin: {
+            t: 100,
+            b: 50,
+            l: 50,
+            r: 50
+        },
+        autosize: true,
+        height: 700,
+        annotations: [legendAnnotation],
+        showlegend: false
+    };
+    
+    // Create the plot with pie chart
+    Plotly.newPlot(chartContainer, pieData, layout, {responsive: true});
+}
+</script>
+</body>
+</html>
+```
+ <figcaption style="text-align: left; margin-top: 10px;">
+    <strong>Figure 3:</strong> Pie chart of HIV transmission groups. <em>Data Source: @aidsvu2025overview</em>
+ </figcaption>
+
+
+# Misconception #4
+
+Although many believe that HIV affects all populations equally, the data clearly shows otherwise. Certain groups — especially young adults, men, and Black Americans — experience significantly higher rates of new diagnoses. This disproves the notion of equal risk and highlights the need for targeted prevention, education, and support efforts for the communities most impacted.
+
+<h2 style="color: #e53935; text-align: center;">HIV has equal rates of infection</h2>
+
+<figure style="width: 100%; margin: 0; padding: 0;">
+  <iframe src="../interactive_viz_outputs/demographics_linked_2x2.html" width="100%" height="800px" frameborder="0" style="min-width: 800px;"></iframe>
+  <figcaption style="text-align: left; margin-top: 10px;">
+    <strong>Figure 4:</strong> Linked bar charts of HIV infection by demographic. <em>Data Source: @aidsvu2025overview</em> </figcaption>
+</figure>
+
+
+<figure style="width: 100%; margin: 0; padding: 0;">
+  <iframe src="../interactive_viz_outputs/table_rates.html" width="70%" height="550px" frameborder="0" style="min-width: 1000px;"></iframe>
+  <figcaption style="text-align: left; margin-top: 10px;">
+    <strong>Table 1:</strong> HIV diagnoses rate by race. <em>Data Source: @aidsvu2025overview</em></figcaption>
+</figure>
+
+<figure style="width: 100%; margin: 0; padding: 0;">
+  <iframe src="../interactive_viz_outputs/tables_transmission.html" width="100%" height="600px" frameborder="0" style="min-width: 1000px;"></iframe>
+  <figcaption style="text-align: left; margin-top: 10px;">
+   <strong>Table 2 & 3:</strong> Transmission mode by race. <em>Data Source: @aidsvu2025overview</em></figcaption>
+</figure>
+
+
+
+Although Black, White, and Hispanic Americans represent the largest absolute numbers of new HIV diagnoses (respectively), a population-adjusted perspective reveals a devastating racial inequity: Black Americans face an HIV incidence rate of 46 per 100,000—nearly ten times the rate among Whites and Asians (5 per 100,000). This stark disparity is not merely a statistical artifact but a symptom of systemic barriers—poverty, housing instability, limited healthcare access, and pervasive stigma—that uniquely and disproportionately imperil Black communities.
+
+
+Transmission patterns also differ by race. Among Black individuals, 59% of new cases are linked to male-to-male sexual contact (MSM), compared with nearly 80% among Native Hawaiians, Other Pacific Islanders, and Asians. Injection drug use accounts for 14% of new infections in American Indian/Alaskan Native populations.
+
+
+Addressing these disparities requires targeted action:
+
+- Expand PrEP access and harm-reduction services in neighborhoods with high Black HIV rates
+
+- Increase culturally tailored testing and treatment programs to overcome stigma and improve care linkage
+
+- Tackle social determinants—economic inequality, housing instability, and limited healthcare access—that drive higher infection rates.
+
+
+
+# Misconception #5
+
+<h2 style="color: #e53935; text-align: center;">HIV/AIDS is no longer an epidemic</h2>
+
+<figure style="width: 100%; margin: 0; padding: 0;">
+  <iframe src="../interactive_viz_outputs/misconception5.html" width="100%" height="450px" frameborder="0" style="min-width: 800px;"></iframe>
+  <figcaption style="text-align: left; margin-top: 10px;">
+    <strong>Figure 5:</strong> Counter of HIV cases. <em>Data source: @unaids2024estimates</em>
+  </figcaption>
+</figure>
+
+Despite major advances in medicine and global public health, HIV/AIDS remains a widespread epidemic that demands sustained attention and action. Every year, about 1.3 million people are newly infected—an average of 3,500 every single day. The virus continues to disproportionately affect vulnerable populations, including women, young people, and key groups such as men who have sex with men, people who inject drugs, and sex workers. Sub-Saharan Africa remains the hardest-hit region, home to two-thirds of all people living with HIV, but the epidemic persists across every part of the world. Progress remains fragile: HIV is just as contagious, about **one in seven people with HIV are unaware of their status**, and prevention and treatment gaps continue, particularly among children and marginalized communities. HIV also remains the leading cause of death globally among women of reproductive age, threatening not only individual lives but the broader health, stability, and development of entire nations.
+
+
+The reason we see fewer deaths today is not because HIV/AIDS has disappeared, but because of unprecedented global efforts, massive investments, and the expansion of life-saving antiretroviral therapy, which now reaches over 30 million people. Without these interventions, the scale of loss and suffering would be far greater. The fight against HIV/AIDS is ongoing, and only by sustaining and strengthening our response – through science, funding, and global solidarity – can we hope to end the epidemic as a public health threat.
+
+
+
+# Misconception #6
+
+<h2 style="color: #e53935; text-align: center;">There is no way to mitigate the harm of HIV/AIDS</h2>
+
+The belief that there is no way to mitigate the harm of HIV/AIDS is clearly false. After the launch of PEPFAR in 2004, HIV-related deaths in PEPFAR-supported countries declined dramatically. The chart shows a sharp peak in deaths around the time of PEPFAR’s implementation, followed by consistent and significant reductions across all major countries affected. This trend demonstrates that with coordinated international efforts, funding, and access to treatment, it is possible to substantially reduce HIV-related mortality and improve health outcomes on a global scale.h
+
+<figure style="width: 100%; margin: 0; padding: 0;">
+  <iframe src="../interactive_viz_outputs/global_aids_deaths_linechart.html" width="100%" height="840px" frameborder="0" style="min-width: 1000px;"></iframe>
+  <figcaption style="text-align: left; margin-top: 10px;">
+    <strong>Figure 6:</strong> Lineplot of HIV-Related Deaths. <em>Data Source: @who_hiv_profiles</em>
+  </figcaption>
+</figure>
+
+# Misconception #7
+
+<h2 style="color: #e53935; text-align: center;">We have a full view of the HIV/AIDs epidemic</h2>
+
+![](../img/collage.png)
+<figcaption style="text-align: left; margin-top: 10px;">
+<strong>Figure 7:</strong> Collage of recent news articles.
+</figcaption>
+
+Recently, under the current administration, there has been a sharp decline in the public availability of data, particularly concerning HIV and global health. Even before this shift, accessing comprehensive, centralized data was challenging. However, the situation has worsened considerably with the removal of many key datasets and government resources that were once critical for research and analysis.
+
+For example, the UNAIDS global HIV estimates file, containing country-level HIV numbers and uncertainty bounds from 1990 to the present, was removed shortly after we downloaded it. Around the same time, several other major sources disappeared. The CDC’s AtlasPlus database, which housed about 15 years of surveillance data for HIV, STDs, TB, and viral hepatitis, was taken offline, along with the CDC’s historical HIV surveillance reports. PEPFAR’s online dashboards detailing program budgets and country-level expenditures were also dismantled. Similarly, access to the Demographic and Health Surveys (DHS), a vital resource for health, HIV, and nutrition data across more than 90 countries, was restricted. Entire websites such as USAID’s main portal and the U.S. foreign assistance database, which tracked global aid flows over the past two decades, were also removed.
+
+These data removals severely limited the scope of our project. They made it significantly harder to locate detailed, reliable information, especially on program funding, expenditures, and trends over time. 
+
+
+<h2 style="color: #e53935; text-align: center;">Next, PEPFAR --> Bureaucratic Solutions</h2>
+
+```{=html}
+<p class="context" style="font-size: 0.95rem;">Click below to view the next iteration of this story, learning about PEPFAR.</p>
+<div style="text-align: center; margin-top: 2rem; padding-bottom: 2rem;">
+    <a href="index.html" class="btn">← Back to Home</a>
+    <a href="pepfar.html" class="btn">PEPFAR analysis →</a>
+</div>
+```

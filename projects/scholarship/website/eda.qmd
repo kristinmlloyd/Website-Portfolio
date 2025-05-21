@@ -1,0 +1,859 @@
+---
+title: "Security Incidents Analysis: Global Patterns and Trends"
+format: 
+  html:
+    code-fold: true
+    toc: true
+    toc-depth: 3
+    number-sections: true
+    theme: cosmo
+    fig-width: 9
+    fig-height: 6
+    fig-dpi: 300
+    self-contained: true
+execute:
+  warning: false
+  message: false
+---
+
+```{python}
+#| label: setup
+#| include: false
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+import folium
+from folium.plugins import MarkerCluster
+from matplotlib.colors import LinearSegmentedColormap
+import warnings
+import plotly.express as px
+import plotly.graph_objects as go
+from IPython.display import display
+
+plt.rcParams['figure.figsize'] = (10, 6)
+warnings.filterwarnings('ignore', category=FutureWarning)
+sns.set_theme(style="whitegrid")
+
+palette = {"primary": "#FFBD59", "secondary": "#64C1FF", "danger": "#FF5252"}
+
+df = pd.read_csv("data/security_incidents_cleaned.csv")
+```
+
+# Introduction
+
+This analysis explores patterns and trends in global security incidents, identifying hotspots and tracking how they've evolved over time. By examining data on security incidents from around the world, we can better understand which regions face the greatest challenges and how these challenges have shifted in recent years.
+
+The distribution of security incidents distribution isn't uniform across the globe so understanding these patterns can help security professionals, policymakers, and researchers allocate resources effectively and develop targeted strategies to mitigate risks.
+
+The following analysis uses data visualization techniques to uncover insights about:
+
+-   The geographic distribution of security incidents
+-   How incident patterns have changed over time
+-   Which countries represent security hotspots, both historically and recently
+-   The nature and impact of different incident types
+
+## Dataset Overview
+
+Our analysis begins with a cleaned dataset of security incidents collected from the Aid Worker Security Database (AWSD). Let's examine the scope of our data:
+
+```{python}
+#| label: dataset-overview
+
+print(f"Dataset contains {len(df)} incidents across {df['country'].nunique()} countries")
+print(f"Time period covered: {df['year'].min()} to {df['year'].max()}")
+```
+
+This extensive dataset allows us to perform comprehensive analysis across both geographic and temporal dimensions. The data has been preprocessed to ensure consistency in country names, coordinate information, and incident classifications.
+
+# Global Distribution of Security Incidents
+
+Security incidents aren't distributed evenly across the world. Some regions experience higher concentrations due to various factors including geopolitical tensions, economic disparities, and historical conflicts. Visualizing this distribution helps us identify global patterns.
+
+## Interactive Global Incident Map
+
+The map below displays incidents across the globe, with colors indicating the severity based on the number of people affected:
+
+- Blue: No reported casualties
+- Green: 1-5 affected individuals
+- Orange: 6-20 affected individuals
+- Red: More than 20 affected individuals
+
+Clustering is used to manage dense areas where multiple incidents occurred in close proximity.
+
+```{python}
+#| label: incident-map-function
+#| echo: false
+
+def create_incidents_map(data):
+    """
+    Create an interactive folium map with clustered markers for security incidents.
+    
+    Args:
+        data: DataFrame containing incident data with latitude and longitude coordinates
+        
+    Returns:
+        folium.Map: Interactive map with clustered markers
+    """
+    # Calculate center coordinates for the map
+    center_lat = data['latitude'].mean()
+    center_lon = data['longitude'].mean()
+    
+    # Create base map
+    incidents_map = folium.Map(location=[center_lat, center_lon], zoom_start=2)
+    
+    # Add marker cluster
+    marker_cluster = MarkerCluster().add_to(incidents_map)
+    
+    # Filter for valid coordinates
+    valid_coords = data[data['latitude'].notna() & data['longitude'].notna()]
+    
+    # Define color function based on number of affected people
+    def get_color(affected):
+        if pd.isna(affected) or affected == 0:
+            return palette["secondary"]  # Blue
+        elif affected <= 5:
+            return palette["primary"]    # Orange
+        elif affected <= 20:
+            return "#FF9A3C"             # Darker orange
+        else:
+            return palette["danger"]     # Red
+    
+    # Add markers for each incident
+    for _, row in valid_coords.iterrows():
+        popup_text = f"""
+        <b>Country:</b> {row['country']}<br>
+        <b>Year:</b> {row['year']}<br>
+        <b>Total Affected:</b> {row['total_affected']}<br>
+        <b>Attack Type:</b> {row['means_of_attack'] if 'means_of_attack' in row and pd.notna(row['means_of_attack']) else 'Unknown'}<br>
+        """
+        
+        folium.CircleMarker(
+            location=[row['latitude'], row['longitude']],
+            radius=5,
+            popup=folium.Popup(popup_text, max_width=300),
+            fill=True,
+            fill_opacity=0.7,
+            color=get_color(row['total_affected']),
+            fill_color=get_color(row['total_affected'])
+        ).add_to(marker_cluster)
+    
+    return incidents_map
+```
+
+```{python}
+#| label: create-global-map
+#| echo: false
+
+global_incidents_map = create_incidents_map(df)
+map_filename = "images/global_security_incidents_map.html"
+global_incidents_map.save(map_filename)
+global_incidents_map
+```
+
+The interactive map reveals several important patterns:
+
+-   Incidents tend to cluster in certain regions
+-   Urban centers often show higher concentrations of incidents
+-   The distribution of high-severity incidents (red markers) isn't uniform, suggesting regional differences in the nature of security threats
+
+You can zoom in on specific regions and click on individual markers to get more details about each incident, such as the country, year, total affected, and attack type. 
+
+# Temporal Trends in Security Incidents
+
+Security landscapes evolve over time. By examining how incident patterns change year by year, we can identify emerging hotspots and areas where security might be improving.
+
+## Incidents by Country Over Time
+
+The animated choropleth map below shows how the distribution of security incidents has shifted over the years. Darker colors indicate higher numbers of incidents.
+
+```{python}
+
+incidents_by_year_country = df.groupby(['year', 'country']).size().reset_index(name='incidents')
+year_totals = incidents_by_year_country.groupby('year')['incidents'].sum().reset_index().sort_values('year')
+
+# Updated colorscale using the colors from the image
+custom_colorscale = [
+    [0, "#F99301"],     # Dark Orange
+    [0.33, "#F56300"],  # Safety Orange
+    [0.66, "#A1083B"],  # Jazzberry Jam
+    [1, "#541743"]      # Pompadour
+]
+
+fig = px.choropleth(
+    incidents_by_year_country,
+    locations='country',
+    locationmode='country names',
+    color='incidents',
+    animation_frame='year',
+    color_continuous_scale=custom_colorscale,
+    range_color=[0, incidents_by_year_country['incidents'].max()],
+    height=600
+)
+
+fig.update_layout(
+    title={
+        'text': 'Security Incidents by Country Over Time',
+        'y': 0.95,
+        'x': 0.5,
+        'xanchor': 'center',
+        'yanchor': 'top',
+        'font': {'size': 24}
+    },
+    coloraxis_colorbar=dict(title='Number of Incidents'),
+    geo=dict(showframe=False, showcoastlines=True, projection_type='natural earth'),
+    margin=dict(t=100)
+)
+
+fig.layout.updatemenus[0].buttons[0].args[1]['frame']['duration'] = 1000
+fig.layout.updatemenus[0].buttons[0].args[1]['transition']['duration'] = 500
+
+for i, year in enumerate(year_totals['year'].unique()):
+    year_total = year_totals.loc[year_totals['year'] == year, 'incidents'].values[0]
+    fig.frames[i].layout.annotations = [
+        dict(
+            x=0.5,
+            y=0.87,
+            xref='paper',
+            yref='paper',
+            text=f'Total Incidents in {year}: {year_total}',
+            showarrow=False,
+            font=dict(size=18)
+        )
+    ]
+
+latest_year = year_totals['year'].max()
+latest_total = year_totals.loc[year_totals['year'] == latest_year, 'incidents'].values[0]
+fig.update_layout(annotations=[
+    dict(
+        x=0.5,
+        y=0.87,
+        xref='paper',
+        yref='paper',
+        text=f'Total Incidents in {latest_year}: {latest_total}',
+        showarrow=False,
+        font=dict(size=18)
+    )
+])
+
+fig.write_html("images/interactive_incidents_over_time.html")
+fig.show()
+
+```
+
+This visualization reveals several insights:
+
+-   The global distribution of security incidents has shifted significantly over time
+-   Some countries that were previously security hotspots have shown improvement
+-   New areas of concern have emerged in recent years
+-   The total number of recorded incidents shows notable year-to-year variation
+
+You can use the play button to animate the map through time, or manually select specific years using the slider.
+
+## Annual Incident Trends
+
+To better understand the overall temporal pattern of security incidents, we can examine the yearly totals across all countries.
+
+```{python}
+#| label: yearly-incidents-bar
+#| echo: false
+
+year_incidents = df.groupby('year').size().reset_index(name='incidents')
+year_incidents['year'] = year_incidents['year'].astype(str)
+
+fig2 = px.bar(
+    year_incidents,
+    x='year',
+    y='incidents',
+    labels={'incidents': 'Number of Incidents', 'year': 'Year'},
+    height=400
+)
+
+fig2.update_traces(marker_color=palette["primary"])
+
+fig2.update_layout(
+    title={
+        'text': 'Security Incidents by Year',
+        'y': 0.95,
+        'x': 0.5,
+        'xanchor': 'center',
+        'yanchor': 'top'
+    },
+    xaxis=dict(rangeslider=dict(visible=True), type='category'),
+    bargap=0.1,
+    template='plotly_white'
+)
+
+fig2.write_html("images/interactive_yearly_incidents_barchart.html")
+fig2.show()
+```
+
+The interactive bar chart shows:
+
+-   Security incidents are increasing over time
+-   Years with notable spikes in security incidents
+
+Several factors might explain the patterns observed, including:
+
+-   Major global events and conflicts
+-   Changes in reporting practices
+-   Implementation of new security measures
+-   Shifts in geopolitical landscapes
+
+# Identifying Security Hotspots
+
+Not all countries experience security incidents at the same rate. By identifying which nations have faced the highest numbers of incidents, we can focus attention on areas that may require additional security resources and intervention.
+
+## Countries with Most Incidents: All-Time Analysis
+
+First, let's look at which countries have experienced the most security incidents over the entire period covered by our dataset:
+
+```{python}
+#| label: top-countries-all-time
+
+total_by_country = df.groupby('country').size().reset_index(name='total_incidents')
+total_by_country = total_by_country.sort_values('total_incidents', ascending=False)
+top15_countries = total_by_country.head(8)
+
+fig_top_all_time = px.bar(
+    top15_countries,
+    x='country',
+    y='total_incidents',
+    labels={'total_incidents': 'Number of Incidents', 'country': 'Country'},
+    height=450
+)
+
+fig_top_all_time.update_traces(marker_color=palette["primary"])
+
+fig_top_all_time.update_layout(
+    title={
+        'text': 'Top Countries by Security Incidents (All Time)',
+        'y': 1.0,
+        'x': 0.5,
+        'xanchor': 'center',
+        'yanchor': 'top',
+        'font': {'size': 17}
+    },
+    xaxis={'categoryorder': 'total descending', 'tickangle': 45}
+)
+
+fig_top_all_time.show()
+
+fig_top_all_time.write_html("images/top_countries_all_time.html")
+```
+
+This visualization highlights the countries that have historically been most affected by security incidents. Several factors might contribute to a country appearing on this list:
+
+-   Long-standing regional conflicts
+-   Political instability
+-   Higher population (which can increase the absolute number of incidents)
+-   More comprehensive reporting of incidents
+
+## Countries with Most Incidents: Recent Trends
+
+Historical patterns don't always reflect current realities. To identify emerging security hotspots, we need to focus on more recent data. The following analysis examines incident patterns over the past 10 years:
+
+```{python}
+#| label: top-countries-recent
+
+current_year = df['year'].max()
+ten_years_ago = current_year - 10
+recent_df = df[df['year'] >= ten_years_ago]
+
+recent_by_country = recent_df.groupby('country').size().reset_index(name='recent_incidents')
+recent_by_country = recent_by_country.sort_values('recent_incidents', ascending=False)
+top15_recent = recent_by_country.head(8)
+
+fig_top_recent = px.bar(
+    top15_recent,
+    x='country',
+    y='recent_incidents',
+    labels={'recent_incidents': 'Number of Incidents', 'country': 'Country'},
+    height=500
+)
+
+fig_top_recent.update_traces(marker_color=palette["primary"])
+
+fig_top_recent.update_layout(
+    title={
+        'text': f'Top Countries by Security Incidents (Last 10 Years: {ten_years_ago}-{current_year})',
+        'y': 1.0,
+        'x': 0.5,
+        'xanchor': 'center',
+        'yanchor': 'top',
+        'font': {'size': 17}
+    },
+    xaxis={'categoryorder': 'total descending', 'tickangle': 45}
+)
+
+fig_top_recent.show()
+
+fig_top_recent.write_html("images/top_countries_recent.html")
+```
+
+This recent trends analysis shows:
+
+- Countries that have experienced deteriorating security situations in the past decade
+- An Emerging hotspot (Mali) that did not appear in historical data
+
+By comparing this visualization with the all-time analysis, we can identify significant shifts in global security patterns.
+
+
+
+# Types of Injuries and Their Contexts
+
+Understanding the nature of injuries in security incidents provides critical insights for medical preparedness and response planning. Different attack methods produce different injury patterns, each requiring specific medical interventions.
+
+```{python}
+#| label: injury-analysis
+
+if 'means_of_attack' in df.columns:
+    attack_counts = df['means_of_attack'].value_counts().reset_index()
+    attack_counts.columns = ['Attack Type', 'Count']
+    attack_counts = attack_counts.sort_values('Count', ascending=False).head(10)
+    
+    fig_injuries = px.bar(
+        attack_counts,
+        y='Attack Type',
+        x='Count',
+        title='Most Common Attack Types and Associated Injuries',
+        height=500,
+        orientation='h'
+    )
+    
+    fig_injuries.update_traces(marker_color=palette["primary"])
+    
+    fig_injuries.update_layout(
+        yaxis={'categoryorder': 'total ascending'},
+        xaxis_title="Number of Incidents",
+        yaxis_title=None,
+        title={
+            'y': 1.0,
+            'x': 0.5,
+            'xanchor': 'center',
+            'yanchor': 'top',
+            'font': {'size': 17}
+        }
+    )
+    
+    fig_injuries.show()
+```
+
+## Common Injury Types and Their Characteristics
+
+- **Shooting**: Use of firearms targeting individuals or convoys; often linked to ambushes or intimidation of aid workers.
+
+- **Kidnapping**: Abduction of humanitarian personnel, sometimes for ransom, political leverage, or forced collaboration.
+
+- **Bodily Assault**: Physical attacks without weapons (e.g., beatings); may occur during looting, protests, or personal confrontations.
+
+- **Unknown**:
+Incident occurred but details about the type of attack are missing or unverified.
+
+- **Aerial Bombardment**: Attacks from aircraft (e.g., jets, drones); can unintentionally hit aid convoys, clinics, or camps, especially in conflict zones.
+
+**Shelling**: Use of heavy artillery (like mortars) in conflict areas, sometimes striking aid facilities unintentionally or as collateral damage.
+
+- **Kidnap-killing**: Victims are abducted and then killed; used as a method of terror or retaliation against perceived foreign involvement.
+
+**Vehicle-borne IED (Improvised Explosive Device)**: Bombs placed in vehicles; may target aid convoys or checkpoints.
+
+**Roadside IED**: Explosives placed along roads; often used to target military or NGO vehicles in volatile regions.
+
+- **Other Explosives**: Includes grenades, mines, or suicide vests; less common but still a serious risk in some areas.
+
+## When Different Injury Types Occur
+
+Certain injury patterns are more likely in specific contexts:
+
+1.  **Combat/Crossfire Situations**: Primarily involve ballistic trauma and injuries from explosives.
+2.  **Targeted Attacks**: Commonly result from firearms or explosive devices aimed at specific individuals or groups.
+3.  **Civil Unrest**: Typically leads to blunt trauma and injuries from less-lethal weapons such as rubber bullets or tear gas canisters.
+4.  **Terrorist Incidents**: Often produce complex injury patterns due to explosives and coordinated, multi-method attacks.
+5.  **Detention**: Injuries are usually associated with blunt force trauma or forms of torture.
+
+Understanding these patterns allows for appropriate medical preparedness, including: - Proper training of medical personnel - Stockpiling appropriate medical supplies - Developing contextually appropriate evacuation protocols - Creating specialized treatment facilities in high-risk areas
+
+# Attack Contexts
+
+Examining the contexts in which security incidents occur provides valuable insights for risk assessment and mitigation strategies.
+
+```{python}
+#| label: attack-contexts
+
+context_counts = df['attack_context'].value_counts().reset_index()
+context_counts.columns = ['Attack Context', 'Count']
+
+context_counts = context_counts.sort_values('Count', ascending=False)
+
+fig_context = px.bar(
+    context_counts,
+    x='Attack Context',
+    y='Count',
+    title='Security Incidents by Attack Context',
+    height=450
+)
+
+fig_context.update_traces(marker_color=palette["primary"])
+
+fig_context.update_layout(
+    xaxis_title=None,
+    yaxis_title="Number of Incidents",
+    xaxis={'categoryorder': 'total descending', 'tickangle': 45}
+)
+
+fig_context.show()
+```
+
+## Analysis of Attack Contexts
+
+The distribution of security incidents across different attack contexts reveals important patterns:
+
+### Combat/Crossfire
+
+- Individuals are caught in direct fighting between armed forces or groups
+
+### Individual Attacks
+
+-   Targeted violence against specific individuals or small groups
+-   May be politically, criminally, or personally motivated
+
+### Ambushes
+
+-   Planned attacks often targeting mobile personnel
+-   Particularly dangerous due to the element of surprise
+-   Can be mitigated through route analysis and convoy procedures
+
+### Raids
+
+-   Organized attacks against specific facilities or compounds
+-   Often involve multiple attackers and coordinated tactics
+-   Physical security measures and response protocols are critical countermeasures
+
+### Detention
+
+-   Formal or informal holding of personnel by various actors
+-   May involve legal or extra-legal processes
+-   Can lead to prolonged security incidents with complex resolution requirements
+
+This understanding of attack contexts helps security managers develop appropriate: - Training programs tailored to likely threat scenarios - Standard operating procedures for different contexts - Resource allocation based on context-specific risks - Coordination mechanisms with relevant security actors
+
+# Nationals vs. Internationals: Casualty Patterns
+
+The impact of security incidents varies significantly between local nationals and international personnel. Understanding these differences is crucial for developing appropriate security protocols.
+
+```{python}
+#| label: nationals-internationals
+
+casualties_data = {
+    'Category': ['Nationals', 'Internationals'],
+    'Killed': [
+        df['nationals_killed'].sum(),
+        df['internationals_killed'].sum()
+    ],
+    'Wounded': [
+        df['nationals_wounded'].sum(),
+        df['internationals_wounded'].sum()
+    ],
+    'Kidnapped': [
+        df['nationals_kidnapped'].sum(),
+        df['internationals_kidnapped'].sum()
+    ]
+}
+
+casualties_df = pd.DataFrame(casualties_data)
+casualties_long = pd.melt(
+    casualties_df,
+    id_vars=['Category'],
+    value_vars=['Killed', 'Wounded', 'Kidnapped'],
+    var_name='Status',
+    value_name='Count'
+)
+
+fig_casualties = px.bar(
+    casualties_long,
+    x='Category',
+    y='Count',
+    color='Status',
+    title='Casualties by Nationality Category (Nationals vs. Internationals)',
+    barmode='stack',
+    height=500,
+    color_discrete_map={
+        'Killed': palette["danger"], 
+        'Wounded': palette["primary"], 
+        'Kidnapped': palette["secondary"]
+    }
+)
+
+fig_casualties.update_layout(
+    xaxis_title=None,
+    yaxis_title="Number of People",
+    legend_title_text=None,
+    title={
+        'y': 1.0,
+        'x': 0.5,
+        'xanchor': 'center',
+        'yanchor': 'top',
+        'font': {'size': 17}
+    }
+)
+
+fig_casualties.show()
+```
+
+## Analysis of Casualty Patterns
+
+The comparison between nationals and internationals reveals several important patterns:
+
+### Disparity in Impact
+
+-   Local nationals typically suffer significantly higher casualties than international personnel
+-   This disparity applies across all types of harm (killed, wounded, kidnapped)
+
+### Factors Contributing to Disparity
+
+1.  **Numbers and Exposure**: Locals far outnumber internationals in most areas
+2.  **Access to Protection**: Internationals often have enhanced security measures and evacuation options
+3.  **Targeting Patterns**: Some actors specifically avoid targeting internationals due to potential international consequences
+4.  **Risk Profiles**: Internationals may have more restricted movement in high-threat areas
+
+### Kidnapping Trends
+
+-   Kidnapping represents a relatively small proportion of overall casualties
+-   However, internationals face a disproportionate kidnapping risk in many contexts due to:
+    -   Higher perceived ransom value
+    -   Political leverage potential
+    -   Media attention
+
+### Implications for Security Planning
+
+-   Different security protocols may be needed for national and international staff
+-   Need for context-specific risk assessments
+-   Importance of inclusive security measures that protect all personnel
+
+# Location Trends
+
+```{python}
+#| label: location
+
+context_counts = df['location'].value_counts().reset_index()
+context_counts.columns = ['Location', 'Count']
+
+context_counts = context_counts.sort_values('Count', ascending=False)
+
+fig_context = px.bar(
+    context_counts,
+    x='Location',
+    y='Count',
+    title='Security Incidents by Location',
+    height=450
+)
+
+fig_context.update_traces(marker_color=palette["primary"])
+
+fig_context.update_layout(
+    xaxis_title=None,
+    yaxis_title="Number of Incidents",
+    xaxis={'categoryorder': 'total descending', 'tickangle': 45}
+)
+
+fig_context.show()
+```
+
+I'll provide some insights into why these security incidents might be distributed this way:
+
+**Road**: The high number of incidents on roads could be due to several factors, such as more exposure and visibility of potential targets, less controlled environment compared to other locations, vulnerable transportation of valuable goods or information, etc.
+
+**Unknown Locations**: The significant number of incidents with unknown locations indicates challenges in tracking and documenting security breaches.
+
+**Public Locations**: These areas are prone to security incidents because high foot traffic increases opportunities for theft or disruption, multiple entry and exit points, or diverse and unpredictable crowd dynamics.
+
+**Protect Sites**: Despite being designated as protected, these locations still experience incidents.
+
+These explanations highlight the complex nature of security incidents and the varied challenges across different location types.
+
+# Gender Distribution of Affected Individuals
+
+Understanding how security incidents affect different gender groups provides important insights into vulnerability patterns and protection needs.
+
+```{python}
+#| label: gender-analysis
+
+gender_cols = ['gender_male', 'gender_female']
+
+gender_totals = {
+    'Gender': ['Male', 'Female'],
+    'Count': [
+        df['gender_male'].sum(),
+        df['gender_female'].sum()
+    ]
+}
+
+gender_df = pd.DataFrame(gender_totals)
+
+fig_gender = px.bar(
+    gender_df,
+    x='Gender',
+    y='Count',
+    title='Gender Distribution of Affected Individuals',
+    height=450
+)
+
+fig_gender.update_traces(marker_color=palette["primary"])
+
+fig_gender.update_layout(
+    xaxis_title=None,
+    yaxis_title="Number of Individuals"
+)
+
+fig_gender.show()
+```
+
+## Analysis of Gender Patterns
+
+The gender distribution of individuals affected by security incidents reveals several significant patterns:
+
+### Male Predominance
+
+-   Males constitute the majority of individuals affected by security incidents
+-   The disparity may reflect different exposure levels due to gender roles in some contexts
+
+### Contributing Factors
+
+1.  **Occupational Exposure**: Males may be overrepresented in certain high-risk professions. Armed groups may specifically target men for recruitment, detention, or elimination as potential threats.
+2.  **Mobility Patterns**: Gender differences in freedom of movement may affect exposure to risks.
+3.  **Targeting Patterns**: In some contexts, males may be specifically targeted.
+4.  **Reporting Biases**: Incidents affecting females may be underreported in some settings. This data may underrepresent violence against women, particularly sexual violence, is often underreported in conflict zones due to stigma and limited access to reporting mechanisms.
+
+### Implications for Protection
+
+-   Training should address the specific needs and vulnerabilities of different gender groups
+
+Understanding these gender dimensions helps organizations develop more effective and inclusive security strategies that protect all personnel regardless of gender.
+
+# Organizations Affected by Security Incidents
+
+Different types of organizations face varying levels of security risk based on their mandates, visibility, and operational contexts.
+
+```{python}
+#| label: organizations-analysis
+
+org_cols = ['un', 'ingo', 'icrc', 'nrcs_and_ifrc', 'nngo', 'other']
+
+if all(col in df.columns for col in org_cols):
+    org_totals = df[org_cols].sum().reset_index()
+    org_totals.columns = ['Organization Type', 'Total Incidents']
+    
+    org_labels = {
+        'un': 'United Nations',
+        'ingo': 'International NGO',
+        'icrc': 'Int. Committee of Red Cross',
+        'nrcs_and_ifrc': 'National Red Cross/Red Crescent',
+        'nngo': 'National NGO',
+        'other': 'Other Organizations'
+    }
+    
+    org_totals['Organization'] = org_totals['Organization Type'].map(org_labels)
+    
+    org_totals = org_totals.sort_values('Total Incidents', ascending=False)
+    
+    fig_orgs = px.bar(
+        org_totals,
+        y='Organization',
+        x='Total Incidents',
+        title='Security Incidents by Organization Type',
+        height=500,
+        orientation='h'
+    )
+    
+    fig_orgs.update_traces(marker_color=palette["primary"])
+    
+    fig_orgs.update_layout(
+        yaxis_title=None,
+        xaxis_title="Number of Incidents",
+        yaxis={'categoryorder': 'total ascending'},
+        title={
+            'y': 1.0,
+            'x': 0.5,
+            'xanchor': 'center',
+            'yanchor': 'top',
+            'font': {'size': 17}
+        }
+    )
+    
+    fig_orgs.show()
+```
+
+## Organizational Risk Profiles
+
+Different organizations face varying security risks based on numerous factors:
+
+- **International NGO**: A non-governmental organization that operates across multiple countries, providing humanitarian aid, development support, or advocacy on global issues.
+
+- **National NGO**: A non-governmental organization that operates primarily within a single country, addressing local or national humanitarian, social, or development needs.
+
+**United Nations (UN)**: An international organization made up of member states, working to maintain peace, provide humanitarian aid, and promote human rights and development worldwide.
+
+- **National Red Cross / Red Crescent**: Independent national societies that are part of the International Red Cross and Red Crescent Movement, providing emergency response, disaster relief, and health services within their own countries.
+
+- **Red Cross**: A neutral, impartial humanitarian organization focused on protecting and assisting victims of armed conflict and promoting international humanitarian law.
+
+### Security Implications by Organization Type
+
+1.  **Organization-specific protocols**: Security measures should be tailored to each organization's unique risk profile
+2.  **Resource allocation**: Security resources should be distributed equitably based on risk
+3.  **Coordination mechanisms**: Inter-organizational security collaboration enhances protection for all
+4.  **Training requirements**: Staff need organization-specific security training
+
+# Comparison of Actor Types
+
+Understanding which actors are responsible for security incidents helps identify patterns of responsibility and develop appropriate mitigation strategies.
+
+```{python}
+#| label: actor-analysis
+
+relevant_actors = ['Host state', 'Foreign or coalition forces']
+actor_data = df[df['actor_type'].isin(relevant_actors)]
+
+if len(actor_data) > 0:
+    actor_counts = actor_data['actor_type'].value_counts().reset_index()
+    actor_counts.columns = ['Actor Type', 'Count']
+    
+    fig_actors = px.bar(
+        actor_counts,
+        x='Actor Type',
+        y='Count',
+        title='Host State vs Foreign Actors in Security Incidents',
+        height=450
+    )
+    
+    fig_actors.update_traces(marker_color=palette["primary"])
+    
+    fig_actors.update_layout(
+        xaxis_title=None,
+        yaxis_title="Number of Incidents"
+    )
+    
+    fig_actors.show()
+```
+
+## Analysis of Actor Responsibility
+
+This analysis focuses specifically on two major actor types responsible for security incidents: Host State forces and Foreign/coalition forces. This comparison reveals important patterns:
+
+### Host State vs. Foreign Forces
+
+-   **Host State**: The national government or military of the country where a humanitarian operation or conflict is taking place.
+-   **Foreign or Coalition Force**: Military forces from one or more countries operating in a foreign nation, often as part of international coalitions or peacekeeping missions.
+
+### Implications for Security Planning
+
+1.  **Context-specific approaches**: Security strategies should reflect the predominant actor types in each area
+2.  **Engagement strategies**: Different approaches may be needed when engaging with different security
+
+# Conclusion
+
+# Analyze individual countries
+
+-   [Palestine](palestine.qmd)

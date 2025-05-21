@@ -1,0 +1,563 @@
+---
+title: "Security Incidents in Syrian Arab Republic: Trends and Patterns"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: true
+    number-sections: true
+    theme: cosmo
+    fig-width: 9
+    fig-height: 6
+    fig-dpi: 300
+    self-contained: true
+bibliography: references.bib
+execute:
+  warning: false
+  message: false
+---
+
+<style>
+.typing-line {
+  font-family: monospace;
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: .15em solid #000;
+  width: 0;
+  display: block;
+  animation: typing 2s steps(20, end) forwards;
+  /* Only type, no infinite blinking */
+}
+
+.typing-line:nth-child(2) {
+  animation-delay: 2s;
+}
+
+.typing-line:nth-child(3) {
+  animation-delay: 4s;
+}
+
+.typing-line:nth-child(4) {
+  animation-delay: 6s;
+}
+
+@keyframes typing {
+  from { width: 0 }
+  to { width: 100% }
+}
+</style>
+
+```{python}
+#| label: setup
+#| include: false
+#| echo: false
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+import folium
+from folium.plugins import MarkerCluster
+from matplotlib.colors import LinearSegmentedColormap
+import warnings
+import plotly.express as px
+import plotly.graph_objects as go
+from IPython.display import display
+from scipy import stats
+
+plt.rcParams['figure.figsize'] = (10, 6)
+warnings.filterwarnings('ignore', category=FutureWarning)
+sns.set_theme(style="whitegrid")
+
+palette = {"primary": "#FFBD59", "secondary": "#64C1FF", "danger": "#FF5252"}
+
+df = pd.read_csv("data/security_incidents_cleaned.csv")
+country_data = df[df['country'] == 'Syrian Arab Republic']
+
+```
+
+![](images/syriapic.png)
+
+```{python}
+#| echo: false
+
+from IPython.display import HTML
+
+killed = int(country_data['nationals_killed'].sum() + country_data['internationals_killed'].sum())
+wounded = int(country_data['nationals_wounded'].sum() + country_data['internationals_wounded'].sum())
+kidnapped = int(country_data['nationals_kidnapped'].sum() + country_data['internationals_kidnapped'].sum())
+
+from IPython.display import HTML
+
+html = f"""
+<div>
+  <span class="typing-line">In the Syrian Arab Republic...</span>
+  <span class="typing-line">{killed} humanitarian workers have died,</span>
+  <span class="typing-line">{wounded} humanitarian workers have been wounded,</span>
+  <span class="typing-line">{kidnapped} humanitarian workers have been kidnapped.</span>
+</div>
+"""
+
+HTML(html)
+
+```      
+
+# Executive Summary
+
+![](images/syria.png){width=200px}
+
+
+This report examines patterns in security incidents affecting humanitarian workers in the Syrian Arab Republic over more than a decade of conflict. Violence has shifted alongside major geopolitical events—from the Syrian uprising and rise of ISIS to the collapse of the Assad regime in 2024. 
+
+Key findings include:
+
+- Aerial bombardment and shelling are the most frequent attack methods, reflecting state-driven warfare and urban conflict.
+- Combat and crossfire dominate the context, indicating that most incidents occur near frontlines rather than through targeted violence.
+- Ambushes and raids continue to pose risks, especially during movement through contested areas.
+- National staff face disproportionate risk, with the vast majority of casualties across all categories.
+- High-impact incidents are concentrated at project sites and compounds, reinforcing the need for fixed-site preparedness.
+
+These trends highlight the urgency of conflict-sensitive planning, improved duty-of-care for national staff, and sustained policy advocacy to protect humanitarian access in Syria.
+
+# Background: The Conflict
+
+## Historical Context
+
+The Syrian conflict represents one of the most devastating and complex crises of the 21st century. Beginning as peaceful pro-democracy protests in 2011 during the Arab Spring, it rapidly escalated into a full-scale civil war when the Bashar al-Assad regime responded with violent crackdowns [@cfr_syria]. The conflict evolved into a multi-sided proxy war with international powers backing different factions:
+
+-   **2011**: Protests against Assad's authoritarian regime met with violent government response
+-   **2012-2013**: Formation of rebel groups and escalation to full civil war
+-   **2014-2015**: Rise of ISIS capturing significant Syrian territory
+-   **2015**: Russian military intervention supporting the Assad regime
+-   **2016-2019**: Government forces recapture key cities including Aleppo and eastern Ghouta
+-   **2019-2020**: Turkish operations against Kurdish forces in northern Syria
+-   **2020-2023**: Relatively frozen conflict lines with occasional flare-ups
+
+## Recent Escalation
+
+The Syrian conflict entered a dramatic new phase in late 2024 with the sudden collapse of the Assad regime after 50 years of family rule. This upheaval has fundamentally altered the dynamics of the war:
+
+-   **November 30, 2024**: Rebel forces led by Hayat Tahrir al-Sham (HTS) and the Turkish-backed Syrian National Army (SNA) seized Aleppo
+-   **December 8, 2024**: Damascus fell to rebel forces, ending the Assad dynasty with Bashar al-Assad fleeing to Moscow
+-   **600,000+** estimated deaths since the beginning of the conflict
+-   **6.9 million** internally displaced persons
+-   **5.4 million** refugees abroad
+-   Multiple concurrent conflicts continuing across Syrian territory:
+    - Kurdish forces clashing with Arab tribes in northeast
+    - Islamic State maintaining presence and launching attacks
+    - Israeli strikes against Iranian and Syrian military positions
+    - Iran-backed militias targeting U.S. forces in eastern Syria
+
+<h1>Map of Incidents <img src="images/map.png" width="60px" style="vertical-align:middle; margin-left:10px;"></h1>
+
+```{python}
+#| echo: false
+
+icon_path = "images/hazard2.png"
+valid_points = country_data[country_data['latitude'].notna() & country_data['longitude'].notna()]
+
+country_map = folium.Map(location=[31.9, 35.2], zoom_start=8)
+
+coords = []
+
+for _, row in valid_points.iterrows():
+    coords.append((row['latitude'], row['longitude']))
+    
+    popup_html = f"""
+    <b>Location:</b> {row['location']}, {row['country']}<br>
+    <b>Year:</b> {row['year']}<br>
+    <b>Total Affected:</b> {row['total_affected']}<br>
+    <b>Attack Type:</b> {row.get('means_of_attack', 'Unknown')}
+    """
+
+    icon = folium.CustomIcon(
+        icon_image=icon_path,
+        icon_size=(20, 20)
+    )
+
+    folium.Marker(
+        location=[row['latitude'], row['longitude']],
+        popup=folium.Popup(popup_html, max_width=300),
+        icon=icon
+    ).add_to(country_map)
+
+if coords:
+    country_map.fit_bounds(coords)
+
+country_map
+
+```
+
+# Temporal Trends in Security Incidents {#sec-temporal}
+
+## Incident Frequency Over Time
+
+```{python}
+#| label: fig-yearly-incidents
+#| fig-cap: "Security incidents in Syria from 2011 to 2025"
+#| echo: false
+
+# Group incidents by year
+yearly_incidents = country_data.groupby('year').size().reset_index(name='incidents')
+
+# Create line chart
+fig = px.line(
+    yearly_incidents, 
+    x='year', 
+    y='incidents',
+    markers=True,
+    labels={'incidents': 'Number of Incidents', 'year': 'Year'},
+    height=500
+)
+
+# Configure layout
+fig.update_layout(
+    title=None,
+    xaxis=dict(tickmode='linear', dtick=2),
+    yaxis=dict(zeroline=True),
+    hovermode='x unified',
+    template='plotly_white'
+)
+
+# Add range slider
+fig.update_xaxes(rangeslider_visible=True)
+
+# Add event annotations
+events = [
+    {'year': 2011, 'event': 'Syrian uprising begins', 'y_position': 3},
+    {'year': 2013, 'event': 'Chemical weapons attack', 'y_position': 35},
+    {'year': 2014, 'event': 'ISIS territorial expansion', 'y_position': 28},
+    {'year': 2015, 'event': 'Russian intervention begins', 'y_position': 12},
+    {'year': 2016, 'event': 'Fall of Aleppo to regime', 'y_position': 24},
+    {'year': 2019, 'event': 'US withdraws from northeast', 'y_position': 48},
+    {'year': 2023, 'event': 'Devastating earthquake', 'y_position': 12},
+    {'year': 2024, 'event': 'Assad regime collapses', 'y_position': 17}
+]
+
+for event in events:
+    fig.add_annotation(
+        x=event['year'],
+        y=event['y_position'],
+        text=event['event'],
+        showarrow=True,
+        arrowhead=1,
+        ax=0,
+        ay=-20,
+        font=dict(size=10),
+        bgcolor="rgba(255,255,255,0.85)",
+        bordercolor="black",
+        borderwidth=1,
+        borderpad=3
+    )
+
+fig.show()
+```
+
+### Analysis of Incident Trends
+
+The incident timeline in Syria reveals a strong link between major geopolitical events and spikes in humanitarian security threats:
+
+- **2011–2013:** The Syrian uprising and subsequent use of chemical weapons mark a dramatic rise in conflict intensity, with incidents peaking during ISIS’s territorial expansion.
+- **2015:** A sharp drop in incidents follows, coinciding with the **start of Russian intervention**, likely signaling a shift in control and tactics.
+- **2016–2018:** Conflict intensifies again with the **fall of Aleppo** and the **US withdrawal from northeast Syria**, resulting in the highest recorded incident levels.
+- **2020–2021:** A steep decline occurs as territorial control consolidates.
+- **2023–2024:** A brief resurgence follows the **devastating earthquake** and eventual **collapse of the Assad regime**, reflecting renewed instability.
+
+These trends highlight how international involvement, regime change, and territorial shifts consistently shape the security landscape for humanitarian operations in Syria.
+
+# Nature of Security Incidents {#sec-nature}
+
+## Predominant Attack Types
+
+```{python}
+#| label: fig-attack-types
+#| fig-cap: "Most common types of attacks"
+#| echo: false
+
+# Analyzing means of attack
+attack_counts = country_data['means_of_attack'].value_counts().reset_index()
+attack_counts.columns = ['Attack Type', 'Count']
+attack_counts = attack_counts.sort_values('Count', ascending=False).head(10)
+
+# Create horizontal bar chart with uniform color
+fig_attacks = px.bar(
+    attack_counts,
+    y='Attack Type',
+    x='Count',
+    title=None,
+    height=500,
+    orientation='h'
+)
+
+# Set all bars to primary color
+fig_attacks.update_traces(marker_color=palette["secondary"])
+
+# Configure layout
+fig_attacks.update_layout(
+    yaxis={'categoryorder': 'total ascending'},
+    xaxis_title="Number of Incidents",
+    yaxis_title=None
+)
+
+fig_attacks.show()
+```
+
+### Analysis of Attack Methods
+
+Aerial bombardment is the most frequently reported attack method, followed by shelling, making Syria unique among conflict zones where indirect fire and airstrikes dominate the threat landscape. These tactics reflect state-level military engagement and urban warfare dynamics, especially during regime offensives. Shooting and kidnapping also appear prominently, pointing to both conventional ground combat and targeted abduction of humanitarian personnel. 
+
+This distribution underscores the need for protective infrastructure in high-risk areas, early-warning systems during aerial campaigns, and mobility protocols to avoid exposure during bombardments and shelling.
+
+## Attack Contexts
+
+```{python}
+#| label: fig-attack-contexts
+#| fig-cap: "Security incidents by attack context"
+#| echo: false
+
+context_counts = country_data['attack_context'].value_counts().reset_index()
+context_counts.columns = ['Attack Context', 'Count']
+
+context_counts = context_counts.sort_values('Count', ascending=False)
+
+fig_context = px.bar(
+    context_counts,
+    x='Count',
+    y='Attack Context',
+    title=None,
+    height=450,
+    orientation='h'
+)
+
+fig_context.update_traces(marker_color=palette["secondary"])
+
+fig_context.update_layout(
+    xaxis_title="Number of Incidents",
+    yaxis_title=None,
+    yaxis=dict(categoryorder='total ascending'),  # <-- ensures most at top
+    margin=dict(l=150, r=20, t=30, b=30)
+)
+
+fig_context.show()
+```
+
+### Analysis of Attack Contexts
+
+Combat or crossfire is by far the most common context of security incidents in Syria, reflecting the country’s prolonged urban warfare and front-line volatility. This indicates that many humanitarian actors are unintentionally caught in large-scale hostilities, rather than being directly targeted.
+
+## Location of Attack
+
+```{python}
+#| label: fig-attack-locations
+#| fig-cap: "Most common attack locations"
+#| echo: false
+
+# Get top 10 most frequent locations
+location_counts = country_data['location'].value_counts().reset_index()
+location_counts.columns = ['Location', 'Count']
+location_counts = location_counts.sort_values('Count', ascending=False).head(10)
+
+# Create bar chart
+fig_locations = px.bar(
+    location_counts,
+    y='Location',
+    x='Count',
+    title=None,
+    height=500,
+    orientation='h'
+)
+
+fig_locations.update_traces(marker_color="#64C1FF")  # <- updated color
+
+fig_locations.update_layout(
+    yaxis={'categoryorder': 'total ascending'},
+    xaxis_title="Number of Incidents",
+    yaxis_title=None
+)
+
+fig_locations.show()
+```
+
+### Analysis of Attack Locations
+
+Most attacks occurred at project sites, on roads, and in public locations, highlighting the widespread insecurity across operational, transit, and civilian spaces.
+
+# Human Impact of Security Incidents {#sec-impact}
+
+## Casualties by Category
+
+```{python}
+#| label: fig-casualties
+#| fig-cap: "Total casualties in Palestine by category"
+#| echo: false
+
+# Create data for stacked bar chart
+stacked_data = {
+    'Category': ['Nationals', 'Internationals'],
+    'Killed': [
+        country_data['nationals_killed'].sum(),
+        country_data['internationals_killed'].sum()
+    ],
+    'Wounded': [
+        country_data['nationals_wounded'].sum(),
+        country_data['internationals_wounded'].sum()
+    ],
+    'Kidnapped': [
+        country_data['nationals_kidnapped'].sum(),
+        country_data['internationals_kidnapped'].sum()
+    ]
+}
+
+# Convert to DataFrame and reshape for stacking
+stacked_df = pd.DataFrame(stacked_data)
+stacked_df_long = pd.melt(
+    stacked_df,
+    id_vars=['Category'],
+    value_vars=['Killed', 'Wounded', 'Kidnapped'],
+    var_name='Status',
+    value_name='Count'
+)
+
+# Create a stacked bar chart
+fig_stacked = px.bar(
+    stacked_df_long,
+    x='Category',
+    y='Count',
+    color='Status',
+    title=None,
+    barmode='stack',
+    height=500,
+    color_discrete_map={
+        'Killed': palette["danger"], 
+        'Wounded': palette["primary"], 
+        'Kidnapped': palette["secondary"]
+    }
+)
+
+# Improve layout
+fig_stacked.update_layout(
+    xaxis_title=None,
+    yaxis_title="Number of People",
+    legend_title_text=None
+)
+
+fig_stacked.show()
+
+```
+
+### Analysis of Casualty Patterns
+
+The overwhelming majority of casualties in Syria are nationals, who account for nearly all reported deaths, injuries, and kidnappings. The high number of national fatalities suggests that many incidents are either highly lethal or occur in areas with limited access to emergency care.
+
+# Major Incidents {#sec-major}
+
+## Top 5 Most Impactful Security Incidents
+
+```{python}
+#| label: tbl-interactive-incidents
+#| echo: false
+
+import plotly.graph_objects as go
+from IPython.display import display, HTML
+
+if not country_data.empty and 'total_affected' in country_data.columns:
+    # Sort the entire dataset by total_affected
+    sorted_incidents = country_data.sort_values(by='total_affected', ascending=False)
+    
+    # Select display columns and rename them
+    display_cols = ['year', 'location', 'total_affected', 'total_killed', 'total_wounded', 'attack_context', 'actor_type']
+    column_names = {
+        'year': 'Year',
+        'location': 'Location',
+        'total_affected': 'Total Affected',
+        'total_killed': 'Killed',
+        'total_wounded': 'Wounded',
+        'attack_context': 'Context',
+        'actor_type': 'Actor Type'
+    }
+    
+    # Prepare the display dataframe
+    display_df = sorted_incidents[display_cols].rename(columns=column_names)
+    
+    # Create an interactive table with Plotly
+    fig = go.Figure(data=[go.Table(
+        header=dict(
+            values=list(column_names.values()),
+            fill_color='#A1083B',
+            align='left',
+            font=dict(color='white', size=14),
+            height=40
+        ),
+        cells=dict(
+            values=[display_df[col] for col in display_df.columns],
+            fill_color=[['#F99301' if i < 5 else '#f9f9f9' for i in range(len(display_df))]],
+            align='left',
+            font=dict(color=['black' if i < 5 else '#333333' for i in range(len(display_df))], size=12),
+            height=30
+        )
+    )])
+    
+    # Update layout for better appearance with fixed height for scrolling
+    fig.update_layout(
+        title={
+            'text': 'Security Incidents Ranked by Impact',
+            'y': 0.98,
+            'x': 0.5,
+            'xanchor': 'center',
+            'yanchor': 'top',
+            'font': {'size': 20}
+        },
+        margin=dict(l=20, r=20, t=60, b=20),
+        height=600,  # Fixed height to enable scrolling
+        width=900
+    )
+    
+    # Add a note about the highlighted rows
+    fig.add_annotation(
+        x=0,
+        y=-0.15,
+        xref='paper',
+        yref='paper',
+        text="<i>Top 5 most impactful incidents are highlighted. Scroll to view all incidents.</i>",
+        showarrow=False,
+        font=dict(size=12),
+        align='left'
+    )
+    
+    # Save and display the figure
+    fig.write_html("images/interactive_incidents_table.html",
+                  include_plotlyjs='cdn',
+                  config={'scrollZoom': True})
+    fig.show()
+```
+
+### Analysis of Major Incidents
+
+The most severe incidents in Syria primarily occurred at **project sites**, with nearly all involving **combat or crossfire**:
+
+- The deadliest incidents occurred in **2016 and 2017**, each resulting in 9 fatalities with no survivors—highlighting the intensity of direct armed clashes.
+- The highest total casualty incident in **2013** left 11 people wounded at a project site, suggesting exposure to indiscriminate violence rather than targeted attack.
+
+These events emphasize the critical need for conflict-sensitive planning, real-time situational awareness, and investment in protective infrastructure at operational sites.
+
+For more detailed information on the Syrian conflict timeline, see the [Council on Foreign Relations Conflict Tracker](https://www.cfr.org/global-conflict-tracker/conflict/conflict-syria).
+
+# Recommendations
+
+## For Security Planning 
+
+- Map and monitor high-risk areas near frontlines, with live updates on aerial activity and shelling zones.
+- Establish hardened infrastructure and underground shelters at compounds and project sites.
+- Develop rapid evacuation protocols tailored to conflict escalation patterns.
+
+## For Humanitarian Organizations
+
+- Provide personal protective equipment and conflict awareness training to national staff in volatile areas.
+- Strengthen coordination with local actors and communities to improve incident reporting and early warnings.
+- Scale up remote programming in areas with ongoing aerial bombardment or crossfire.
+
+## For Future Research
+
+- Analyze how territorial control shifts impact humanitarian security in real time.
+- Investigate long-term mental health outcomes for frontline national staff.
+- Study the role of infrastructure damage (e.g., hospitals, water, roads) on aid delivery and mobility.

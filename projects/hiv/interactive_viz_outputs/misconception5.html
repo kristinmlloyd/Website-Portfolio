@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {
+      background-color: #121212;
+      color: white;
+      font-family: 'Helvetica', sans-serif;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+    
+    /* Main Content */
+    .container {
+      max-width: 900px;
+      text-align: center;
+      padding: 20px;
+      margin: 0 auto; /* Removed top margin to position at top */
+      height: 100vh; /* Full viewport height */
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    
+    .message {
+      font-size: 1.8em;
+      line-height: 1.5;
+      opacity: 1;
+      margin-bottom: 2rem;
+    }
+    
+    .counter {
+      font-size: 5rem;
+      color: #e32d2d;
+      font-weight: bold;
+    }
+    
+    /* Hidden play button for fallback */
+    .play-button {
+      display: none;
+      margin-top: 30px;
+      padding: 15px 30px;
+      background-color: #e32d2d;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 1.4em;
+      cursor: pointer;
+      opacity: 0;
+      transition: background-color 0.3s;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Main Content Container -->
+  <div class="container" id="main-container">
+    <p class="message" id="message">
+      Approximately <span class="counter" id="counter">0</span> people are currently living with HIV in our world.
+    </p>
+    
+    <button class="play-button" id="play-button">Start Animation</button>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/countup.js/2.0.7/countUp.umd.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      // Set up counter
+      const counter = new countUp.CountUp('counter', 39900000, {
+        startVal: 0,
+        duration: 8,
+        separator: ',',
+        useEasing: true
+      });
+      
+      // Get elements
+      const container = document.getElementById('main-container');
+      const playButton = document.getElementById('play-button');
+      
+      // Keep track of animation state
+      let animated = false;
+      
+      // Function to check if element is in viewport
+      function isElementInViewport(el) {
+        const rect = el.getBoundingClientRect();
+        return (
+          rect.top < (window.innerHeight || document.documentElement.clientHeight) * 0.8 &&
+          rect.bottom > 0 &&
+          rect.left < (window.innerWidth || document.documentElement.clientWidth) &&
+          rect.right > 0
+        );
+      }
+      
+      // Function to handle scroll event
+      function checkScroll() {
+        if (!animated && isElementInViewport(container)) {
+          // Add a 2-second delay before starting the animation
+          setTimeout(function() {
+            if (!counter.error) {
+              counter.start();
+              animated = true;
+            } else {
+              console.error(counter.error);
+            }
+          }, 3000); // 2-second delay
+        }
+      }
+      
+      // Listen for scroll events
+      window.addEventListener('scroll', checkScroll);
+      
+      // Check initial state (in case the element is already visible)
+      checkScroll();
+      
+      // Fallback button just in case
+      playButton.addEventListener('click', function() {
+        if (!animated && !counter.error) {
+          counter.start();
+          animated = true;
+        }
+      });
+    });
+  </script>
+</body>
+</html>

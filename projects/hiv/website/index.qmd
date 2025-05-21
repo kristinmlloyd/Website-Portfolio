@@ -1,0 +1,80 @@
+---
+format: 
+  html:
+    anchor-links: false
+    page-layout: full
+    toc: false
+    css: styles.css
+---
+
+
+# Welcome to The Red Line
+
+::: {.hero-banner}
+### A Living Memory of the HIV/AIDS Epidemic
+
+This storytelling experience walks through the past, present, and future of the HIV/AIDS crisis through impactful data visualization and narrative. 
+
+Ultimately, this interactive project strives to educate, destigmatize, and inspire pragmatic action by visualizing how queer communities responded with power and purpose when the world turned them away. 
+
+:::
+
+<hr class="section-divider"></hr>
+
+
+
+<div class="arrow-bounce">
+  <p>Scroll down to explore the parts of our Story</p>
+  <div class="arrow-down"></div>
+</div>
+
+
+
+
+
+::::{.grid .intro-section}
+:::{.intro-card}
+## The Past
+### New York Case Study
+Follow the history of HIV/AIDS in New York City, the epicenter of the early epidemic in the United States, where activism, tragedy, and resilience shaped the response.
+
+[View New York Case Study](new_york.qmd)
+:::
+:::{.intro-card}
+## The Present
+### Misconceptions
+Explore the common misconceptions surrounding the disease today and the impacts of the epidemic, examining how different communities and regions have been affected by HIV/AIDS over time.
+
+[View Misconceptions](misconception.qmd)
+:::
+:::{.intro-card}
+## The Future
+### PEPFAR's Global Impact
+Learn about the President's Emergency Plan For AIDS Relief (PEPFAR) and its role in addressing the global HIV/AIDS crisis through international cooperation, and the hold it has on the future.
+
+[View PEPFAR Analysis](pepfar.qmd)
+:::
+::::
+
+
+```{=html}
+<hr class="credits-divider" />
+<div class="team-credits">
+  <p class="credits-title">Created by:</p>
+  <div class="credits-names">
+    <a href="https://www.linkedin.com/in/jessicajoy1019/" target="_blank">
+      Jessica Joy
+    </a>
+    <a href="https://www.linkedin.com/in/kristin-lloyd-ramseynj/" target="_blank">
+      Kristin Lloyd
+    </a>
+    <a href="https://www.linkedin.com/in/viviana-luccioli/" target="_blank">
+      Viviana Luccioli
+    </a>
+    <a href="https://www.linkedin.com/in/trey-roark-20426b253/" target="_blank">
+      Trey Roark
+    </a>
+  </div>
+  <p class="credits-footer">© 2025 | For educational use only</p>
+</div>
+```

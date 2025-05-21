@@ -1,0 +1,300 @@
+---
+title: "Missing Data Patterns in Humanitarian Security Incidents"
+subtitle: "Understanding Information Gaps in Conflict Monitoring"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: true
+    number-sections: true
+    theme: cosmo
+    fig-width: 5
+    fig-height: 3
+    fig-dpi: 150
+    self-contained: true
+execute:
+  warning: false
+  message: false
+---
+
+```{python}
+#| label: setup
+#| include: false
+#| echo: false
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+import warnings
+
+plt.rcParams['figure.figsize'] = (6, 4)
+warnings.filterwarnings('ignore', category=FutureWarning)
+sns.set_theme(style="whitegrid")
+```
+
+```{python}
+#| include: false
+#| echo: false
+
+import plotly.express as px
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
+
+plt.rcParams['font.size'] = 11
+plt.rcParams['axes.titlesize'] = 10
+plt.rcParams['axes.labelsize'] = 8
+
+palette = {
+    "primary": "#1D70B8",
+    "secondary": "#FFBD59",
+    "tertiary": "#F2645A",
+    "neutral": "#7A868C"
+}
+
+df = pd.read_csv("data/security_incidents_cleaned.csv")
+countries = [
+    "Occupied Palestinian Territories", "Afghanistan", "DR Congo",
+    "Syrian Arab Republic", "Somalia", "Mali", "South Sudan", "Sudan"
+]
+df_filtered = df[df['country'].isin(countries)]
+country_totals = df_filtered.groupby('country').size().to_dict()
+```
+
+![](images/missing.png)
+
+# Executive Summary
+
+This analysis examines patterns of missing data ("Unknown" values) in humanitarian security incident reports across eight conflict-affected countries. The findings reveal significant systematic gaps that have important implications for security analysis and humanitarian response.
+
+Key findings include:
+
+- **Substantial data gaps**: Critical incident details are missing across the countries analyzed, with Sudan showing the highest rate of unknown values (over 40%).
+- **Country-specific reporting challenges**: Sudan, DR Congo, and Afghanistan demonstrate the highest proportions of missing data, suggesting specific challenges in information collection in these environments.
+- **Systematic information biases**: Perpetrator information (actor identity and type) and attack motives are consistently the most incomplete fields across all countries, creating a systematic accountability gap.
+- **Uneven documentation quality**: Location, means of attack, and attack context data is generally more complete than other fields, suggesting focused reporting priorities on "what" incidents occur rather than "who" is responsible.
+- **Data reliability variation**: The reliability of security analysis varies significantly by country, with Occupied Palestinian Territories and Syrian Arab Republic data appearing more complete than other conflict zones.
+
+This missingness is not random but follows patterns that reflect both operational constraints in conflict environments and potential reporting biases. These systematic gaps must be explicitly acknowledged when conducting cross-country comparisons or analyzing perpetrator accountability.
+
+# Introduction
+
+## Background
+
+Humanitarian security incident data provide crucial insights into patterns of violence in conflict zones, helping organizations protect staff, allocate resources, and advocate for civilian protection. However, these datasets often contain substantial information gaps due to access limitations, security concerns, and reporting infrastructure challenges.
+
+This analysis explores patterns of missing data across different countries and incident attributes, revealing how information gaps may affect our understanding of humanitarian crises. By identifying where data is most consistently missing, we can better contextualize findings and understand the limitations of conflict monitoring systems.
+
+## Methodology
+
+This study analyzes a dataset of humanitarian security incidents across eight conflict-affected countries. Missing information is identified through "Unknown" values in six key fields:
+
+- **means_of_attack**: How the attack was carried out
+- **attack_context**: Circumstances surrounding the incident
+- **location**: Specific place where the incident occurred
+- **motive**: Apparent reason behind the attack
+- **actor_type**: Category of perpetrator (e.g., military, non-state armed group)
+- **actor_name**: Specific identity of the perpetrator
+
+For each country and field, we calculate the percentage of incidents with "Unknown" values. This allows us to identify patterns in data completeness and potential systematic biases in reporting.
+
+# Data Completeness by Country
+
+The chart reveals significant variation in data completeness across countries. Sudan leads with over 40% of relevant fields missing, followed by DR Congo and Afghanistan, each exceeding 35%. These high rates suggest either limited access to reliable data in volatile regions or weak reporting infrastructure. Countries like the Syrian Arab Republic and Occupied Palestinian Territories show comparatively lower missingness, potentially due to better-established monitoring systems or more centralized data collection efforts.
+
+```{python}
+
+#| echo: false
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Load the data
+df = pd.read_csv("data/security_incidents_cleaned.csv")
+
+# Define target countries
+target_countries = [
+    "Occupied Palestinian Territories",
+    "Afghanistan",
+    "DR Congo",
+    "Syrian Arab Republic",
+    "Somalia",
+    "Mali",
+    "South Sudan",
+    "Sudan"
+]
+
+# Filter for target countries
+filtered_df = df[df["country"].isin(target_countries)]
+
+# Columns to check for unknown values
+columns_to_check = [
+    "means_of_attack", "attack_context", "location",
+    "motive", "actor_type", "actor_name"
+]
+
+# Compute unknowns per country
+def calculate_known_unknown(df, columns):
+    summary = []
+    for country in target_countries:
+        country_data = df[df["country"] == country]
+        total_cells = len(country_data) * len(columns)
+        unknowns = (country_data[columns] == "Unknown").sum().sum()
+        knowns = total_cells - unknowns
+        summary.append({
+            "country": country,
+            "known": knowns,
+            "unknown": unknowns,
+            "pct_known": knowns / total_cells,
+            "pct_unknown": unknowns / total_cells
+        })
+    return pd.DataFrame(summary).sort_values("pct_unknown", ascending=False)
+
+# Apply function
+summary_df = calculate_known_unknown(filtered_df, columns_to_check)
+
+# Plot
+plt.figure(figsize=(5, 3))
+plt.barh(summary_df["country"], summary_df["pct_known"], color="#64C1FF", label="Known")
+plt.barh(summary_df["country"], summary_df["pct_unknown"], left=summary_df["pct_known"], color="#FF5252", label="Unknown")
+plt.xlabel("Proportion of Attribute Values")
+plt.title("Overall Data Completeness by Country")
+plt.legend(loc="lower right", fontsize=7)
+plt.xticks(fontsize=7)
+plt.yticks(fontsize=7)
+plt.gca().invert_yaxis()
+plt.tight_layout()
+plt.show()
+
+```
+
+This missingness pattern has important implications:
+
+- **Cross-country comparisons**: Analysis comparing conflict patterns across countries should acknowledge that information gaps may be driving apparent differences
+- **Trend identification**: Areas with higher missing data may show artificially low counts of specific attack types or perpetrators
+- **Underreporting bias**: The true security situation may be worse than reported, particularly in countries with higher information gaps
+
+_________________________________________________________________________________________________
+
+This heatmap reveals that missing data is not evenly distributed across columns or countries. Key patterns include:
+
+- **Perpetrator information gaps**: Fields related to those responsible for incidents—specifically actor type, actor name, and motive—consistently show the highest rates of unknown values.
+- **Country-specific patterns**: Sudan shows particularly high missingness across all fields, while the Occupied Palestinian Territories has better documentation overall.
+- **Relatively complete means of attack, attack context, and location data**: Across most countries, this type of information is more consistently available than other fields.
+
+```{python}
+#| echo: false
+
+columns_to_check = [
+    "means_of_attack", "attack_context", "location",
+    "motive", "actor_type", "actor_name"
+]
+
+value = "Unknown"  
+
+heatmap_data = pd.DataFrame(index=countries, columns=columns_to_check, dtype=float)
+
+for country in countries:
+    country_data = df_filtered[df_filtered['country'] == country]
+    for col in columns_to_check:
+        count = country_data[country_data[col] == value].shape[0]
+        heatmap_data.loc[country, col] = (count / len(country_data)) * 100 if len(country_data) else 0.0
+
+heatmap_data['average'] = heatmap_data[columns_to_check].mean(axis=1)
+heatmap_data = heatmap_data.sort_values('average', ascending=False)
+
+#| echo: false
+
+plt.figure(figsize=(4, 3))
+sns.heatmap(
+    heatmap_data[columns_to_check],
+    annot=False, 
+    cmap="YlOrRd",
+    linewidths=0.5,
+    cbar_kws={"shrink": 0.7},
+    xticklabels=True,
+    yticklabels=True
+)
+
+# Make axis label text smaller
+plt.xticks(fontsize=6)
+plt.yticks(fontsize=6)
+
+plt.title("% 'Unknown' Values by Country and Column", fontsize=8)
+plt.tight_layout()
+plt.show()
+
+```
+
+These patterns reflect the practical challenges of documenting security incidents in conflict zones, where identifying perpetrators often carries security risks for monitors and witnesses.
+
+## Gender Analysis
+
+The chart reveals critical gaps in gender data collection across conflict-affected countries, with Sudan exhibiting the highest level of missing information. Syria leads in data completeness, yet nearly one-fifth of gender records remain undocumented. 
+
+```{python}
+#| echo: false
+import pandas as pd
+import matplotlib.pyplot as plt
+
+df = pd.read_csv("data/security_incidents_cleaned.csv")
+
+target_countries = [
+    "Occupied Palestinian Territories",
+    "Afghanistan",
+    "DR Congo",
+    "Syrian Arab Republic",
+    "Somalia",
+    "Mali",
+    "South Sudan",
+    "Sudan"
+]
+
+filtered_df = df[df["country"].isin(target_countries)]
+
+summary = filtered_df.groupby("country")[["gender_female", "gender_male", "gender_unknown"]].sum().reset_index()
+summary["total"] = summary["gender_female"] + summary["gender_male"] + summary["gender_unknown"]
+summary["known"] = summary["gender_female"] + summary["gender_male"]
+summary["pct_known"] = summary["known"] / summary["total"]
+summary["pct_unknown"] = summary["gender_unknown"] / summary["total"]
+summary = summary.sort_values("pct_unknown", ascending=False)
+
+# Smaller plot with smaller fonts
+plt.figure(figsize=(4, 2.4))
+plt.barh(summary["country"], summary["pct_known"], color="#64C1FF", label="Known")
+plt.barh(summary["country"], summary["pct_unknown"], left=summary["pct_known"], color="#FF5252", label="Unknown")
+
+plt.xlabel("Proportion of Gender Data", fontsize=6)
+plt.title("Gender Data Completeness by Country", fontsize=7)
+plt.xticks(fontsize=6)
+plt.yticks(fontsize=6)
+plt.legend(loc="lower right", fontsize=5)
+plt.gca().invert_yaxis()
+plt.tight_layout(pad=0.3)
+plt.show()
+
+```
+
+**Emergency Response Priorities**: During humanitarian crises, responders often prioritize basic needs (e.g., food, water, shelter) over detailed demographic tracking.
+
+**Reporting Biases**: Incidents affecting females may be underreported in some settings. This data may underrepresent violence against women, particularly sexual violence, is often underreported in conflict zones due to stigma and limited access to reporting mechanisms.
+
+# 💡 Recommendations
+
+Based on these findings, we recommend the following approaches:
+
+- **Acknowledge data limitations**: All security analysis using such data should explicitly discuss information gaps and their potential impact on findings. Reports should include data completeness metrics as standard context.
+- **Develop missingness-aware methods**: Statistical approaches that account for systematic patterns in missing data should be employed when comparing across countries or analyzing perpetrator trends. This might include:
+    - Missingness indicators as covariates in statistical models
+    - Multiple imputation techniques for sensitivity analysis
+    - Weighted analysis that gives less weight to countries with more incomplete data
+- **Contextual interpretation**: Findings should be interpreted in light of local reporting constraints, with input from field-based experts who understand documentation challenges. This local expertise can help contextualize whether "Unknown" values result from security constraints, resource limitations, or other factors.
+- **Investment in documentation**: Humanitarian organizations should prioritize strengthening incident reporting systems, particularly for perpetrator identification, while maintaining reporter safety. This could include:
+    - Developing standardized reporting protocols
+    - Training local staff in documentation practices
+    - Creating secure, anonymous reporting channels
+    - Implementing retrospective data enhancement processes
+- **Targeted improvements**: Focus documentation improvement efforts on Sudan, DR Congo, and Afghanistan, where information gaps are most severe. These countries would benefit most from enhanced reporting infrastructure and methodology.
+- **Pattern analysis of unknowns**: Rather than treating "Unknown" values as simply missing, analyze their patterns and correlations to gain insights about the conditions under which information gaps occur. This meta-analysis can reveal important contextual factors affecting documentation.
+- **Transparency in derived conclusions**: When publishing analysis based on this data, clearly communicate the limitations and acknowledge how missing data may affect conclusions. This transparency builds credibility and encourages appropriate use of the findings.
+
+By implementing these recommendations, organizations can both improve the quality of security incident data and make more responsible use of existing information, despite its limitations.

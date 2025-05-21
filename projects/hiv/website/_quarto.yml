@@ -1,0 +1,30 @@
+project:
+  type: website
+  output-dir: _site
+  resources:
+  - images/ribbons_transmission.html
+
+website:
+  title: "<img src='images/hiv_ribbon.png' style='height:40px; margin-right: 0px;'/> Red Line: HIV/AIDS Through Visualization <img src='images/hiv_ribbon.png' style='height:40px; verticall-align: left; margin-right: 6px;'/>"
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+      - href: new_york.qmd
+        text: New York Case Study
+      - href: misconception.qmd
+        text: Misconceptions
+      - href: pepfar.qmd
+        text: PEPFAR
+    right:
+      - icon: github
+        href: https://github.com/gu-dsan5200/dsan5200-spring2025-project-group-02
+        aria-label: GitHub
+
+format:
+  html:
+    anchor-sections: false
+    css: styles.css
+    theme: darkly
+    toc: true
+

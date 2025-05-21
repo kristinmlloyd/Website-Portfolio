@@ -1,0 +1,269 @@
+---
+title: "Red Line: A New York Case Study"
+resources:
+  - images/hiv_ribbon.png
+format: 
+  html:
+    theme: dark
+    page-layout: full
+    navbar: false
+    css: styles.css
+    embed-resources: true
+    toc: false
+    tools: false
+    include-in-header:
+      text: |
+        <script src="ribbons.js" defer></script>
+---
+
+
+```{=html}
+<div class="page-container">
+  <div class="ribbon-container" id="ribbon-field"></div>
+
+  <div class="scroll-container">
+    <section class="scroll-section" id="intro">
+      <div class="content-card">
+        <h2>The "Original" Crisis in New York City</h2>
+        <p>This visualization tells the story of the HIV epidemic in New York, showing how the lack of timely action contributed to the loss of hundreds of thousands of lives. The following is a <b> data-driven </b> visualization, where each red ribbon represents approximately 2,400 people in New York (150,000 in total).</p>
+        <p>As you scroll through the years, the red ribbons – the international symbol of HIV/AIDS awareness – will fade away, representing lives lost. Let’s follow the story of how HIV/AIDS was covered in New York and abroad from the early discovery to now. You’ll learn about the AIDS crisis and the total accumulated reported cases and deaths within New York at the time.</p>
+        <div class="scroll-indicator">↓ Scroll to begin ↓</div>
+      </div>
+    </section>
+    
+    <section class="scroll-section" data-year="Pre-1981" data-cases="54" data-deaths="15">
+      <div class="content-card">
+        <h2>Pre-1981</h2>
+        <p>54 cases, 15 deaths in NYC</p>
+        <p class="context">Some of the first cases of Human Immunodeficiency Virus (HIV) and Acquired Immune Deficiency Syndrome (AIDS) were discovered at this time in New York. This is mainly where it was popularized and highly localized throughout the 1980s. Reports of a new severe disease that was baffling doctors across the country.</p>
+        <p class="context">However, this <i>does not</i> mean that AIDS started in New York or in the 1980s. In fact, there are early traces of the disease from across the U.S and the Caribbean, like a teenager in St. Louis died of a mysterious disease that was later tested to be AIDS in 1969.</p>
+        <p class="stat-highlight">What they didn’t know is that this would be the start of an epidemic.</p>
+      </div>
+    </section>
+
+    <section class="scroll-section" data-year="1981" data-cases="165" data-deaths="74">
+      <div class="content-card">
+        <h2>1981</h2>
+        <p>165 cases, 74 deaths in NYC</p>
+        <p class="context"> <i>The New York Native</i>, a gay newspaper, becomes the first in the world to report about a strange pneumonia sweeping through New York, where several homosexual men have died.</p>
+        <p class="context">The Center for Disease Control (CDC) has begun gathering information about a potential new cancer that was spreading quickly.</p>
+      </div>
+    </section>
+    
+    <section class="scroll-section" data-year="1982" data-cases="775" data-deaths="273">
+      <div class="content-card">
+        <h2>1982</h2>
+        <p>775 cases, 273 deaths in NYC</p>
+        <p class="context">Gay Men’s Health Crisis (GMHC), the first community-based AIDS service provider, had just been founded in New York, assisting with concerned queer men. Fear and misinformation spread while federal funding for research remains minimal.</p>
+        <p>The CDC believes this to be a disease associated with homosexuality, drug usage, and having a Haitian origin, which were all later found to be debunked. Many cases of women and children were beginning to be reported.</p>
+        <p class="stat-highlight">Coverage was made by those most affected</p>
+      </div>
+    </section>
+
+    <section class="scroll-section" data-year="1983" data-cases="1891" data-deaths="858">
+      <div class="content-card">
+        <h2>1983</h2>
+        <p>1,891 cases, 858 deaths in NYC</p>
+        <p class="context">New York Physician Joseph Sonnabend is threatened with eviction from his office for treating AIDS patients, where the first AIDS discrimination lawsuit is carried out. Along with Dr. Joseph Sonnabend, Dr. Mathilde Krim, Michael Callen, and others found the AIDS Medical Foundation (AMF), a New York-based AIDS research organization.</p>
+        <p class="context">AIDS activist Larry Kramer publishes an assessment on how AIDS impacts the gay community in the New York Native. In their essay, a plea for anger as the government lacks support for the rejection of support for sick and dying gay men.</p>
+        <p class="stat-highlight">At this point, AIDS cases have been reported in 33 countries</p>
+      </div>
+    </section>
+
+    <section class="scroll-section" data-year="1984" data-cases="3770" data-deaths="1965">
+      <div class="content-card">
+        <h2>1984</h2>
+        <p>3,770 cases, 1,965 deaths in NYC</p>
+        <p class="context">Research about the retrovirus labeled HTLV-III is found to be the potential cause of AIDS. <i>The New York Times</i> reports that AIDS is transmissible through saliva, which was later debunked two years later. This proceeded to fuel the stigmatization that AIDS was transferred out of queer people’s spaces. </p>
+        <p class="context">At this point, New York makes up half the AIDS diagnoses in the US. Philosopher Michel Foucault and activist Bobbi Campbell are just a couple of the people that died of AIDS this year.</p>
+        <p class="stat-highlight">How many more until action truly begins?</p>
+      </div>
+    </section>
+    
+    <section class="scroll-section" data-year="1985" data-cases="6680" data-deaths="3799">
+      <div class="content-card">
+        <h2>1985</h2>
+        <p>6,680 cases, 3,799 deaths in NYC</p>
+        <p class="context">Screening of the U.S. blood supply finally begins. President Ronald Reagan mentions AIDS publicly for the first time, but receives backlash for the lack of priority paid towards AIDS research. However, more people were diagnosed in 1985 than in all previous years combined, with 51% of adults and 59% of children having died.</p>
+        <p class="context">The New York State Public Health Council tells local health officials to close gay bathhouses, bars, clubs, to prevent homosexual sexual activity in the boroughs of New York.  AIDS activism through plays break out as <i>As Is</i>, the first play about AIDS makes it to broadway, empowering actors across the U.S. to announce their status.</p>
+        <p class="stat-highlight">At least one HIV case has now been reported from each region of the world</p>
+      </div>
+    </section>
+
+    <section class="scroll-section" data-year="1986" data-cases="10962" data-deaths="6512">
+      <div class="content-card">
+        <h2>1985</h2>
+        <p>10,962 cases, 6,512 deaths in NYC</p>
+        <p class="context">Larry Kramer, a writer and AIDS activist unofficially conceives ACT UP, an AIDS coalition to Unleash Power) as New York remains at the epicenter of the AIDS crisis in the US.</p>
+        <p class="context">NYC Health Department begins anonymous HIV testing, responding to several privacy concerns regarding the stigma of the disease. This is especially important as hospitals begin turning patients away, funeral homes are refusing those dying of AIDS, and families continuously disown their children during this time.</p>
+        <p class="stat-highlight">Science moved faster than justice</p>
+      </div>
+    </section>
+    
+    <section class="scroll-section" data-year="1987" data-cases="16243" data-deaths="9866">
+      <div class="content-card">
+        <h2>1987</h2>
+        <p>16,243 cases, 9,866 deaths in NYC</p>
+        <p class="context">ACT UP is finally born in NYC and they stage their first die-in on Wall Street to protest the preliminary drug prices being inaccessible to lower classes, which are impacted the most by the disease. The AIDS quilt is also finally inscribed and displayed publicly to mourn the unnecessary losses of those across the US.</p>
+        <p class="context">Debra Frazer-Howze, director of teenage services at the Urban League of New York, founded the National Black Leadership Commission on AIDS to educate, mobilize, and empower black leaders to fight HIV/AIDS as well as other health disparities in local communities.</p>
+        <p class="context">Princess Diana makes international history when she shakes the hand of an HIV-positive patient, which shocked the world as many believed HIV to be transferred through contact, which was later found to be false.</p>
+        <p class="context">The U.S. bars HIV-positive immigrants and travelers from entering the country as the perception of HIV being an airborne disease spread casually continues to run rampant. They say it’s a “dangerous contagious disease”. Locally, parents refuse to let their childrens attend schools with HIV-positive children.</p>
+        <p class="stat-highlight">ACT UP Slogan: SILENCE = DEATH</p>
+      </div>
+    </section>
+
+    <section class="scroll-section" data-year="1988" data-cases="22779" data-deaths="14157">
+      <div class="content-card">
+        <h2>1988</h2>
+        <p>22,779 cases, 14,157 deaths in NYC</p>
+        <p class="context">Protests in NYC call out the Catholic Church as they condemn condoms, later proven to be an extremely effective way at preventing the spread of HIV/AIDS, whereas NYC mandates AIDS education in schools, sparking massive controversy.</p>
+        <p class="context">ACT UP engages in a massive sit-in at FDA offices for their slow pace in federal drug-approval for the treatment of the disease. Eight days later, the FDA announced regulations to speed up that process. Congress then passed the Hope Act, granting federal funds to this research, and World AIDS Day (December 1st) was observed for the first time by the World Health Organization and United Nations to help raise awareness of the international epidemic.</p>
+        <p class="context">Additionally, the Abandoned Infant Assistance (AIA) Act gets passed into law. This law addresses what were called “boarder babies”, infants who have be perinatally exposed to drugs/HIV who have either been orphaned or left at hospitals indefinitely by their parents.</p>
+        <p class="stat-highlight">Treatment became possible. Access remained political</p>
+      </div>
+    </section>
+
+    <section class="scroll-section" data-year="1989" data-cases="29807" data-deaths="19494">
+      <div class="content-card">
+        <h2>1989</h2>
+        <p>29,807 cases, 19,494 deaths in NYC</p>
+        <p class="context">The healing community <i>Housing Works</i> was founded to address the dual crises of homelessness and AIDS among low-income New Yorkers, an issue that disproportionately affected black queer populations. Many drag queens, trans women, and sex workers were conducting pragmatic change by handing out condoms on the street, running underground needle exchanges, as well as building care networks.</p>
+        <p class="context">New York stands at a limbo to help address localized controversy caused by those fear mongering queer individuals, beginning to re-segregate the population through schools, bathrooms, and places of work.</p>
+        <p class="stat-highlight">Queer Action was Bringing Pragmatism</p>
+      </div>
+    </section>
+
+    <section class="scroll-section" data-year="1990" data-cases="37800" data-deaths="25219">
+      <div class="content-card">
+        <h2>1990</h2>
+        <p>37,800 cases, 25,219 deaths in NYC</p>
+        <p class="context">Early editions of Zidovudine (AZT) were approved as a treatment strategy for pediatric AIDS. NYC begins needle exchange pilot programs after activist demands, but implementation becomes slow as local communities fight back against it. This leads to a negligence and increase in cases <i>and</i> deaths.</p>
+        <p class="context">Surveillance data indicated that while black and latina women made up only 19% of all U.S. women, they represented 72% of all women diagnosed with AIDS. This is followed by more protests at the National Institute of Health (NIH) to demand more interventionist treatments and trials to those most affected by the disease. To date, nearly twice as many Americans have already died of AIDS-related causes as died in the Vietnam war.</p>
+        <p class="stat-highlight">Science saved lives. Racism decided who got saved</p>
+      </div>
+    </section>
+    
+    <section class="scroll-section" data-year="1991-1995" data-cases="95376" data-deaths="62739">
+      <div class="content-card">
+        <h2>1991-1995</h2>
+        <p>95,376 cases, 62,739 deaths in NYC</p>
+        <p class="context">In the early 1990s, the U.S. Congress passed the Terry Beirn Community-Based Clinical Trials Program Act (PDF, 56 KB) to establish a network of community-based clinical trials for HIV treatment.</p>
+        <p class="context">AIDS deaths in New York reached an all time high during 1995 alone (approximately 8,000 alone), even though headway was being made elsewhere.</p>
+        <p class="context">The Red Ribbon Project is launched, to demonstrate compassion for those living with AIDS as well as their caregivers, and the Red Ribbon becomes the international symbol of AIDS awareness.</p>
+        <p class="stat-highlight">Did the international change truly reflect the local need?</p>
+      </div>
+    </section>
+    
+    <section class="scroll-section" data-year="1996-2000" data-cases="129914" data-deaths="80544">
+      <div class="content-card">
+        <h2>1996-2000</h2>
+        <p>129,914 cases, 80,544 deaths in NYC</p>
+        <p class="context">Highly Active Antiretroviral Therapy (HAART) is introduced, where AIDS finally becomes treatable. AIDS-related deaths continue to drop, but accessibility is still riddled with inequities. People believed the crisis was coming to an end. However, even though deaths dropped, it was mainly for white cis gay men with insurance. Black, brown, trans, and low-income New Yorkers are still left to form their own care networks, or die. Bronx and Brooklyn remain NYC’s infection epicenters, but remain absent from national conversations.</p>
+        <p class="context">During his State of the Union address, President George W. Bush announced his Emergency Plan for AIDS Relief (PEPFAR), a five-year, $15 billion initiative to fight HIV/AIDS internationally.</p>
+        <p class="stat-highlight">The crisis didn’t end, it just stopped being televised</p>
+      </div>
+    </section>
+    
+    <section class="scroll-section" data-year="2001-2005" data-cases="154709" data-deaths="93003">
+      <div class="content-card">
+        <h2>2001-2005</h2>
+        <p>154,709 cases, 93,003 deaths in NYC</p>
+        <p class="context"><i>We All Have AIDS</i>, a PSA campaign founded by Kenneth Cole, he made an effort to unite famous HIV/AIDS activists to stand for one message, representing their own charities and organizations, but acting in solidarity with one another. It was brought to reduce the stigma associated with the disease. However, criminalization laws emerged during the early aughts, ones that punish people living with HIV for having sex, even when undetectable (or unable to be transmitted through sexual contact). In New York specifically, young black gay men see infection rates higher than any other group, but are labeled by health organizations as “hard to reach” instead of “worth reaching”.</p>
+        <p class="context">Dual crises arise during this period as well, especially post 9/11 as many HIV service organizations near Ground Zero in lower Manhattan are either displaced or shut down. AIDS funding is cut and pivoted to “homeland security”, leaving the disease to be an afterthought.</p>
+        <p class="stat-highlight">We all have AIDS if one of us does</p>
+      </div>
+    </section>
+
+    <section class="scroll-section" data-year="2006-2010" data-cases="171583" data-deaths="102897">
+      <div class="content-card">
+        <h2>2006-2010</h2>
+        <p>171,583 cases, 102,897 deaths in NYC</p>
+        <p class="context">The CDC recommends that all adolescents and adults be tested routinely for HIV as the disease continues to spread. The travel ban on HIV-positive visitors is finally lifted (which was in place since 1987). Stories of a man who was cured of HIV known as “the Berlin Patient” is reported in The New England Journal of Medicine.</p>
+        <p class="context">Well-known medical sources today such as Pre-Exposure Prophylaxis (PrEP) begin clinical trials, but only accessible to high-end health systems. The number of people receiving HIV/AIDS treatment in low- and middle-income countries reached a record high of 5.25 million in 2010 alone, but universal access remains a distant goal. Additionally, trans people continue to be excluded from publicly accessible datasets, funding, and services. </p>
+        <p class="stat-highlight">Not invisible. Ignored.</p>
+      </div>
+    </section>
+
+    <section class="scroll-section" data-year="2011-2015" data-cases="181026" data-deaths="110718">
+      <div class="content-card">
+        <h2>2011-2015</h2>
+        <p>181,026 cases, 110,718 deaths in NYC</p>
+        <p class="context">PrEP (Truvada) was finally FDA-approved in 2012. Community-led clinics like Callen-Lorde begin offering it to marginalized communities, subverting local channels where inaccessibility is still a priority. Cure initiatives are announced and intensified as the International AIDS Society and the NIH announced plans to attempt curing the supposedly incurable disease. The FDA approves the first at-home HIV test that will let users learn their HIV status right away.</p>
+        <p class="context">New York becomes the first to enact the End AIDS 2020 initiative, aiming to end the epidemic of AIDS by 2020, but is heavily criticized for its performativity. Meanwhile, Major provisions of the Affordable Care Act (ACA) go into effect. Insurers are now barred from discriminating against customers with pre-existing conditions, and they can no longer impose annual limits on coverage, which play a pivotal role in key advances for people living with HIV/AIDS.</p>
+        <p class="context">President Obama also signed the HIV Organ Policy Equity (HOPE) Act, which will allow people living with HIV to receive organs from other infected donors. The HOPE Act gave the potential of saving to save the lives of HIV-infected patients with liver and kidney failure annually.</p>
+        <p class="stat-highlight">International protection, but local deception.</p>
+      </div>
+    </section>
+    
+    <section class="scroll-section" data-year="2016-2020" data-cases="186000" data-deaths="116403">
+      <div class="content-card">
+        <h2>2016-2020</h2>
+        <p>186,000 cases, 116,403 deaths in NYC</p>
+        <p class="context">NYC launches programs to expand citywide HIV testing and PrEP access, especially in public clinics. HIV criminalization laws remain, disproportionately targeting Black and Latinx people.</p>
+        <p class="context">When COVID-19 arrived in New York in early 2020, it collided with a city still carrying the scars of the HIV/AIDS epidemic. In the early stages of the pandemic, New York State experienced a substantial decrease in HIV testing. Clinic visits were canceled or delayed, cutting off access to medication and checkups.</p>
+        <p class="context">Trump’s administration threatens to cut Ryan White funding and HIV protections for LGBTQ+ people, as well as attempts to purge data regarding HIV/AIDS testing. Activists and Organizations like ACT UP protest utilizing digital platforms such as Instagram, protest art, and documentary films to expose persistent inequalities regarding the HIV/AIDS epidemic and how it evolved.</p>
+        <p class="stat-highlight">Are these lives political?</p>
+      </div>
+    </section>
+
+    <section class="scroll-section" data-year="2021-2025" data-cases="200000" data-deaths="150000">
+      <div class="content-card">
+        <h2>2021-2025</h2>
+        <p>Cases and Deaths still climbing in NYC</p>
+        <p class="context">AIDS cases and deaths are continuing to rise, not meeting expectations with these upcoming years. COVID-19 mirrors AIDS, but gains more attention. Many AIDS organizations in NYC pivot to COVID support, stretching already-thin resources.</p>
+        <p class="context">Along with COVID-19, Monkeypox (2022) again exposes systemic neglect of queer health until widespread contagion prompts federal action. However, COVID-19 takes priority action as many cases of that still rise in the US and abroad. The pandemic also affected HIV prevention efforts. There were significant reductions in the number of individuals accessing pre-exposure prophylaxis (PrEP) and other preventive services during the pandemic's peak. Individuals living with HIV faced heightened risks during the COVID-19 pandemic.​ </p>
+        <p class="context">Youth-led groups like <i>Black Trans Femmes in the Arts, Gays Against Guns</i>, and others integrate HIV advocacy into abolitionist, anti-racist movements. As of 2025, over 125,000 New Yorkers are living with HIV.</p>
+        <p class="context"> The projected cumulative deaths for 2025 total about 150,000. </p>
+        <p class="stat-highlight">New infections, same injustice</p>
+      </div>
+    </section>
+    
+    <section class="scroll-section" id="conclusion">
+      <div class="content-card">
+        <h2>Remembering the Lost</h2>
+        <p class="context">As we traversed the stories of those living in New York with HIV/AIDS, we learned much about the epidemic through a localized lens. Yet, so much of the action surrounding AIDS centered around New York during the early cases that were neglected in the early 1980s. This visualization represents just a fraction of the human toll of the HIV/AIDS epidemic. Each ribbon that faded away were real people with dreams, families, and futures. The history of the HIV crisis in New York teaches us about the deadly consequences of stigma, inaction, and the marginalization of vulnerable communities.</p>
+        <p class="stat-highlight">New York wasn't the beginning, and it won't be the end.</p>
+      </div>
+    </section>
+
+    <section class="scroll-section" id="conclusion">
+      <div class="content-card">
+        <h2>Remembering those who Fought</h2>
+        <p class="context">This highlights the importance of historical education, particularly when it comes to how current perceptions of HIV/AIDS impact marginalized communities. The 1980s and lack of support paved the way for cases to exponentially rise over the next couple of decades, caused by the classification of this disease as a “gay disease”. This stigma still instantiates itself in structures around us, like with blood donations. Although modern medicine has continuously attempted to combat this, it’s become politically-charged and will only continue to be addressed when bureaucratic structures are in favor of action. Furthermore, this disease disproportionately affects certain populations, as you’ll learn in the rest of this report, but that doesn’t mean cases aren’t arising in all populations. </p>
+        <p class="context">Today, we remember those who were lost and continue to fight for a future where public health crises are met with compassion, science, and swift action.</p>
+        <p class="stat-highlight">If queer people had not fought, protested, organized, and cared for one another for 40 years would the United States have ever responded at all?</p>
+      </div>
+    </section>
+
+
+    <section class="scroll-section" id="conclusion">
+      <div class="content-card">
+        <h2>Action, not Reaction</h2>
+        <p class="context">Lastly, it’s becoming increasingly difficult to analyze and study the still at-large impacts of HIV/AIDS, as current data is being purged on many sites like the CDC, preventing holistic analysis from taking place. It’s important to not only acknowledge its current impact, but its historical precedence in the predisposition of the queer people of color communities that it impacted the most. New York was crucial to early developments of research, stigma, and overall origination of HIV/AIDS coverage across the globe. If you’d like to learn more about the HIV/AIDS crisis, both in New York and abroad, please refer to the references that were used in curating these visualizations. </p>
+        <p class="stat-highlight">How many of these deaths could’ve been prevented?</p>
+      </div>
+    </section>
+
+    <section class="scroll-section" id="conclusion">
+      <div class="content-card">
+        <h2>Next, HIV/AIDS Misconceptions</h2>
+        <p class="context">Click below to view the next iteration of this story, dispelling HIV/AIDS misconceptions through comprehensive data visualization and storytelling. </p>
+        <div style="text-align: center; margin-top: 3rem; padding-bottom: 3rem;">
+          <a href="index.html" class="btn">← Back to Home</a>
+          <a href="misconception.html" class="btn">Dispel Misconceptions →</a>
+        </div>
+      </div>
+    </section>
+
+
+  </div>
+</div>
+
+<div class="stats-overlay">
+  <div id="current-year">Pre-1981</div>
+  <div id="case-counter">Cases: 54</div>
+  <div id="death-counter">Deaths: 15</div>
+</div>
+
+
+```

@@ -1,0 +1,554 @@
+---
+title: "Security Incidents in Somolia: Trends and Patterns"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: true
+    number-sections: true
+    theme: cosmo
+    fig-width: 9
+    fig-height: 6
+    fig-dpi: 300
+    self-contained: true
+bibliography: references.bib
+execute:
+  warning: false
+  message: false
+---
+
+<style>
+.typing-line {
+  font-family: monospace;
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: .15em solid #000;
+  width: 0;
+  display: block;
+  animation: typing 2s steps(20, end) forwards;
+  /* Only type, no infinite blinking */
+}
+
+.typing-line:nth-child(2) {
+  animation-delay: 2s;
+}
+
+.typing-line:nth-child(3) {
+  animation-delay: 4s;
+}
+
+.typing-line:nth-child(4) {
+  animation-delay: 6s;
+}
+
+@keyframes typing {
+  from { width: 0 }
+  to { width: 100% }
+}
+</style>
+
+```{python}
+#| label: setup
+#| include: false
+#| echo: false
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+import folium
+from folium.plugins import MarkerCluster
+from matplotlib.colors import LinearSegmentedColormap
+import warnings
+import plotly.express as px
+import plotly.graph_objects as go
+from IPython.display import display
+from scipy import stats
+
+plt.rcParams['figure.figsize'] = (10, 6)
+warnings.filterwarnings('ignore', category=FutureWarning)
+sns.set_theme(style="whitegrid")
+
+palette = {"primary": "#FFBD59", "secondary": "#64C1FF", "danger": "#FF5252"}
+
+df = pd.read_csv("data/security_incidents_cleaned.csv")
+country_data = df[df['country'] == 'Somalia']
+
+```
+
+![](images/somoliapic.png)
+
+```{python}
+#| echo: false
+
+from IPython.display import HTML
+
+killed = int(country_data['nationals_killed'].sum() + country_data['internationals_killed'].sum())
+wounded = int(country_data['nationals_wounded'].sum() + country_data['internationals_wounded'].sum())
+kidnapped = int(country_data['nationals_kidnapped'].sum() + country_data['internationals_kidnapped'].sum())
+
+from IPython.display import HTML
+
+html = f"""
+<div>
+  <span class="typing-line">In Somolia...</span>
+  <span class="typing-line">{killed} humanitarian workers have died,</span>
+  <span class="typing-line">{wounded} humanitarian workers have been wounded,</span>
+  <span class="typing-line">{kidnapped} humanitarian workers have been kidnapped.</span>
+</div>
+"""
+
+HTML(html)
+
+```
+
+# Executive Summary
+
+![](images/somolia.png){width=200px}
+
+This report analyzes humanitarian security incidents in Somalia, one of the most dangerous operational environments for aid workers due to sustained conflict and environmental shocks.
+
+Key findings include:
+
+- **Incident frequency peaked during key flashpoints**, including Al-Shabaab’s rise (2008), cross-border activity, and the 2022 “total war” campaign.
+- **Shooting and kidnapping are the most common attack methods**, often targeting humanitarian staff directly.
+- **Ambushes dominate the attack context**, particularly along roads, making mobility a major operational hazard.
+- **National staff bear the greatest burden**, accounting for the majority of those killed, wounded, and kidnapped.
+- **High-impact incidents cluster around roads**
+
+These patterns call for data-driven planning, localized security strategies, and stronger policy frameworks to reduce risk and maintain humanitarian access in Somalia.
+
+# Background: The Conflict
+
+## Historical Context
+
+The Somali conflict has been shaped by decades of state collapse, civil war, and the rise of extremist groups. Al-Shabaab emerged from this chaotic environment, tracing its origins to Afghan war veterans who returned to Somalia in the late 1980s [@cfr_somalia]. The group's evolution occurred against a backdrop of complete state failure:
+
+-   **1991**: Collapse of the Somali central government, leading to prolonged civil war
+-   **Late 1990s**: Formation of al-Ittihad al-Islami (AIAI), a Salafi militant organization
+-   **2004-2006**: Rise of the Islamic Courts Union (ICU) controlling much of southern Somalia
+-   **2006**: Ethiopian invasion to oust ICU from Mogadishu, triggering al-Shabaab's formal establishment
+-   **2007**: Creation of African Union Mission in Somalia (AMISOM) peacekeeping force
+-   **2010-2011**: Al-Shabaab reaches peak territorial control, including parts of Mogadishu
+-   **2012**: Establishment of Federal Government of Somalia (FGS), beginning efforts to rebuild state institutions
+-   **2013-2021**: Al-Shabaab demonstrates resilience despite territorial losses, launching high-profile attacks across East Africa
+
+## Recent Escalation
+
+Somalia entered a new phase in its fight against al-Shabaab in 2022, with intensified military operations and evolving humanitarian challenges:
+
+-   **May 2022**: Hassan Sheikh Mohamud elected president, promising renewed focus on defeating al-Shabaab
+-   **August 2022**: Launch of "total war" against al-Shabaab, a major government offensive supported by clan militias
+-   **April 2022**: AMISOM replaced by African Union Transition Mission in Somalia (ATMIS) with planned withdrawal by end of 2024
+-   **2022**: 41% increase in al-Shabaab violence targeting civilians despite territorial losses
+-   **2021-2023**: Five consecutive failed rainy seasons produced Somalia's worst drought on record
+-   **October 2023**: Devastating floods affecting 2.48 million people after years of drought
+-   **37%** of the population requiring humanitarian assistance
+-   **3.8 million** internally displaced persons
+-   **4.3 million** people facing crisis or worse levels of food insecurity
+
+<h1>Map of Incidents <img src="images/map.png" width="60px" style="vertical-align:middle; margin-left:10px;"></h1>
+
+```{python}
+#| echo: false
+icon_path = "images/hazard2.png"
+valid_points = country_data[country_data['latitude'].notna() & country_data['longitude'].notna()]
+
+country_map = folium.Map(location=[31.9, 35.2], zoom_start=8)
+
+coords = []
+
+for _, row in valid_points.iterrows():
+    coords.append((row['latitude'], row['longitude']))
+    
+    popup_html = f"""
+    <b>Location:</b> {row['location']}, {row['country']}<br>
+    <b>Year:</b> {row['year']}<br>
+    <b>Total Affected:</b> {row['total_affected']}<br>
+    <b>Attack Type:</b> {row.get('means_of_attack', 'Unknown')}
+    """
+
+    icon = folium.CustomIcon(
+        icon_image=icon_path,
+        icon_size=(20, 20)
+    )
+
+    folium.Marker(
+        location=[row['latitude'], row['longitude']],
+        popup=folium.Popup(popup_html, max_width=300),
+        icon=icon
+    ).add_to(country_map)
+
+if coords:
+    country_map.fit_bounds(coords)
+
+country_map
+
+```
+
+# Temporal Trends in Security Incidents {#sec-temporal}
+
+## Incident Frequency Over Time
+
+```{python}
+#| label: fig-yearly-incidents
+#| fig-cap: "Security incidents"
+#| echo: false
+
+yearly_incidents = country_data.groupby('year').size().reset_index(name='incidents')
+
+fig = px.line(
+    yearly_incidents, 
+    x='year', 
+    y='incidents',
+    markers=True,
+    labels={'incidents': 'Number of Incidents', 'year': 'Year'},
+    height=500
+)
+
+fig.update_layout(
+    title=None,
+    xaxis=dict(tickmode='linear', dtick=2),
+    yaxis=dict(zeroline=True),
+    hovermode='x unified',
+    template='plotly_white'
+)
+
+fig.update_xaxes(rangeslider_visible=True)
+
+events = [
+    {'year': 2006, 'event': 'Ethiopia invades Somalia', 'y_position': 5},
+    {'year': 2007, 'event': 'AMISOM peacekeeping force created', 'y_position': 15},
+    {'year': 2010, 'event': 'First foreign attack in Uganda', 'y_position': 10},
+    {'year': 2011, 'event': 'Al-Shabaab peak territorial control', 'y_position': 25},
+    {'year': 2013, 'event': 'Westgate Mall attack in Kenya', 'y_position': 20},
+    {'year': 2017, 'event': 'Mogadishu truck bombings', 'y_position': 12},
+    {'year': 2022, 'event': '"Total war" against Al-Shabaab', 'y_position': 6},
+    {'year': 2023, 'event': 'Devastating floods', 'y_position': 15}
+]
+
+for event in events:
+    fig.add_annotation(
+        x=event['year'],
+        y=event['y_position'],
+        text=event['event'],
+        showarrow=True,
+        arrowhead=1,
+        ax=0,
+        ay=-20,
+        font=dict(size=10),
+        bgcolor="rgba(255,255,255,0.85)",
+        bordercolor="black",
+        borderwidth=1,
+        borderpad=3
+    )
+
+fig.show()
+```
+
+### Analysis of Incident Trends
+
+The timeline of humanitarian security incidents in Somalia reflects the cyclical intensity of conflict linked to Al-Shabaab’s activity:
+
+- **2006–2008:** A sharp spike in incidents corresponds to Ethiopia’s invasion and Al-Shabaab’s rise, culminating in their peak territorial control by 2008.
+- **2011–2013:** After the creation of AMISOM and major Mogadishu truck bombings, violence fluctuates but remains high.
+- **2017–2020:** A period of relative stabilization is followed by renewed violence after declared "total war" against Al-Shabaab.
+- **2023:** A final spike appears to be driven more by climate-related emergencies, including devastating floods, complicating the humanitarian environment further.
+
+This pattern shows how armed group dynamics, regional interventions, and environmental crises all contribute to fluctuations in humanitarian risk across time.
+
+# Nature of Security Incidents {#sec-nature}
+
+## Predominant Attack Types
+
+```{python}
+#| label: fig-attack-types
+#| fig-cap: "Most common types of attacks"
+#| echo: false
+
+attack_counts = country_data['means_of_attack'].value_counts().reset_index()
+attack_counts.columns = ['Attack Type', 'Count']
+attack_counts = attack_counts.sort_values('Count', ascending=False).head(10)
+
+fig_attacks = px.bar(
+    attack_counts,
+    y='Attack Type',
+    x='Count',
+    title=None,
+    height=500,
+    orientation='h'
+)
+
+fig_attacks.update_traces(marker_color=palette["secondary"])
+
+fig_attacks.update_layout(
+    yaxis={'categoryorder': 'total ascending'},
+    xaxis_title="Number of Incidents",
+    yaxis_title=None
+)
+
+fig_attacks.show()
+```
+
+### Analysis of Attack Methods
+
+Shooting is by far the most common method of attack, reflecting the dominance of small-arms conflict in Somalia’s security environment. **Kidnapping** is the second most frequent, underscoring the targeting of humanitarian staff for leverage or ransom. 
+
+## Attack Contexts
+
+```{python}
+#| label: fig-attack-contexts
+#| fig-cap: "Security incidents by attack context"
+#| echo: false
+
+context_counts = country_data['attack_context'].value_counts().reset_index()
+context_counts.columns = ['Attack Context', 'Count']
+
+context_counts = context_counts.sort_values('Count', ascending=False)
+
+fig_context = px.bar(
+    context_counts,
+    x='Count',
+    y='Attack Context',
+    title=None,
+    height=450,
+    orientation='h'
+)
+
+fig_context.update_traces(marker_color=palette["secondary"])
+
+fig_context.update_layout(
+    xaxis_title="Number of Incidents",
+    yaxis_title=None,
+    yaxis=dict(categoryorder='total ascending'),  # <-- ensures most at top
+    margin=dict(l=150, r=20, t=30, b=30)
+)
+
+fig_context.show()
+```
+
+### Analysis of Attack Contexts
+
+**Ambushes** are the most frequent attack context, indicating a high level of premeditated violence, especially along transit routes and during routine movements. **Individual attacks** rank closely behind, suggesting targeted incidents against specific staff or facilities rather than broad confrontations.
+
+The relatively high number of **unknown** contexts suggests a need for improved field reporting and classification. **Raids** and **combat/crossfire** represent organized or opportunistic engagements, while **mob violence** and **detention** appear far less frequently but may reflect localized tensions or government involvement.
+
+This pattern reinforces the operational necessity of route planning, protective protocols for national staff, and scenario-specific security training that prepares personnel for both ambush-style and individualized threats.
+
+## Location of Attack
+
+```{python}
+#| label: fig-attack-locations
+#| fig-cap: "Security incidents by attack locations"
+#| echo: false
+
+# Get top 10 most frequent locations
+location_counts = country_data['location'].value_counts().reset_index()
+location_counts.columns = ['Location', 'Count']
+location_counts = location_counts.sort_values('Count', ascending=False).head(10)
+
+# Create bar chart
+fig_locations = px.bar(
+    location_counts,
+    y='Location',
+    x='Count',
+    title=None,
+    height=500,
+    orientation='h'
+)
+
+fig_locations.update_traces(marker_color="#64C1FF")  # <- updated color
+
+fig_locations.update_layout(
+    yaxis={'categoryorder': 'total ascending'},
+    xaxis_title="Number of Incidents",
+    yaxis_title=None
+)
+
+fig_locations.show()
+```
+
+### Analysis of Attack Locations
+
+Most humanitarian incidents occurred on roads and in public locations, with a notable portion lacking location details.
+
+# Human Impact of Security Incidents {#sec-impact}
+
+## Casualties by Category
+
+```{python}
+#| label: fig-casualties
+#| fig-cap: "Total casualties in Palestine by category"
+#| echo: false
+
+stacked_data = {
+    'Category': ['Nationals', 'Internationals'],
+    'Killed': [
+        country_data['nationals_killed'].sum(),
+        country_data['internationals_killed'].sum()
+    ],
+    'Wounded': [
+        country_data['nationals_wounded'].sum(),
+        country_data['internationals_wounded'].sum()
+    ],
+    'Kidnapped': [
+        country_data['nationals_kidnapped'].sum(),
+        country_data['internationals_kidnapped'].sum()
+    ]
+}
+
+stacked_df = pd.DataFrame(stacked_data)
+stacked_df_long = pd.melt(
+    stacked_df,
+    id_vars=['Category'],
+    value_vars=['Killed', 'Wounded', 'Kidnapped'],
+    var_name='Status',
+    value_name='Count'
+)
+
+fig_stacked = px.bar(
+    stacked_df_long,
+    x='Category',
+    y='Count',
+    color='Status',
+    title=None,
+    barmode='stack',
+    height=500,
+    color_discrete_map={
+        'Killed': palette["danger"], 
+        'Wounded': palette["primary"], 
+        'Kidnapped': palette["secondary"]
+    }
+)
+
+fig_stacked.update_layout(
+    xaxis_title=None,
+    yaxis_title="Number of People",
+    legend_title_text=None
+)
+
+fig_stacked.show()
+```
+
+### Analysis of Casualty Patterns
+
+The data reveals a stark disparity in impact: national staff account for the vast majority of casualties, including deaths, injuries, and kidnappings. This reflects their greater exposure on the ground, often serving in front-line or field-based roles where risks are highest.
+
+While international staff are affected, their casualty numbers remain comparatively low—likely due to stricter security protocols, evacuation mechanisms, and lower operational presence in high-risk zones.
+
+# Major Incidents {#sec-major}
+
+## Top 5 Most Impactful Security Incidents
+
+```{python}
+#| label: tbl-interactive-incidents
+#| echo: false
+
+import plotly.graph_objects as go
+from IPython.display import display, HTML
+
+if not country_data.empty and 'total_affected' in country_data.columns:
+    # Sort the entire dataset by total_affected
+    sorted_incidents = country_data.sort_values(by='total_affected', ascending=False)
+    
+    # Select display columns and rename them
+    display_cols = ['year', 'location', 'total_affected', 'total_killed', 'total_wounded', 'attack_context', 'actor_type']
+    column_names = {
+        'year': 'Year',
+        'location': 'Location',
+        'total_affected': 'Total Affected',
+        'total_killed': 'Killed',
+        'total_wounded': 'Wounded',
+        'attack_context': 'Context',
+        'actor_type': 'Actor Type'
+    }
+    
+    # Prepare the display dataframe
+    display_df = sorted_incidents[display_cols].rename(columns=column_names)
+    
+    # Create an interactive table with Plotly
+    fig = go.Figure(data=[go.Table(
+        header=dict(
+            values=list(column_names.values()),
+            fill_color='#A1083B',
+            align='left',
+            font=dict(color='white', size=14),
+            height=40
+        ),
+        cells=dict(
+            values=[display_df[col] for col in display_df.columns],
+            fill_color=[['#F99301' if i < 5 else '#f9f9f9' for i in range(len(display_df))]],
+            align='left',
+            font=dict(color=['black' if i < 5 else '#333333' for i in range(len(display_df))], size=12),
+            height=30
+        )
+    )])
+    
+    # Update layout for better appearance with fixed height for scrolling
+    fig.update_layout(
+        title={
+            'text': 'Security Incidents Ranked by Impact',
+            'y': 0.98,
+            'x': 0.5,
+            'xanchor': 'center',
+            'yanchor': 'top',
+            'font': {'size': 20}
+        },
+        margin=dict(l=20, r=20, t=60, b=20),
+        height=600,  # Fixed height to enable scrolling
+        width=900
+    )
+    
+    # Add a note about the highlighted rows
+    fig.add_annotation(
+        x=0,
+        y=-0.15,
+        xref='paper',
+        yref='paper',
+        text="<i>Top 5 most impactful incidents are highlighted. Scroll to view all incidents.</i>",
+        showarrow=False,
+        font=dict(size=12),
+        align='left'
+    )
+    
+    # Save and display the figure
+    fig.write_html("images/interactive_incidents_table.html",
+                  include_plotlyjs='cdn',
+                  config={'scrollZoom': True})
+    fig.show()
+
+```
+
+### Analysis of Major Incidents
+
+The most impactful security incidents in Somalia span over two decades, highlighting the enduring nature of risk across different periods and settings:
+
+- The **deadliest incident**, in 2022, involved an ambush on a road that killed all 14 people affected—illustrating the extreme lethality of roadside attacks.
+- A **2017 raid** at a public location resulted in 18 total casualties, the highest overall toll, with a large number wounded.
+- Other major incidents occurred at **office compounds** and on **roads**, reaffirming that both operational facilities and transportation routes remain highly vulnerable.
+- All top 5 incidents involved **non-state armed groups**, underscoring their persistent threat across time.
+- The recurrence of **raids and ambushes** in high-impact events reflects the dominance of tactical surprise and mobility in attack methods.
+
+These findings reinforce the need for proactive security protocols, especially for field sites and ground travel routes.
+
+For more detailed information on the Somolian conflict timeline, see the [Council on Foreign Relations Conflict Tracker](https://www.cfr.org/global-conflict-tracker/conflict/al-shabab-somalia).
+
+# 💡 Recommendations
+
+## For Security Planning
+
+- Routinely map ambush-prone roadways and update movement protocols for affected corridors.
+- Reinforce compound perimeters and conduct regular drills for shelter-in-place or raid response.
+- Establish early-warning systems tied to Al-Shabaab activity, especially before declared offensives or rainy seasons.
+
+## For Humanitarian Organizations
+
+- Prioritize national staff protection with tailored training, protective gear, and mental health services.
+- Build contingency supply caches in stable regions to reduce dependence on insecure roads.
+- Strengthen coordination with local security actors and community leaders in high-risk areas.
+
+## For Future Research
+
+- Examine links between climate shocks (e.g., floods, droughts) and violence escalation.
+- Analyze the evolution of Al-Shabaab’s targeting tactics across operational zones.
+- Evaluate the long-term impact of AMISOM and other interventions on humanitarian access and staff safety.

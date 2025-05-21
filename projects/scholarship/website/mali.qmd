@@ -1,0 +1,549 @@
+---
+title: "Security Incidents in Mali: Trends and Patterns"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: true
+    number-sections: true
+    theme: cosmo
+    fig-width: 9
+    fig-height: 6
+    fig-dpi: 300
+    self-contained: true
+bibliography: references.bib
+execute:
+  warning: false
+  message: false
+---
+
+<style>
+.typing-line {
+  font-family: monospace;
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: .15em solid #000;
+  width: 0;
+  display: block;
+  animation: typing 2s steps(20, end) forwards;
+  /* Only type, no infinite blinking */
+}
+
+.typing-line:nth-child(2) {
+  animation-delay: 2s;
+}
+
+.typing-line:nth-child(3) {
+  animation-delay: 4s;
+}
+
+.typing-line:nth-child(4) {
+  animation-delay: 6s;
+}
+
+@keyframes typing {
+  from { width: 0 }
+  to { width: 100% }
+}
+</style>
+
+```{python}
+#| label: setup
+#| include: false
+#| echo: false
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+import folium
+from folium.plugins import MarkerCluster
+from matplotlib.colors import LinearSegmentedColormap
+import warnings
+import plotly.express as px
+import plotly.graph_objects as go
+from IPython.display import display
+from scipy import stats
+
+plt.rcParams['figure.figsize'] = (10, 6)
+warnings.filterwarnings('ignore', category=FutureWarning)
+sns.set_theme(style="whitegrid")
+
+palette = {"primary": "#FFBD59", "secondary": "#64C1FF", "danger": "#FF5252"}
+
+df = pd.read_csv("data/security_incidents_cleaned.csv")
+country_data = df[df['country'] == 'Mali']
+
+```
+
+![](images/malipic.png)
+
+```{python}
+#| echo: false
+
+from IPython.display import HTML
+
+killed = int(country_data['nationals_killed'].sum() + country_data['internationals_killed'].sum())
+wounded = int(country_data['nationals_wounded'].sum() + country_data['internationals_wounded'].sum())
+kidnapped = int(country_data['nationals_kidnapped'].sum() + country_data['internationals_kidnapped'].sum())
+
+from IPython.display import HTML
+
+html = f"""
+<div>
+  <span class="typing-line">In Mali...</span>
+  <span class="typing-line">{killed} humanitarian workers have died,</span>
+  <span class="typing-line">{wounded} humanitarian workers have been wounded,</span>
+  <span class="typing-line">{kidnapped} humanitarian workers have been kidnapped.</span>
+</div>
+"""
+
+HTML(html)
+
+```       
+
+# Executive Summary
+
+![](images/mali.png){width=185px}
+
+# Executive Summary
+
+This analysis examines security incidents affecting humanitarian operations in Mali from 2006 to 2025. Key findings include:
+
+-   **Post-coup escalation**: Following the 2020 military coup, incidents surged to unprecedented levels, peaking with French withdrawal and Wagner Group deployment.
+  
+-   **Kidnapping dominance**: Unlike other conflicts, kidnapping is the primary attack method in Mali, reflecting armed groups' focus on resource extraction and population control.
+
+-   **Ambush vulnerability**: Road networks represent the most dangerous operational environment, with ambushes accounting for most security incidents.
+
+-   **National staff risk**: Malian humanitarian workers face substantially higher security risks than international personnel.
+
+-   **False security improvements**: The recent decline in incidents reflects reduced humanitarian presence following UN peacekeepers' expulsion, not improved security.
+
+These findings have significant implications for humanitarian operations in Mali's evolving conflict landscape.
+
+# Background: The Conflict
+
+## Historical Context
+
+Mali's crisis began with the 2012 Tuareg rebellion, triggered by fighters and weapons flowing from Libya after Gaddafi's fall. The Tuareg MNLA briefly allied with Islamist groups to capture northern cities and declare the independent Azawad state. A military coup in March 2012 further destabilized Mali, until French intervention in 2013 pushed back the Islamists [@cfr_mali]. Major developments included:
+
+-   **2012**: Military coup and Tuareg rebellion seize northern Mali
+-   **2013**: French Operation Serval pushes back Islamist groups
+-   **2015**: Peace agreement signed with Tuareg separatists, excluding Islamist factions
+-   **2013-2019**: Gradual expansion of jihadist groups into central Mali
+-   **2015-2020**: Deployment of UN peacekeeping mission MINUSMA across northern regions
+
+Years of marginalization in northern regions, weak governance, and corruption created fertile ground for danger.
+
+## Recent Escalation 
+
+Mali's security has deteriorated rapidly since the 2020-2021 military coups. The situation has worsened dramatically with:
+
+-   **2022**: Junta cuts ties with France and hires Wagner Group mercenaries
+-   **2022**: Moura massacre with over 300 civilian deaths
+-   Renewed fighting with Tuareg separatists in northeast regions
+-   JNIM jihadist group controlling northern territories
+-   Humanitarian crisis with thousands displaced
+-   Multiple sieges of major northern cities including Timbuktu
+
+With international support gone and violence surging on multiple fronts, Mali now stands on the brink of civil war.
+
+<h1>Map of Incidents <img src="images/map.png" width="60px" style="vertical-align:middle; margin-left:10px;"></h1>
+
+```{python}
+
+#| echo: false
+
+icon_path = "images/hazard2.png"
+valid_points = country_data[country_data['latitude'].notna() & country_data['longitude'].notna()]
+
+country_map = folium.Map(location=[31.9, 35.2], zoom_start=8)
+
+coords = []
+
+for _, row in valid_points.iterrows():
+    coords.append((row['latitude'], row['longitude']))
+    
+    popup_html = f"""
+    <b>Location:</b> {row['location']}, {row['country']}<br>
+    <b>Year:</b> {row['year']}<br>
+    <b>Total Affected:</b> {row['total_affected']}<br>
+    <b>Attack Type:</b> {row.get('means_of_attack', 'Unknown')}
+    """
+
+    icon = folium.CustomIcon(
+        icon_image=icon_path,
+        icon_size=(20, 20)
+    )
+
+    folium.Marker(
+        location=[row['latitude'], row['longitude']],
+        popup=folium.Popup(popup_html, max_width=300),
+        icon=icon
+    ).add_to(country_map)
+
+if coords:
+    country_map.fit_bounds(coords)
+
+country_map
+
+```
+
+# Temporal Trends in Security Incidents {#sec-temporal}
+
+## Incident Frequency Over Time
+
+```{python}
+#| label: fig-yearly-incidents
+#| fig-cap: "Security incidents"
+#| echo: false
+
+yearly_incidents = country_data.groupby('year').size().reset_index(name='incidents')
+
+fig = px.line(
+    yearly_incidents, 
+    x='year', 
+    y='incidents',
+    markers=True,
+    labels={'incidents': 'Number of Incidents', 'year': 'Year'},
+    height=500
+)
+
+fig.update_layout(
+    title=None,
+    xaxis=dict(tickmode='linear', dtick=2),
+    yaxis=dict(zeroline=True),
+    hovermode='x unified',
+    template='plotly_white'
+)
+
+fig.update_xaxes(rangeslider_visible=True)
+
+events = [
+    {'year': 2012, 'event': 'Tuareg rebellion and coup', 'y_position': 1},
+    {'year': 2013, 'event': 'French intervention', 'y_position':3},
+    {'year': 2015, 'event': 'Peace agreement with Tuaregs', 'y_position': 5},
+    {'year': 2020, 'event': 'Military coup', 'y_position': 17},
+    {'year': 2022, 'event': 'French withdrawal', 'y_position': 20},
+    {'year': 2023, 'event': 'UN peacekeepers expelled', 'y_position': 18}
+]
+
+for event in events:
+    fig.add_annotation(
+        x=event['year'],
+        y=event['y_position'],
+        text=event['event'],
+        showarrow=True,
+        arrowhead=1,
+        ax=0,
+        ay=-20,
+        font=dict(size=10),
+        bgcolor="rgba(255,255,255,0.85)",
+        bordercolor="black",
+        borderwidth=1,
+        borderpad=3
+    )
+
+fig.show()
+```
+
+### Analysis of Incident Trends
+
+The line chart reveals striking patterns in security incidents affecting humanitarian operations in Mali:
+
+-   **Initial stability (2006-2012)**: Prior to the Tuareg rebellion and military coup, security incidents remained minimal, with almost no reported attacks on humanitarian operations.
+
+-   **Modest increase (2013-2018)**: Following French intervention and the 2015 peace agreement with Tuareg groups, incidents began a slow but steady climb as Islamist groups excluded from peace processes expanded their operations in central Mali.
+
+-   **Sharp escalation (2019-2022)**: A dramatic surge occurred after the 2020 military coup, with incidents peaking in 2021-2022 at approximately 20 annual incidents - coinciding with the withdrawal of French forces and their replacement with Wagner Group mercenaries.
+
+-   **Unexpected decline (2023-2025)**: Contrary to general security trends, incidents affecting humanitarian operations decreased significantly after the expulsion of UN peacekeepers. This likely reflects reduced humanitarian presence rather than improved security conditions, as many organizations withdrew from high-risk areas.
+
+This pattern reveals a complex relationship between political developments and humanitarian security in Mali, where periods of apparent improvement may actually signal reduced operational capacity rather than enhanced security conditions.
+
+# Nature of Security Incidents {#sec-nature}
+
+## Predominant Attack Types
+
+```{python}
+#| label: fig-attack-types
+#| fig-cap: "Most common types of attacks"
+#| echo: false
+
+attack_counts = country_data['means_of_attack'].value_counts().reset_index()
+attack_counts.columns = ['Attack Type', 'Count']
+attack_counts = attack_counts.sort_values('Count', ascending=False).head(10)
+
+fig_attacks = px.bar(
+    attack_counts,
+    y='Attack Type',
+    x='Count',
+    title=None,
+    height=500,
+    orientation='h'
+)
+
+fig_attacks.update_traces(marker_color=palette["secondary"])
+
+fig_attacks.update_layout(
+    yaxis={'categoryorder': 'total ascending'},
+    xaxis_title="Number of Incidents",
+    yaxis_title=None
+)
+
+fig_attacks.show()
+```
+
+### Analysis of Attack Methods
+
+The significant disparity between kidnapping and other attack methods highlights how extremist groups have adapted their strategies, focusing on operations that require minimal resources while maximizing psychological impact and financial gain.
+
+## Attack Contexts
+
+```{python}
+#| label: fig-attack-contexts
+#| fig-cap: "Security incidents by attack context"
+#| echo: false
+
+context_counts = country_data['attack_context'].value_counts().reset_index()
+context_counts.columns = ['Attack Context', 'Count']
+
+context_counts = context_counts.sort_values('Count', ascending=False)
+
+fig_context = px.bar(
+    context_counts,
+    x='Count',
+    y='Attack Context',
+    title=None,
+    height=450,
+    orientation='h'
+)
+
+fig_context.update_traces(marker_color=palette["secondary"])
+
+fig_context.update_layout(
+    xaxis_title="Number of Incidents",
+    yaxis_title=None,
+    yaxis=dict(categoryorder='total ascending'),  # <-- ensures most at top
+    margin=dict(l=150, r=20, t=30, b=30)
+)
+
+fig_context.show()
+```
+
+### Analysis of Attack Contexts
+
+There is a significant gap between ambushes and the second most common category. This disparity highlights how armed groups in Mali have strategically prioritized ambush tactics, likely due to their effectiveness along the country's limited road networks [@britannicaMaliTransport].
+
+## Location of Attack
+
+```{python}
+#| label: fig-attack-locations
+#| fig-cap: "Security incidents by attack locations"
+#| echo: false
+
+# Get top 10 most frequent locations
+location_counts = country_data['location'].value_counts().reset_index()
+location_counts.columns = ['Location', 'Count']
+location_counts = location_counts.sort_values('Count', ascending=False).head(10)
+
+# Create bar chart
+fig_locations = px.bar(
+    location_counts,
+    y='Location',
+    x='Count',
+    title=None,
+    height=500,
+    orientation='h'
+)
+
+fig_locations.update_traces(marker_color="#64C1FF")  # <- updated color
+
+fig_locations.update_layout(
+    yaxis={'categoryorder': 'total ascending'},
+    xaxis_title="Number of Incidents",
+    yaxis_title=None
+)
+
+fig_locations.show()
+```
+
+### Analysis of Attack Locations
+
+The vast majority of incidents occurred on roads, underscoring the heightened dangers faced by aid workers during travel and transportation. As mentioned above, Mali has a very limited road network. 
+
+# Human Impact of Security Incidents {#sec-impact}
+
+## Casualties by Category
+
+```{python}
+#| label: fig-casualties
+#| fig-cap: "Total casualties by category"
+#| echo: false
+
+stacked_data = {
+    'Category': ['Nationals', 'Internationals'],
+    'Killed': [
+        country_data['nationals_killed'].sum(),
+        country_data['internationals_killed'].sum()
+    ],
+    'Wounded': [
+        country_data['nationals_wounded'].sum(),
+        country_data['internationals_wounded'].sum()
+    ],
+    'Kidnapped': [
+        country_data['nationals_kidnapped'].sum(),
+        country_data['internationals_kidnapped'].sum()
+    ]
+}
+
+stacked_df = pd.DataFrame(stacked_data)
+stacked_df_long = pd.melt(
+    stacked_df,
+    id_vars=['Category'],
+    value_vars=['Killed', 'Wounded', 'Kidnapped'],
+    var_name='Status',
+    value_name='Count'
+)
+
+fig_stacked = px.bar(
+    stacked_df_long,
+    x='Category',
+    y='Count',
+    color='Status',
+    title=None,
+    barmode='stack',
+    height=500,
+    color_discrete_map={
+        'Killed': palette["danger"], 
+        'Wounded': palette["primary"], 
+        'Kidnapped': palette["secondary"]
+    }
+)
+
+fig_stacked.update_layout(
+    xaxis_title=None,
+    yaxis_title="Number of People",
+    legend_title_text=None
+)
+
+fig_stacked.show()
+```
+
+### Analysis of Casualty Patterns
+
+This chart shows that Malian nationals suffer far more from conflict than internationals. Kidnapping is the most common form of violence against locals, showing how armed groups target communities to gain control and extract ransoms. This data highlights that Malians themselves bear the overwhelming burden of the country's ongoing security crisis.
+
+# Major Incidents {#sec-major}
+
+## Top 5 Most Impactful Security Incidents
+
+```{python}
+
+#| label: tbl-interactive-incidents
+#| echo: false
+
+import plotly.graph_objects as go
+from IPython.display import display, HTML
+
+if not country_data.empty and 'total_affected' in country_data.columns:
+    # Sort the entire dataset by total_affected
+    sorted_incidents = country_data.sort_values(by='total_affected', ascending=False)
+    
+    # Select display columns and rename them
+    display_cols = ['year', 'location', 'total_affected', 'total_killed', 'total_wounded', 'attack_context', 'actor_type']
+    column_names = {
+        'year': 'Year',
+        'location': 'Location',
+        'total_affected': 'Total Affected',
+        'total_killed': 'Killed',
+        'total_wounded': 'Wounded',
+        'attack_context': 'Context',
+        'actor_type': 'Actor Type'
+    }
+    
+    # Prepare the display dataframe
+    display_df = sorted_incidents[display_cols].rename(columns=column_names)
+    
+    # Create an interactive table with Plotly
+    fig = go.Figure(data=[go.Table(
+        header=dict(
+            values=list(column_names.values()),
+            fill_color='#A1083B',
+            align='left',
+            font=dict(color='white', size=14),
+            height=40
+        ),
+        cells=dict(
+            values=[display_df[col] for col in display_df.columns],
+            fill_color=[['#F99301' if i < 5 else '#f9f9f9' for i in range(len(display_df))]],
+            align='left',
+            font=dict(color=['black' if i < 5 else '#333333' for i in range(len(display_df))], size=12),
+            height=30
+        )
+    )])
+    
+    # Update layout for better appearance with fixed height for scrolling
+    fig.update_layout(
+        title={
+            'text': 'Security Incidents Ranked by Impact',
+            'y': 0.98,
+            'x': 0.5,
+            'xanchor': 'center',
+            'yanchor': 'top',
+            'font': {'size': 20}
+        },
+        margin=dict(l=20, r=20, t=60, b=20),
+        height=600,  # Fixed height to enable scrolling
+        width=900
+    )
+    
+    # Add a note about the highlighted rows
+    fig.add_annotation(
+        x=0,
+        y=-0.15,
+        xref='paper',
+        yref='paper',
+        text="<i>Top 5 most impactful incidents are highlighted. Scroll to view all incidents.</i>",
+        showarrow=False,
+        font=dict(size=12),
+        align='left'
+    )
+    
+    # Save and display the figure
+    fig.write_html("images/interactive_incidents_table.html",
+                  include_plotlyjs='cdn',
+                  config={'scrollZoom': True})
+    fig.show()
+
+```
+
+### Analysis of Major Incidents
+
+This table displays all security incidents in Mali from 2018 to 2024, highlighting the evolution of the conflict. The top incidents in public locations (2018) and at project sites (2022) each affected 9 individuals, suggesting targeted attacks on civilian gatherings and humanitarian operations. Road incidents in 2020 and 2024 each affected 6 people. 
+
+For more detailed information on the Mali conflict timeline, see the [Council on Foreign Relations Conflict Tracker](https://www.cfr.org/global-conflict-tracker/conflict/violent-extremism-sahel).
+
+# 💡 Recommendations
+
+## For Security Planning
+
+-   Implement journey management systems with real-time risk assessments for ambush prevention
+-   Establish early warning networks for intelligence on armed group movements
+-   Create specialized anti-kidnapping protocols with comprehensive staff training
+-   Develop clear security thresholds for program suspension in high-risk areas
+
+## For Humanitarian Organizations
+
+-   Balance operational presence with community acceptance strategies
+-   Invest in remote management capabilities for periods of limited access
+-   Prioritize national staff security with equal protection measures
+-   Develop flexible programming models adaptable to changing security conditions
+
+## For Future Research
+
+-   Examine access negotiation effectiveness with different armed groups
+-   Analyze the impact of foreign security actors (UN, France, Wagner) on humanitarian security
+-   Study community protection strategies in areas where state authority has receded
+-   Evaluate digital technology applications for security management in high-risk environments

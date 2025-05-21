@@ -1,0 +1,424 @@
+---
+title: "Security Incidents Analysis: Global Patterns and Trends"
+format: 
+  html:
+    code-fold: true
+    toc: true
+    toc-depth: 3
+    number-sections: true
+    theme: cosmo
+    fig-width: 9
+    fig-height: 6
+    fig-dpi: 300
+    self-contained: true
+execute:
+  warning: false
+  message: false
+---
+
+<style>
+.typing-line {
+  font-family: monospace;
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: .15em solid #000;
+  width: 0;
+  display: block;
+  animation: typing 2s steps(20, end) forwards;
+  /* Only type, no infinite blinking */
+}
+
+.typing-line:nth-child(2) {
+  animation-delay: 2s;
+}
+
+.typing-line:nth-child(3) {
+  animation-delay: 4s;
+}
+
+.typing-line:nth-child(4) {
+  animation-delay: 6s;
+}
+
+@keyframes typing {
+  from { width: 0 }
+  to { width: 100% }
+}
+</style>
+
+![](images/aid1.png)
+
+```{python}
+#| label: setup
+#| include: false
+#| echo: false
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+import folium
+from folium.plugins import MarkerCluster
+from matplotlib.colors import LinearSegmentedColormap
+import warnings
+import plotly.express as px
+import plotly.graph_objects as go
+from IPython.display import display
+
+plt.rcParams['figure.figsize'] = (10, 6)
+warnings.filterwarnings('ignore', category=FutureWarning)
+sns.set_theme(style="whitegrid")
+
+palette = {"primary": "#FFBD59", "secondary": "#64C1FF", "danger": "#FF5252"}
+
+df = pd.read_csv("data/security_incidents_cleaned.csv")
+``` 
+
+# Introduction
+
+This section offers a global overview of security incidents using data from the Aid Worker Security Database, highlighting key geographic and temporal trends to better understand where violence against personnel is most concentrated.  
+
+The analysis reveals distinct hotspots of insecurity, which are explored further in the individual country reports that follow.
+
+# Dataset Overview
+
+```{python}
+#| echo: false
+#| label: dataset-overview
+
+print(f"Dataset contains {len(df):,} incidents across {df['country'].nunique():,} countries")
+print(f"Time period covered: {df['year'].min()} to {df['year'].max()}")
+
+```
+
+![](images/human3.png)
+
+# Global Incident Distribution
+
+Security incidents aren't distributed evenly across the world. Some regions experience higher concentrations due to various factors including geopolitical tensions, economic disparities, and historical conflicts. Visualizing this distribution helps us identify global patterns.
+
+The map below displays incidents across the globe, with the heatmap intensity representing the concentration and severity of security incidents. Africa shows the highest density, particularly across Central and East African nations, while significant hotspots also appear throughout the Middle East and parts of South and Southeast Asia.
+
+```{python}
+
+#| label: global-incidents-heatmap
+#| echo: false
+
+import folium
+from folium.plugins import HeatMap
+import numpy as np
+import pandas as pd
+
+def create_security_incidents_heatmap(data):
+    center_lat = 0
+    center_lon = 0
+    
+    incidents_map = folium.Map(
+        location=[center_lat, center_lon],
+        zoom_start=2,     
+        tiles="CartoDB dark_matter",
+        min_zoom=2,       
+        max_bounds=True,   
+        world_copy_jump=True  
+    )
+    
+    valid_coords = data[data['latitude'].notna() & data['longitude'].notna()]
+    
+    heat_data = []
+    for _, row in valid_coords.iterrows():
+        intensity = float(max(1, row['total_affected'])) if not pd.isna(row['total_affected']) else 1.0
+        heat_data.append([float(row['latitude']), float(row['longitude']), intensity])
+    
+    HeatMap(
+        heat_data,
+        radius=10,
+        blur=10,
+        min_opacity=0.5,
+        max_zoom=13,
+        gradient={
+            '0.2': '#64C1FF',  
+            '0.4': '#FFB74D',  
+            '0.6': '#FF9A3C',  
+            '0.8': '#FF5252'  
+        }
+    ).add_to(incidents_map)
+    
+    folium.GeoJson(
+        'https://raw.githubusercontent.com/python-visualization/folium/master/examples/data/world-countries.json',
+        style_function=lambda x: {
+            'fillColor': 'transparent',
+            'color': '#444444',
+            'weight': 0.5,
+            'fillOpacity': 0
+        }
+    ).add_to(incidents_map)
+    
+    incidents_map.fit_bounds([[-90, -180], [90, 180]])
+    
+    return incidents_map
+
+global_incidents_heatmap = create_security_incidents_heatmap(df)
+global_incidents_heatmap.save("images/global_security_incidents_heatmap.html")
+global_incidents_heatmap
+
+```
+
+# Temporal Trends
+
+## Annual Trends at a Glance
+
+The chart below offers a simple view of yearly totals across all countries, showing how global incident volume has risen over time.
+
+```{python}
+#| label: yearly-incidents-bar
+#| echo: false
+
+year_incidents = df.groupby('year').size().reset_index(name='incidents')
+year_incidents['year'] = year_incidents['year'].astype(str)
+
+fig2 = px.bar(
+    year_incidents,
+    x='year',
+    y='incidents',
+    labels={'incidents': 'Number of Incidents', 'year': 'Year'},
+    height=400
+)
+
+fig2.update_traces(marker_color=palette["secondary"])
+
+fig2.update_layout(
+    title={
+        'text': 'Security Incidents by Year',
+        'y': 0.95,
+        'x': 0.5,
+        'xanchor': 'center',
+        'yanchor': 'top'
+    },
+    xaxis=dict(rangeslider=dict(visible=True), type='category'),
+    bargap=0.1,
+    template='plotly_white'
+)
+
+fig2.write_html("images/interactive_yearly_incidents_barchart.html")
+fig2.show()
+```
+
+The bar chart shows:
+
+- A general upward trend in reported incidents
+- Distinct spikes likely linked to global conflicts or regional escalations
+- Possible influence from improved data collection and reporting
+
+Together, these visuals underscore how fluid the security landscape is—and why real-time analysis and localized response strategies matter.
+
+## Regional Trends at a Glance
+
+By examining individual countries, we can pinpoint emerging hotspots as well as regions showing signs of improved security.
+
+The animated choropleth map below shows how the distribution of security incidents has shifted over the years. Darker colors indicate higher numbers of incidents.
+
+```{python}
+
+#| label: incidents-choropleth
+#| echo: false
+
+incidents_by_year_country = df.groupby(['year', 'country']).size().reset_index(name='incidents')
+year_totals = incidents_by_year_country.groupby('year')['incidents'].sum().reset_index().sort_values('year')
+
+custom_colorscale = [
+    [0, "#F99301"],
+    [0.33, "#F56300"],
+    [0.66, "#A1083B"],
+    [1, "#541743"]
+]
+
+fig = px.choropleth(
+    incidents_by_year_country,
+    locations='country',
+    locationmode='country names',
+    color='incidents',
+    animation_frame='year',
+    color_continuous_scale=custom_colorscale,
+    range_color=[0, incidents_by_year_country['incidents'].max()],
+    height=600
+)
+
+fig.update_layout(
+    coloraxis_colorbar=dict(title='Number of Incidents'),
+    geo=dict(showframe=False, showcoastlines=True, projection_type='natural earth'),
+    margin=dict(t=100)  # Further increased top margin for even higher annotation
+)
+
+fig.layout.updatemenus[0].buttons[0].args[1]['frame']['duration'] = 1000
+fig.layout.updatemenus[0].buttons[0].args[1]['transition']['duration'] = 500
+
+# Move annotations even higher
+for i, year in enumerate(year_totals['year'].unique()):
+    year_total = year_totals.loc[year_totals['year'] == year, 'incidents'].values[0]
+    fig.frames[i].layout.annotations = [
+        dict(
+            x=0.5,
+            y=1.05,  # Even higher position (was 0.95)
+            xref='paper',
+            yref='paper',
+            text=f'Total Incidents in {year}: {year_total}',
+            showarrow=False,
+            font=dict(size=18)
+        )
+    ]
+
+# Set initial annotation even higher
+latest_year = year_totals['year'].max()
+latest_total = year_totals.loc[year_totals['year'] == latest_year, 'incidents'].values[0]
+fig.update_layout(annotations=[
+    dict(
+        x=0.5,
+        y=1.05,  # Even higher position (was 0.95)
+        xref='paper',
+        yref='paper',
+        text=f'Total Incidents in {latest_year}: {latest_total}',
+        showarrow=False,
+        font=dict(size=18)
+    )
+])
+
+fig.write_html("images/interactive_incidents_over_time.html")
+fig.show()
+
+```
+
+<br>
+
+This visualization reveals several insights:
+
+-   Some countries that were previously security hotspots have shown improvement
+-   New areas of concern have emerged in recent years
+-   The total number of recorded incidents shows notable year-to-year variation
+
+You can use the play button to animate the map through time, or manually select specific years using the slider.
+
+# Countries with Most Incidents: All-Time Analysis
+
+First, let's look at which countries have experienced the most security incidents over the entire period covered by our dataset:
+
+```{python}
+
+#| echo: false
+#| label: total-incidents-all-time
+
+import plotly.express as px
+
+
+total_by_country = df.groupby('country').size().reset_index(name='total_incidents')
+total_by_country = total_by_country.sort_values('total_incidents', ascending=False)
+top15_countries = total_by_country.head(8)
+
+fig_top_all_time = px.bar(
+    top15_countries,
+    y='country',              
+    x='total_incidents',       
+    labels={'total_incidents': 'Number of Incidents', 'country': 'Country'},
+    height=450,
+    orientation='h'             
+)
+
+fig_top_all_time.update_traces(marker_color=palette["secondary"])
+
+fig_top_all_time.update_layout(
+    title={
+        'text': 'Top Countries by Security Incidents (All Time)',
+        'y': 0.95,
+        'x': 0.5,
+        'xanchor': 'center',
+        'yanchor': 'top',
+        'font': {'size': 15}
+    },
+    yaxis={'categoryorder': 'total ascending'},  
+    margin=dict(l=150, r=20, t=80, b=50)         
+)
+
+fig_top_all_time.show()
+
+fig_top_all_time.write_html("images/top_countries_all_time.html")
+
+```
+
+This visualization highlights the countries that have historically been most affected by security incidents. Several factors might contribute to a country appearing on this list:
+
+-   Long-standing regional conflicts
+-   Political instability
+-   Higher population (which can increase the absolute number of incidents)
+-   More comprehensive reporting of incidents
+
+# Countries with Most Incidents: Recent Trends
+
+Historical patterns don't always reflect current realities. To identify emerging security hotspots, we need to focus on more recent data. The following analysis examines incident patterns over the past 10 years:
+
+```{python}
+
+#| label: total-incidents-recent-years
+#| echo: false
+import plotly.express as px
+
+# Keep the data preparation the same
+current_year = df['year'].max()
+ten_years_ago = current_year - 10
+recent_df = df[df['year'] >= ten_years_ago]
+
+recent_by_country = recent_df.groupby('country').size().reset_index(name='recent_incidents')
+recent_by_country = recent_by_country.sort_values('recent_incidents', ascending=False)
+top15_recent = recent_by_country.head(8)
+
+fig_top_recent = px.bar(
+    top15_recent,
+    y='country',                
+    x='recent_incidents',    
+    labels={'recent_incidents': 'Number of Incidents', 'country': 'Country'},
+    height=500,
+    orientation='h'            
+)
+
+fig_top_recent.update_traces(marker_color=palette["secondary"])
+
+fig_top_recent.update_layout(
+    title={
+        'text': f'Top Countries by Security Incidents<br>(Last 10 Years: {ten_years_ago}–{current_year})',
+        'y': 0.95,
+        'x': 0.5,
+        'xanchor': 'center',
+        'yanchor': 'top',
+        'font': {'size': 15}
+    },
+    yaxis={'categoryorder': 'total ascending'},  
+    margin=dict(l=150, r=20, t=100, b=50)       
+)
+
+fig_top_recent.show()
+
+```
+
+This recent trends analysis shows:
+
+- Countries that have experienced deteriorating security situations in the past decade
+- An Emerging hotspot (Mali) that did not appear in historical data
+
+By comparing this visualization with the all-time analysis, we can identify significant shifts in global security patterns.
+
+# Conclusion
+
+This analysis offers a comprehensive view of the evolving security landscape facing humanitarian personnel worldwide. By visualizing both global and regional patterns over time, we identify persistent hotspots, emerging threats, and areas showing signs of improvement. Temporal trends reveal how conflict intensity and geographic distribution shift year to year, influenced by political instability, territorial changes, and peace processes.
+
+# Next Steps
+
+## Analyze Individual Countries
+
+The next phase of our analysis dives deeper into individual country reports. These pages explore national-level trends, highlight localized patterns of violence, and provide tailored insights for each context. Click any country below to explore its specific security profile.
+
+- [Palestine](palestine.qmd)
+- [Afghanistan](af.qmd)
+- [DR Congo](dr.qmd)
+- [Syria](syria.qmd)
+- [Somalia](somolia.qmd)
+- [Mali](mali.qmd)
+- [South Sudan](southsudan.qmd)
+- [Sudan](sudan.qmd)

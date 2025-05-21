@@ -1,0 +1,537 @@
+---
+title: "Security Incidents in Democratic Republic of Congo: Trends and Patterns"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: true
+    number-sections: true
+    theme: cosmo
+    fig-width: 9
+    fig-height: 6
+    fig-dpi: 300
+    self-contained: true
+bibliography: references.bib
+execute:
+  warning: false
+  message: false
+---
+
+<style>
+.typing-line {
+  font-family: monospace;
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: .15em solid #000;
+  width: 0;
+  display: block;
+  animation: typing 2s steps(20, end) forwards;
+  /* Only type, no infinite blinking */
+}
+
+.typing-line:nth-child(2) {
+  animation-delay: 2s;
+}
+
+.typing-line:nth-child(3) {
+  animation-delay: 4s;
+}
+
+.typing-line:nth-child(4) {
+  animation-delay: 6s;
+}
+
+@keyframes typing {
+  from { width: 0 }
+  to { width: 100% }
+}
+</style>
+
+```{python}
+#| label: setup
+#| include: false
+#| echo: false
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+import folium
+from folium.plugins import MarkerCluster
+from matplotlib.colors import LinearSegmentedColormap
+import warnings
+import plotly.express as px
+import plotly.graph_objects as go
+from IPython.display import display
+from scipy import stats
+
+plt.rcParams['figure.figsize'] = (10, 6)
+warnings.filterwarnings('ignore', category=FutureWarning)
+sns.set_theme(style="whitegrid")
+
+palette = {"primary": "#FFBD59", "secondary": "#64C1FF", "danger": "#FF5252"}
+
+df = pd.read_csv("data/security_incidents_cleaned.csv")
+country_data = df[df['country'] == 'DR Congo']
+
+```
+
+![](images/drpic.png)
+
+```{python}
+#| echo: false
+
+from IPython.display import HTML
+
+killed = int(country_data['nationals_killed'].sum() + country_data['internationals_killed'].sum())
+wounded = int(country_data['nationals_wounded'].sum() + country_data['internationals_wounded'].sum())
+kidnapped = int(country_data['nationals_kidnapped'].sum() + country_data['internationals_kidnapped'].sum())
+
+from IPython.display import HTML
+
+html = f"""
+<div>
+  <span class="typing-line">In the Dominican Republic of Congo...</span>
+  <span class="typing-line">{killed} humanitarian workers have died,</span>
+  <span class="typing-line">{wounded} humanitarian workers have been wounded,</span>
+  <span class="typing-line">{kidnapped} humanitarian workers have been kidnapped.</span>
+</div>
+"""
+
+HTML(html)
+
+```   
+
+# Executive Summary
+
+![](images/dr.png){width=200px}
+
+This analysis examines security incidents affecting humanitarian operations in the Democratic Republic of Congo from 1996 to 2025, revealing significant patterns and trends. Key findings include:
+
+-   **Political transition volatility**: Security incidents peaked dramatically following the 2019 political transition, with incident levels reaching unprecedented heights in 2020.
+-   **Kidnapping prevalence**: Unlike other conflict contexts, kidnapping emerges as the predominant attack type, reflecting armed groups' tactical choices in the DRC.
+-   **Ambush vulnerability**: Security incidents most frequently occur during ambushes, highlighting the risks associated with movement through the challenging terrain of eastern DRC.
+-   **Nationals at highest risk**: Congolese humanitarian workers face disproportionately higher security risks, particularly from kidnapping, compared to international personnel.
+-   **Geographic hotspots**: Road networks and transportation routes represent the most dangerous operational environments, requiring specialized security approaches.
+
+These findings have critical implications for humanitarian operations, protection strategies, and security risk management in the complex and evolving DRC context.
+
+# Background: The Conflict
+
+## Historical Context
+
+The conflict in the Democratic Republic of Congo represents one of Africa's most complex and enduring crises. Rooted in the aftermath of the 1994 Rwandan Genocide, the violence has evolved through two major regional wars—the First Congo War (1996-1997) and the Second Congo War (1998-2003)—which collectively resulted in millions of deaths. Despite formal peace agreements, eastern DRC has remained unstable, with over 120 different armed groups competing for territory, resources, and influence in the mineral-rich regions of North Kivu, South Kivu, and Ituri provinces [@cfr_drc].
+
+## Recent Escalation
+
+In early 2025, M23 rebels, backed by Rwandan troops, captured Goma in eastern DRC, killing between 900-2,000 civilians and triggering mass displacement. This represented the culmination of escalating violence that began with M23's resurgence in 2022 and their steady territorial gains throughout 2023. The situation had already deteriorated significantly following DRC's contested December 2023 elections, which sparked nationwide unrest. During 2024, the humanitarian situation worsened dramatically, with:
+
+-   **358,000** newly displaced people
+-   **30%** rise in violations against children
+-   Failure of the U.S.-brokered peace agreement from late 2023
+-   Intensification of conflict despite international diplomatic efforts
+-   Severe humanitarian access constraints in M23-controlled territories
+
+<h1>Map of Incidents <img src="images/map.png" width="60px" style="vertical-align:middle; margin-left:10px;"></h1>
+
+```{python}
+#| echo: false
+icon_path = "images/hazard2.png"
+valid_points = country_data[country_data['latitude'].notna() & country_data['longitude'].notna()]
+
+country_map = folium.Map(location=[31.9, 35.2], zoom_start=8)
+
+coords = []
+
+for _, row in valid_points.iterrows():
+    coords.append((row['latitude'], row['longitude']))
+    
+    popup_html = f"""
+    <b>Location:</b> {row['location']}, {row['country']}<br>
+    <b>Year:</b> {row['year']}<br>
+    <b>Total Affected:</b> {row['total_affected']}<br>
+    <b>Attack Type:</b> {row.get('means_of_attack', 'Unknown')}
+    """
+
+    icon = folium.CustomIcon(
+        icon_image=icon_path,
+        icon_size=(20, 20)
+    )
+
+    folium.Marker(
+        location=[row['latitude'], row['longitude']],
+        popup=folium.Popup(popup_html, max_width=300),
+        icon=icon
+    ).add_to(country_map)
+
+if coords:
+    country_map.fit_bounds(coords)
+
+country_map
+
+```
+
+# Temporal Trends in Security Incidents {#sec-temporal}
+
+## Incident Frequency Over Time
+
+```{python}
+#| label: fig-yearly-incidents
+#| fig-cap: "Security incidents"
+#| echo: false
+
+yearly_incidents = country_data.groupby('year').size().reset_index(name='incidents')
+
+fig = px.line(
+    yearly_incidents, 
+    x='year', 
+    y='incidents',
+    markers=True,
+    labels={'incidents': 'Number of Incidents', 'year': 'Year'},
+    height=500
+)
+
+fig.update_layout(
+    title=None,
+    xaxis=dict(tickmode='linear', dtick=2),
+    yaxis=dict(zeroline=True),
+    hovermode='x unified',
+    template='plotly_white'
+)
+
+fig.update_xaxes(rangeslider_visible=True)
+
+events = [
+    {'year': 2003, 'event': 'End of Second Congo War', 'y_position': 6},
+    {'year': 2012, 'event': 'First M23 rebellion', 'y_position': 2},
+    {'year': 2013, 'event': 'M23 defeated by UN forces', 'y_position': 8},
+    {'year': 2019, 'event': 'Tshisekedi takes power', 'y_position': 28},
+    {'year': 2022, 'event': 'M23 resurgence', 'y_position': 20},
+    {'year': 2023, 'event': 'Contested elections', 'y_position': 15},
+    {'year': 2025, 'event': 'M23 captures Goma', 'y_position': 5}
+]
+
+for event in events:
+    fig.add_annotation(
+        x=event['year'],
+        y=event['y_position'],
+        text=event['event'],
+        showarrow=True,
+        arrowhead=1,
+        ax=0,
+        ay=-20,
+        font=dict(size=10),
+        bgcolor="rgba(255,255,255,0.85)",
+        bordercolor="black",
+        borderwidth=1,
+        borderpad=3
+    )
+
+fig.show()
+```
+
+### Analysis of Incident Trends
+
+The line chart reveals a complex pattern of security incidents in the Democratic Republic of Congo:
+
+-   **Post-war stabilization (2003-2006)**: Following the end of the Second Congo War, incidents remained relatively low but persistent, suggesting continued insecurity despite formal peace agreements.
+
+-   **First wave of M23 (2008-2013)**: The emergence of the M23 rebellion in 2012 corresponded with fluctuating incident levels, though the defeat of M23 by UN forces in 2013 didn't immediately reduce security incidents.
+
+-   **Dramatic surge (2018-2020)**: The most striking feature is the sharp spike in incidents following Felix Tshisekedi taking power in 2019, with incidents peaking at 27 in 2020 - the highest recorded level in the entire period.
+
+-   **Steady decline with volatility (2020-2023)**: The M23 resurgence in 2022 and contested elections in 2023 corresponded with declining yet volatile incident patterns, suggesting changing rather than improving security dynamics.
+
+-   **Recent drop (2025)**: The sharp decline in incidents following the M23 capture of Goma is notable, potentially indicating reduced humanitarian presence in conflict areas rather than improved security conditions.
+
+This pattern highlights the complex relationship between political transitions, armed group activities, and humanitarian security incidents in DRC, where periods of apparent stability can mask underlying tensions that later erupt into violence.
+
+# Nature of Security Incidents {#sec-nature}
+
+## Predominant Attack Types
+
+```{python}
+#| label: fig-attack-types
+#| fig-cap: "Most common types of attacks"
+#| echo: false
+
+attack_counts = country_data['means_of_attack'].value_counts().reset_index()
+attack_counts.columns = ['Attack Type', 'Count']
+attack_counts = attack_counts.sort_values('Count', ascending=False).head(10)
+
+fig_attacks = px.bar(
+    attack_counts,
+    y='Attack Type',
+    x='Count',
+    title=None,
+    height=500,
+    orientation='h'
+)
+
+fig_attacks.update_traces(marker_color=palette["secondary"])
+
+fig_attacks.update_layout(
+    yaxis={'categoryorder': 'total ascending'},
+    xaxis_title="Number of Incidents",
+    yaxis_title=None
+)
+
+fig_attacks.show()
+```
+
+### Analysis of Attack Methods
+
+Kidnapping and shooting are the predominant attack methods in the DRC conflict. Bodily assault represents the third most common tactic. The high prevalence of kidnappings aligns with documented tactics by armed groups in eastern DRC, particularly by militia groups seeking ransom or using abductions to intimidate local populations and establish territorial control.
+
+## Attack Contexts
+
+```{python}
+#| label: fig-attack-contexts
+#| fig-cap: "Security incidents by attack context"
+#| echo: false
+
+context_counts = country_data['attack_context'].value_counts().reset_index()
+context_counts.columns = ['Attack Context', 'Count']
+
+context_counts = context_counts.sort_values('Count', ascending=False)
+
+fig_context = px.bar(
+    context_counts,
+    x='Count',
+    y='Attack Context',
+    title=None,
+    height=450,
+    orientation='h'
+)
+
+fig_context.update_traces(marker_color=palette["secondary"])
+
+fig_context.update_layout(
+    xaxis_title="Number of Incidents",
+    yaxis_title=None,
+    yaxis=dict(categoryorder='total ascending'),  # <-- ensures most at top
+    margin=dict(l=150, r=20, t=30, b=30)
+)
+
+fig_context.show()
+```
+
+### Analysis of Attack Contexts
+
+The prevalence of ambushes reflects the tactical approach of armed groups operating in the DRC. The high number of ambushes aligns with the geographical characteristics of the conflict zone, where dense forests and limited road infrastructure create ideal conditions for surprise attacks by M23 rebels and other armed groups. The substantial number of unknown contexts points to the challenges in documenting incidents in remote areas with limited monitoring presence.
+
+## Location of Attack
+
+```{python}
+#| label: fig-attack-locations
+#| fig-cap: "Most common attack locations"
+#| echo: false
+
+# Get top 10 most frequent locations
+location_counts = country_data['location'].value_counts().reset_index()
+location_counts.columns = ['Location', 'Count']
+location_counts = location_counts.sort_values('Count', ascending=False).head(10)
+
+# Create bar chart
+fig_locations = px.bar(
+    location_counts,
+    y='Location',
+    x='Count',
+    title=None,
+    height=500,
+    orientation='h'
+)
+
+fig_locations.update_traces(marker_color="#64C1FF")  # <- updated color
+
+fig_locations.update_layout(
+    yaxis={'categoryorder': 'total ascending'},
+    xaxis_title="Number of Incidents",
+    yaxis_title=None
+)
+
+fig_locations.show()
+```
+
+### Analysis of Attack Locations
+
+Most incidents occurred on roads, followed by a high proportion of unknown locations, highlighting both the risks of transit and limitations in reporting.
+
+# Human Impact of Security Incidents {#sec-impact}
+
+## Casualties by Category
+
+```{python}
+#| label: fig-casualties
+#| fig-cap: "Total casualties by category"
+#| echo: false
+
+stacked_data = {
+    'Category': ['Nationals', 'Internationals'],
+    'Killed': [
+        country_data['nationals_killed'].sum(),
+        country_data['internationals_killed'].sum()
+    ],
+    'Wounded': [
+        country_data['nationals_wounded'].sum(),
+        country_data['internationals_wounded'].sum()
+    ],
+    'Kidnapped': [
+        country_data['nationals_kidnapped'].sum(),
+        country_data['internationals_kidnapped'].sum()
+    ]
+}
+
+stacked_df = pd.DataFrame(stacked_data)
+stacked_df_long = pd.melt(
+    stacked_df,
+    id_vars=['Category'],
+    value_vars=['Killed', 'Wounded', 'Kidnapped'],
+    var_name='Status',
+    value_name='Count'
+)
+
+fig_stacked = px.bar(
+    stacked_df_long,
+    x='Category',
+    y='Count',
+    color='Status',
+    title=None,
+    barmode='stack',
+    height=500,
+    color_discrete_map={
+        'Killed': palette["danger"], 
+        'Wounded': palette["primary"], 
+        'Kidnapped': palette["secondary"]
+    }
+)
+
+fig_stacked.update_layout(
+    xaxis_title=None,
+    yaxis_title="Number of People",
+    legend_title_text=None
+)
+
+fig_stacked.show()
+
+```
+
+### Analysis of Casualty Patterns
+
+The significantly higher rate of kidnappings among nationals compared to other casualty types reflects a tactical choice by armed groups in eastern DRC, who frequently use abductions to control territory, extract resources, and recruit fighters. This pattern aligns with reports from UN agencies documenting extensive use of kidnapping by the various groups. The disproportionate impact on nationals versus internationals highlights how Congolese civilians bear the overwhelming burden of the conflict. *source*
+
+# Major Incidents {#sec-major}
+
+## Top 5 Most Impactful Security Incidents
+
+```{python}
+#| label: tbl-interactive-incidents
+#| echo: false
+
+import plotly.graph_objects as go
+from IPython.display import display, HTML
+
+if not country_data.empty and 'total_affected' in country_data.columns:
+    # Sort the entire dataset by total_affected
+    sorted_incidents = country_data.sort_values(by='total_affected', ascending=False)
+    
+    # Select display columns and rename them
+    display_cols = ['year', 'location', 'total_affected', 'total_killed', 'total_wounded', 'attack_context', 'actor_type']
+    column_names = {
+        'year': 'Year',
+        'location': 'Location',
+        'total_affected': 'Total Affected',
+        'total_killed': 'Killed',
+        'total_wounded': 'Wounded',
+        'attack_context': 'Context',
+        'actor_type': 'Actor Type'
+    }
+    
+    # Prepare the display dataframe
+    display_df = sorted_incidents[display_cols].rename(columns=column_names)
+    
+    # Create an interactive table with Plotly
+    fig = go.Figure(data=[go.Table(
+        header=dict(
+            values=list(column_names.values()),
+            fill_color='#A1083B',
+            align='left',
+            font=dict(color='white', size=14),
+            height=40
+        ),
+        cells=dict(
+            values=[display_df[col] for col in display_df.columns],
+            fill_color=[['#F99301' if i < 5 else '#f9f9f9' for i in range(len(display_df))]],
+            align='left',
+            font=dict(color=['black' if i < 5 else '#333333' for i in range(len(display_df))], size=12),
+            height=30
+        )
+    )])
+    
+    # Update layout for better appearance with fixed height for scrolling
+    fig.update_layout(
+        title={
+            'text': 'Security Incidents Ranked by Impact',
+            'y': 0.98,
+            'x': 0.5,
+            'xanchor': 'center',
+            'yanchor': 'top',
+            'font': {'size': 20}
+        },
+        margin=dict(l=20, r=20, t=60, b=20),
+        height=600,  # Fixed height to enable scrolling
+        width=900
+    )
+    
+    # Add a note about the highlighted rows
+    fig.add_annotation(
+        x=0,
+        y=-0.15,
+        xref='paper',
+        yref='paper',
+        text="<i>Top 5 most impactful incidents are highlighted. Scroll to view all incidents.</i>",
+        showarrow=False,
+        font=dict(size=12),
+        align='left'
+    )
+    
+    # Save and display the figure
+    fig.write_html("images/interactive_incidents_table.html",
+                  include_plotlyjs='cdn',
+                  config={'scrollZoom': True})
+    fig.show()
+    
+    # Removed the display(HTML(search_html)) line and the search_html variable
+```
+
+### Analysis of Major Incidents
+
+The table reveals a pattern of security incidents in the DRC spanning two decades (1997-2017). The deadliest incident occurred during the 1997 First Congo War period with 10 fatalities.
+
+For more detailed information on the Israeli-Palestinian conflict timeline, see the [Council on Foreign Relations Conflict Tracker](https://www.cfr.org/global-conflict-tracker/conflict/violence-democratic-republic-congo).
+
+# 💡 Recommendations
+
+These findings suggest specific approaches for operating in the DRC context:
+
+## For Security Planning
+
+-   Implement comprehensive journey management protocols with real-time risk assessments
+-   Establish robust communication networks with regular check-in procedures during movements
+-   Develop specific anti-kidnapping protocols and train staff on prevention and response
+-   Consider armed escorts on high-risk routes where appropriate and legally permissible
+
+## For Humanitarian Organizations
+
+-   Balance operational presence with a thorough understanding of conflict dynamics in each area
+-   Consider remote programming models in areas with highest kidnapping risks
+-   Prioritize national staff security with equal investment in protection measures
+-   Develop context-specific security training focusing on ambush prevention and response
+
+## For Future Research
+
+-   Analyze the effectiveness of different security approaches in reducing kidnapping risks
+-   Examine the long-term trends in security following major political transitions
+-   Research community-based protection mechanisms that have proven effective in the DRC context
+
+By providing a data-driven understanding of security patterns in the DR Congo, this analysis aims to contribute to safer and more effective operations in this challenging environment.

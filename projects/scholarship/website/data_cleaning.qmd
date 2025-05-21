@@ -1,0 +1,406 @@
+---
+title: "Security Incidents Data Cleaning"
+format: 
+  html:
+    embed-resources: true
+    code-fold: true
+    toc: true
+    toc-depth: 3
+    toc-title: "Contents"
+    code-tools: true
+    error: false  
+---
+
+![](images/broom.png){width=150px}
+
+## 1. Introduction
+
+This document outlines the data cleaning process for the security incidents dataset. We'll examine the data structure, identify and address missing values, and prepare the dataset for analysis of broad trends in aid worker incidents by country, year, and organization type.
+
+The cleaning process follows a systematic approach:
+
+1. Loading and initial inspection
+2. Handling missing values
+3. Duplicate detection and removal
+4. Data type optimization
+5. Outlier analysis and handling
+6. Geographic data validation
+7. Final dataset preparation
+
+## 2. Loading and Initial Inspection
+
+First, let's load the dataset and standardize the column names for consistency.
+
+```{python}
+#| label: load-data
+
+import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np
+import seaborn as sns
+
+df = pd.read_csv("data/security_incidents.csv")
+
+df.columns = df.columns.str.strip().str.lower().str.replace(" ", "_")
+
+df.head(1)
+```
+
+```{python}
+#| label: basic-info
+
+rows, cols = df.shape
+print(f"The dataset contains {rows} rows and {cols} columns.")
+```
+
+## 3. Handling Missing Values
+
+To better understand which variables have missing values, we'll create a visualization showing the percentage of missing values per column.
+
+```{python}
+
+missing_values = df.isnull().sum()
+missing_percent = (missing_values / len(df) * 100).round(2)
+
+missing_df = pd.DataFrame({
+    'Missing Values': missing_values,
+    'Percentage': missing_percent
+})
+
+print("Columns with missing values:")
+missing_df[missing_df['Missing Values'] > 0].sort_values('Missing Values', ascending=False)
+
+if missing_values.sum() > 0:
+    plt.figure(figsize=(12, 6))
+    sns.heatmap(df.isnull(), cbar=False, cmap='viridis', yticklabels=False)
+    plt.title('Missing Values Heatmap')
+    plt.tight_layout()
+    plt.show()
+
+```
+
+```{python}
+#| label: missing-values-viz
+
+missing_percent = (df.isna().sum() / len(df)) * 100
+missing_percent = missing_percent[missing_percent > 0].sort_values(ascending=True)
+
+plt.figure(figsize=(7, 4))
+missing_percent.plot(kind='barh', color='#64C1FF')
+plt.title("Percentage of Missing Values per Column")
+plt.xlabel("Percent Missing (%)")
+plt.tight_layout()
+plt.grid(axis='x', linestyle='--', alpha=0.5)
+plt.show()
+
+```
+
+### 3.1 Strategy for Missing Values
+
+Based on our exploration, we have identified several columns with high proportions of missing values:
+
+- `City` (over 20% missing)
+- `District`, `Day`, and `Region` (significant proportions missing)
+
+Since our analysis focus is on broad trends by country, year, and organization type, we will:
+
+1. Remove granular fields with limited analytical value for our specific goals
+2. Leave the remaining minimal missing values as-is, as they're sparse and likely random
+
+```{python}
+#| label: remove-columns
+
+import matplotlib.pyplot as plt
+
+columns_to_drop = ['day', 'month', 'district', 'city', 'region', 'country_code', 'incident_id']
+df.drop(columns=columns_to_drop, inplace=True)
+
+# Recalculate missing values after dropping columns
+missing_percent = (df.isna().sum() / len(df)) * 100
+missing_percent = missing_percent[missing_percent > 0].sort_values(ascending=True)
+
+# Visualize the remaining missing values
+plt.figure(figsize=(7, 4))
+missing_percent.plot(kind='barh', color='#64C1FF')
+plt.title("Percentage of Missing Values After Column Removal")
+plt.xlabel("Percent Missing (%)")
+plt.tight_layout()
+plt.grid(axis='x', linestyle='--', alpha=0.5)
+plt.show()
+
+```
+
+```{python}
+
+missing_values = df.isnull().sum()
+missing_percent = (missing_values / len(df) * 100).round(2)
+
+missing_df = pd.DataFrame({
+    'Missing Values': missing_values,
+    'Percentage': missing_percent
+})
+
+print("Columns with missing values:")
+missing_df[missing_df['Missing Values'] > 0].sort_values('Missing Values', ascending=False)
+
+# Visualize missing values if any exist
+if missing_values.sum() > 0:
+    plt.figure(figsize=(12, 6))
+    sns.heatmap(df.isnull(), cbar=False, cmap='viridis', yticklabels=False)
+    plt.title('Missing Values Heatmap')
+    plt.tight_layout()
+    plt.show()
+```
+
+### 3.2 Missing Values Decision
+
+Since the highest missing value percentage is now less than 0.5%, and the remaining missing data is sparse, likely random, and not concentrated in critical columns, we've decided:
+
+- No imputation is necessary
+- Leave these values as-is (NaN), as most analysis tools handle them gracefully
+- Imputing could introduce unnecessary bias given the small percentage
+
+## 4. Handling Duplicates
+
+Let's identify and remove duplicate records that could skew our analysis.
+
+```{python}
+#| label: duplicate-detection
+
+duplicated_mask = df.duplicated(keep=False)
+duplicates = df[duplicated_mask]
+
+duplicate_count = len(duplicates)
+print(f"Total number of duplicated rows: {duplicate_count}")
+
+duplicate_patterns = df[duplicated_mask].groupby(df.columns.tolist()).size().reset_index()
+duplicate_patterns = duplicate_patterns.rename(columns={0: 'occurrence_count'})
+
+duplicate_patterns = duplicate_patterns.sort_values('occurrence_count', ascending=False)
+
+unique_duplicate_patterns = len(duplicate_patterns)
+print(f"Number of unique duplicate patterns: {unique_duplicate_patterns}")
+
+occurrence_summary = duplicate_patterns['occurrence_count'].value_counts().sort_index()
+print("\nOccurrence pattern summary:")
+for count, frequency in occurrence_summary.items():
+    print(f"  {frequency} record(s) appear {count} times each")
+```
+
+Based on the duplicate analysis results, we need to remove duplicates from the dataset. The pattern of duplications (with some records appearing up to 13 times) suggests systematic duplication issues that could significantly skew our analysis.
+
+```{python}
+#| label: remove-duplicates
+
+original_count = len(df)
+
+df = df.drop_duplicates()
+
+removed_count = original_count - len(df)
+removal_percentage = (removed_count / original_count) * 100
+
+print(f"Removed {removed_count} duplicate rows ({removal_percentage:.2f}% of dataset)")
+print(f"Dataset now contains {len(df)} unique records")
+
+```
+
+## 5. Data Type Optimization
+
+Most data types in this dataset are appropriate, but there are a few minor adjustments that could be made for consistency:
+
+```{python}
+#| label: data-types
+
+df.dtypes
+```
+
+### 5.1 Data Type Conversion
+
+The following columns could benefit from data type conversion:
+
+| Column          | Current | Suggested | Reason                          |
+|-----------------|---------|-----------|----------------------------------|
+| `icrc`          | float64 | int64     | Counts should be integers        |
+| `nrcs_and_ifrc` | float64 | int64     | Counts should be integers        |
+| `nngo`          | float64 | int64     | Counts should be integers        |
+
+```{python}
+#| label: convert-data-types
+
+count_columns = ['icrc', 'nrcs_and_ifrc', 'nngo']
+for col in count_columns:
+    if col in df.columns:
+        df[col] = df[col].fillna(0).astype(int)
+
+df[count_columns].dtypes
+
+```
+
+## 6. Outlier Analysis and Handling
+
+Let's identify and visualize outliers in the dataset to better understand extreme values in our security incidents data.
+
+```{python}
+
+#| label: outlier-summary
+
+import warnings
+warnings.filterwarnings('ignore', category=FutureWarning)
+# Function to detect outliers using IQR method
+def detect_outliers(df, column):
+    q1 = df[column].quantile(0.25)
+    q3 = df[column].quantile(0.75)
+    iqr = q3 - q1
+    lower_bound = q1 - 1.5 * iqr
+    upper_bound = q3 + 1.5 * iqr
+    
+    outliers = df[(df[column] < lower_bound) | (df[column] > upper_bound)]
+    return outliers, lower_bound, upper_bound
+
+excluded_cols = ['year']
+numeric_cols = df.select_dtypes(include=['int64', 'float64']).columns
+numeric_cols = [col for col in numeric_cols if col not in excluded_cols]
+
+outlier_summary = pd.DataFrame(columns=['Column', 'Total', 'Outliers', 'Percentage'])
+
+for col in numeric_cols:
+    outliers, _, _ = detect_outliers(df, col)
+    
+    new_row = {
+        'Column': col,
+        'Total': len(df),
+        'Outliers': len(outliers),
+        'Percentage': len(outliers) / len(df) * 100
+    }
+    outlier_summary = pd.concat([outlier_summary, pd.DataFrame([new_row])], ignore_index=True)
+
+outlier_summary = outlier_summary.sort_values('Percentage', ascending=True)
+
+plt.figure(figsize=(7,4))
+plt.barh(outlier_summary['Column'], outlier_summary['Percentage'], color='#64C1FF')
+plt.title('Percentage of Outliers by Column')
+plt.xlabel('Percentage of Values Identified as Outliers')
+plt.grid(axis='x', linestyle='--', alpha=0.7)
+plt.tight_layout()
+plt.show()
+```
+
+### 6.1 Visualization of Key Outliers
+
+Let's visualize the distribution and outliers for the most important columns:
+
+```{python}
+#| label: outlier-boxplots
+
+top_cols = outlier_summary.head(6)['Column'].tolist()
+
+# Create boxplots for top outlier columns
+plt.figure(figsize=(10, 6))
+for i, col in enumerate(top_cols, 1):
+    plt.subplot(2, 3, i)
+    sns.boxplot(y=df[col], color='#64C1FF')
+    plt.title(f'Box Plot: {col}')
+    plt.grid(linestyle='--', alpha=0.7)
+plt.tight_layout()
+plt.show()
+
+```
+
+### 6.2 Outlier Handling Strategy
+
+In security incident data, outliers often represent real extreme events (like major attacks) rather than errors. For our analysis:
+
+1. We'll flag high-impact incidents rather than removing them
+2. This allows us to analyze with or without extreme events as needed
+
+```{python}
+#| label: flag-high-impact
+
+df['high_impact'] = False
+
+for col in ['total_killed', 'total_wounded', 'total_kidnapped', 'total_affected']:
+    if col in df.columns:
+        threshold = df[col].quantile(0.99)
+        df.loc[df[col] > threshold, 'high_impact'] = True
+
+high_impact_count = df['high_impact'].sum()
+print(f"Flagged {high_impact_count} high-impact incidents ({high_impact_count/len(df)*100:.2f}% of dataset)")
+
+if 'total_affected' in df.columns:
+    print("\nTop 5 most severe incidents:")
+    display(df.sort_values('total_affected', ascending=False).head(5)[
+        ['year', 'country', 'total_affected', 'total_killed', 'total_wounded', 'total_kidnapped']])
+```
+
+## 7. Geographic Data Validation
+
+Let's verify that our latitude and longitude values are within valid ranges.
+
+```{python}
+#| label: validate-coordinates
+
+# Check if latitude and longitude values are within valid ranges
+# Valid ranges: Latitude (-90 to 90), Longitude (-180 to 180)
+
+invalid_lat = df[(df['latitude'] < -90) | (df['latitude'] > 90)].shape[0]
+invalid_lon = df[(df['longitude'] < -180) | (df['longitude'] > 180)].shape[0]
+
+print(f"Invalid latitude values (outside -90 to 90): {invalid_lat}")
+print(f"Invalid longitude values (outside -180 to 180): {invalid_lon}")
+
+lat_min, lat_max = df['latitude'].min(), df['latitude'].max()
+lon_min, lon_max = df['longitude'].min(), df['longitude'].max()
+
+print(f"\nLatitude range: {lat_min} to {lat_max}")
+print(f"Longitude range: {lon_min} to {lon_max}")
+
+plt.figure(figsize=(7,4))
+plt.scatter(df['longitude'], df['latitude'], alpha=0.5, s=3)
+plt.title('Geographic Distribution of Incidents')
+plt.xlabel('Longitude')
+plt.ylabel('Latitude')
+plt.xlim(-180, 180)
+plt.ylim(-90, 90)
+plt.grid(True)
+plt.tight_layout()
+plt.show()
+
+```
+
+There are 0 invalid latitudes and longitudes, so we do not have to handle those outliers. All geographic coordinates are within valid ranges and suitable for mapping and spatial analysis.
+
+## 8. Final Dataset Summary
+
+Let's examine our cleaned dataset:
+
+```{python}
+#| label: final-summary
+
+print(f"Final dataset shape: {df.shape}")
+print("\nColumns in the cleaned dataset:")
+print(df.columns.tolist())
+print("\nSummary statistics:")
+df.describe()
+```
+
+## 9. Conclusion
+
+The data cleaning process for the security incidents dataset has:
+
+1. Standardized column names for consistency
+2. Removed granular fields with limited analytical value
+3. Addressed minimal remaining missing values by leaving them as-is
+4. Removed 28 duplicate records from 5 unique patterns
+5. Optimized data types for count-based columns
+6. Identified and flagged high-impact incidents for flexible analysis
+7. Validated geographic coordinates, confirming all are within valid ranges
+
+The dataset is now ready for exploratory data analysis and modeling to identify trends in aid worker security incidents by country, year, and organization type.
+
+```{python}
+#| label: save-dataset
+#| eval: false
+#| echo: false
+
+df.to_csv("data/security_incidents_cleaned.csv", index=False)
+```

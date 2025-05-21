@@ -1,0 +1,761 @@
+---
+title: "Humanitarian Aid Under Fire"
+subtitle: "A Global Analysis of Violence Against Humanitarian Workers"
+format: 
+  html:
+    code-fold: true
+    toc: true
+    toc-depth: 3
+    number-sections: true
+    theme: cosmo
+    fig-width: 9
+    fig-height: 6
+    fig-dpi: 300
+    self-contained: true
+execute:
+  warning: false
+  message: false
+bibliography: references.bib
+nocite: "@*"
+csl: apa.csl
+---
+
+![](images/hi3.png)
+
+# Introduction: The Rising Threats to Humanitarian Workers
+
+Around the world, humanitarian aid workers risk their lives to assist communities affected by conflict, disaster, and crisis. But what happens when **aid itself becomes a target**?
+
+This research explores global patterns of violence against humanitarian personnel using data from the **Aid Worker Security Database (AWSD)**. By examining incident patterns across time, geography, and conflict contexts, we uncover both universal trends and context-specific threats that shape the security landscape for aid operations worldwide. Each record in the dataset includes:
+
+- **Temporal and geographic data**: Incident date, location, coordinates
+- **Organizational details**: Staff nationality
+- **Incident specifics**: Attack type, context, and location
+- **Impact metrics**: Numbers killed, wounded, kidnapped
+
+The AWSD is considered the gold standard for humanitarian security data and is used by researchers, policy makers, and security practitioners worldwide.
+
+# Research Questions and Methodology
+
+## Research Questions
+
+<div style="text-align: left;">
+  ![](images/question.png){width=100px}
+</div>
+
+This research seeks to answer four fundamental questions about humanitarian security:
+
+```{mermaid}
+flowchart TD
+    classDef primary fill:#e1f5fe,stroke:#0288d1,stroke-width:2px
+    classDef secondary fill:#f0f4f8,stroke:#4682b4,stroke-width:1px
+    classDef highlight fill:#fce4ec,stroke:#d81b60,stroke-width:2px
+
+    title[("Security Incident Analysis<br>Research Questions")] 
+    title --> A & B & C & D
+    
+    A["What types of attacks are<br>most common?"]:::primary
+    
+    B["How does violence vary by<br>year and political event?"]:::primary
+    
+    C["How does risk differ for national<br>vs. international staff?"]:::primary
+    
+    D["What contextual factors shape<br>security patterns?"]:::primary
+```
+
+## Methodology
+
+This project is broken into three main parts. First, we conduct a global analysis of all countries to uncover global trends in humanitarian security incidents. Next, we take a closer look at eight contemporary conflict hotspots—Afghanistan, Democratic Republic of Congo (DRC), Mali, Palestine, Somalia, South Sudan, Sudan, and Syria—to explore country-specific patterns and challenges. Lastly, throughout our analysis, we encountered a significant number of unknown values; we examine the implications of this missing data and reflect on how uncertainty shapes our understanding of humanitarian risk.
+
+# Regional Focus: Eight Contemporary Hotspots
+
+## Why These Eight Countries?
+
+![](images/glob.png){width=200px}
+
+These countries consistently rank among those with the highest security incident rates, both historically and over the past 15 years. Mali emerges as a major hotspot primarily in the past 15 years.
+
+```{python}
+#| echo: false
+import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Define values
+percent_target_countries = 8.42
+percent_target_incidents = 63.82
+
+# Create positions for the bars (closer together)
+positions = [0, 0.4]  # Place bars much closer together
+labels = ['Countries', 'Incidents']
+colors = ['#FF5733', '#E8E8E8']
+bar_width = 0.35  # Slightly narrower bars
+
+# Create smaller plot with tighter width
+fig, ax = plt.subplots(figsize=(2, 1.5))
+
+# Plot stacked bars (bottom = Target, top = Other)
+for i in range(2):
+    ax.bar(positions[i], percent_target_countries if i == 0 else percent_target_incidents, 
+           color=colors[0], width=bar_width)
+    ax.bar(positions[i], 100 - (percent_target_countries if i == 0 else percent_target_incidents), 
+           color=colors[1], width=bar_width, 
+           bottom=percent_target_countries if i == 0 else percent_target_incidents)
+    
+    # Add exact decimal value labels
+    if i == 0:
+        ax.text(positions[i], percent_target_countries / 2, f"{percent_target_countries}%", 
+                ha='center', va='center', color='white', fontsize=6, fontweight='bold')
+    else:
+        ax.text(positions[i], percent_target_incidents / 2, f"{percent_target_incidents}%", 
+                ha='center', va='center', color='white', fontsize=6, fontweight='bold')
+
+# Bold title with smaller font
+ax.set_title('8 Countries = 64% of Incidents', fontsize=7, fontweight='bold')
+
+# Further clean up
+ax.set_ylim(0, 100)
+ax.set_yticks([])
+ax.set_xticks(positions)
+ax.set_xticklabels(labels, fontsize=6)
+ax.tick_params(left=False, bottom=False)
+for spine in ax.spines.values():
+    spine.set_visible(False)
+
+# This makes the plot even tighter
+plt.tight_layout(pad=0.05)
+plt.subplots_adjust(left=0, right=1)  # Use full width of figure
+plt.savefig("mini_security_chart_close_bars.png", dpi=300, bbox_inches='tight')
+plt.show()
+
+```
+
+```{python}
+#| echo: false
+import pandas as pd
+
+# Load the data
+df = pd.read_csv("data/security_incidents_cleaned.csv")
+
+# Standardize country names for matching
+df['country'] = df['country'].str.strip().str.lower()
+
+# Define the list of target countries
+target_countries = [
+    'somalia',
+    'occupied palestinian territories',
+    'dr congo',
+    'mali',
+    'south sudan',
+    'sudan',
+    'afghanistan',
+    'syrian arab republic'
+]
+
+target_countries = [c.lower() for c in target_countries]
+
+total_incidents = len(df)
+
+target_incidents = df[df['country'].isin(target_countries)]
+num_target_incidents = len(target_incidents)
+
+percent_target = (num_target_incidents / total_incidents) * 100
+
+num_countries = df['country'].nunique()
+
+```
+
+```{python}
+
+#| echo: false
+total_affected_sum = target_incidents["total_affected"].sum()
+
+```
+
+Although they represent just 8.4% of the countries in the dataset, these eight countries account for 63.8% of all recorded incidents. 
+
+```{=html}
+
+<style>
+  .pop-number {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #FF5733;
+    display: inline-block;
+    animation: pop 1s ease-in-out infinite alternate;
+  }
+
+  @keyframes pop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.5); }
+    100% { transform: scale(1); }
+  }
+</style>
+
+<p><span class="pop-number">5,375</span> humanitarian aid workers have been affected by the violence in these countries.</p>
+
+```
+
+## Key Findings
+
+### Staff Nationality and Casualty Patterns
+
+There is a consistent disparity in security incidents affecting national versus international staff:
+
+- National staff account for a significant amount of all casualities (killed, wounded, and kidnapped)
+
+This pattern represents both an operational challenge and an ethical concern for humanitarian organizations attempting to manage risk equitably.
+
+```{python}
+
+#| echo: false
+
+import pandas as pd
+from IPython.display import HTML, display
+import ipywidgets as widgets
+
+# Updated data with accurate values
+country_summary = {
+    "Palestine": {
+        "nationals": {"killed": 423, "wounded": 143, "kidnapped": 0},
+        "internationals": {"killed": 8, "wounded": 3, "kidnapped": 1}
+    },
+    "Afghanistan": {
+        "nationals": {"killed": 439, "wounded": 354, "kidnapped": 429},
+        "internationals": {"killed": 47, "wounded": 42, "kidnapped": 43}
+    },
+    "DRC": {
+        "nationals": {"killed": 103, "wounded": 113, "kidnapped": 202},
+        "internationals": {"killed": 4, "wounded": 16, "kidnapped": 10}
+    },
+    "Syria": {
+        "nationals": {"killed": 282, "wounded": 222, "kidnapped": 53},
+        "internationals": {"killed": 7, "wounded": 6, "kidnapped": 17}
+    },
+    "Somalia": {
+        "nationals": {"killed": 234, "wounded": 154, "kidnapped": 105},
+        "internationals": {"killed": 26, "wounded": 11, "kidnapped": 55}
+    },
+    "Mali": {
+        "nationals": {"killed": 21, "wounded": 41, "kidnapped": 175},
+        "internationals": {"killed": 5, "wounded": 14, "kidnapped": 8}
+    },
+    "South Sudan": {
+        "nationals": {"killed": 250, "wounded": 417, "kidnapped": 146},
+        "internationals": {"killed": 17, "wounded": 49, "kidnapped": 12}
+    },
+    "Sudan": {
+        "nationals": {"killed": 222, "wounded": 262, "kidnapped": 125},
+        "internationals": {"killed": 9, "wounded": 19, "kidnapped": 30}
+    }
+}
+
+# Generate HTML for each country
+def generate_country_html(country):
+    stats = country_summary[country]
+    nat = stats['nationals']
+    intl = stats['internationals']
+    
+    html = f"""
+    <div style='margin-top: 20px; font-family: sans-serif;'>
+        <h2 style='text-align: center; font-size: 1.7rem;'>Security Incident Summary: {country}</h2>
+        
+        <h3 style='text-align: center;'>National Staff</h3>
+        <div style='display: flex; justify-content: center; gap: 20px; margin-bottom: 20px;'>
+            <div style='background-color:#FF6B6B; color:white; padding:20px; border-radius:8px; text-align: center;'>
+                <strong>Killed</strong><br>{nat['killed']}
+            </div>
+            <div style='background-color:#FFD166; padding:20px; border-radius:8px; text-align: center;'>
+                <strong>Wounded</strong><br>{nat['wounded']}
+            </div>
+            <div style='background-color:#64C1FF; color:white; padding:20px; border-radius:8px; text-align: center;'>
+                <strong>Kidnapped</strong><br>{nat['kidnapped']}
+            </div>
+        </div>
+        
+        <h3 style='text-align: center;'>International Staff</h3>
+        <div style='display: flex; justify-content: center; gap: 20px;'>
+            <div style='background-color:#FF6B6B; color:white; padding:20px; border-radius:8px; text-align: center;'>
+                <strong>Killed</strong><br>{intl['killed']}
+            </div>
+            <div style='background-color:#FFD166; padding:20px; border-radius:8px; text-align: center;'>
+                <strong>Wounded</strong><br>{intl['wounded']}
+            </div>
+            <div style='background-color:#64C1FF; color:white; padding:20px; border-radius:8px; text-align: center;'>
+                <strong>Kidnapped</strong><br>{intl['kidnapped']}
+            </div>
+        </div>
+    </div>
+    """
+    return html
+
+# Create tab interface
+countries = list(country_summary.keys())
+children = [widgets.HTML(generate_country_html(c)) for c in countries]
+
+tabs = widgets.Tab()
+tabs.children = children
+for i, country in enumerate(countries):
+    tabs.set_title(i, country)
+
+# Display everything
+title_html = """
+<h1 style="text-align: center; font-size: 2rem; font-weight: bold; margin-bottom: 20px; font-family: sans-serif;">
+    Humanitarian Security Incidents by Country
+</h1>
+"""
+display(HTML(title_html))
+display(tabs)
+
+```
+
+### Attack Methods, Contexts, and Locations
+
+Attack methods, contexts, and locations vary significantly across these eight conflict zones, reflecting differences in conflict dynamics, armed actor capabilities, and tactical objectives:
+
+```{python}
+#| echo: false
+from IPython.display import HTML, display
+import ipywidgets as widgets
+
+# Attack methods and contexts per country
+attack_data = {
+    "Palestine": {
+        "methods": {"Aerial bombardment": 67, "Shooting": 41, "Unknown": 27},
+        "contexts": {"Combat/Crossfire": 113, "Individual attack": 18, "Unknown": 16},
+        "locations": {"Unknown": 45, "Project Site": 33, "Road": 28}
+    },
+    "Afghanistan": {
+        "methods": {"Kidnapping": 197, "Shooting": 154, "Unknown": 74},
+        "contexts": {"Ambush": 244, "Unknown": 123, "Individual attack": 114},
+        "locations": {"Road": 245, "Unknown": 169, "Project Site": 62}
+    },
+    "DRC": {
+        "methods": {"Kidnapping": 80, "Shooting": 71, "Bodily assault": 45},
+        "contexts": {"Ambush": 98, "Unknown": 52, "Individual attack": 33},
+        "locations": {"Road": 103, "Unknown": 60, "Home": 23}
+    },
+    "Syria": {
+        "methods": {"Shelling": 62, "Shooting": 46, "Kidnapping": 39},
+        "contexts": {"Combat/Crossfire": 195, "Unknown": 50, "Individual attack": 43},
+        "locations": {"Project Site": 87, "Road": 76, "Public Location": 70}
+    },
+    "Somalia": {
+        "methods": {"Kidnapping": 132, "Shooting": 66, "Unknown": 35},
+        "contexts": {"Ambush": 88, "Unknown": 61, "Individual attack": 82},
+        "locations": {"Road": 101, "Unknown": 84, "Public Location": 60}
+    },
+    "Mali": {
+        "methods": {"Kidnapping": 76, "Shooting": 23, "Bodily assault": 14},
+        "contexts": {"Ambush": 79, "Unknown": 18, "Individual attack": 14},
+        "locations": {"Road": 80, "Unknown": 19, "Public Location": 13}
+    },
+    "South Sudan": {
+        "methods": {"Kidnapping": 76, "Shooting": 23, "Bodily assault": 14},
+        "contexts": {"Ambush": 224, "Individual attack": 155, "Raid": 82},
+        "locations": {"Road": 230, "Public Location": 101, "Unknown": 73}
+    },
+    "Sudan": {
+        "methods": {"Shooting": 113, "Kidnapping": 75, "Bodily assault": 73},
+        "contexts": {"Ambush": 139, "Unknown": 61, "Combat/Crossfire": 60},
+        "locations": {"Road": 195, "Project Site": 50, "Public Location": 43}  # Fixed empty values
+    }
+}
+
+# Severity color scale function
+def get_color(value):
+    if value >= 150:
+        return "#d73027"  # High (Red)
+    elif value >= 100:
+        return "#fc8d59"  # Medium-high (Orange)
+    elif value >= 50:
+        return "#fee08b"  # Medium (Yellow)
+    else:
+        return "#91cf60"  # Low (Green)
+
+# Function to create HTML summary with color cards
+def generate_attack_html(country):
+    data = attack_data[country]
+    methods = data["methods"]
+    contexts = data["contexts"]
+    locations = data["locations"]
+
+    method_cards = "".join([
+        f"""
+        <div style='background-color:{get_color(v)}; padding:15px; border-radius:5px; text-align:center; width:180px;'>
+            <strong>{k}</strong><br>{v} incidents
+        </div>
+        """
+        for k, v in methods.items()
+    ])
+
+    context_cards = "".join([
+        f"""
+        <div style='background-color:{get_color(v)}; padding:15px; border-radius:5px; text-align:center; width:180px;'>
+            <strong>{k}</strong><br>{v} incidents
+        </div>
+        """
+        for k, v in contexts.items()
+    ])
+    
+    # Add location cards
+    location_cards = "".join([
+        f"""
+        <div style='background-color:{get_color(v)}; padding:15px; border-radius:5px; text-align:center; width:180px;'>
+            <strong>{k}</strong><br>{v} incidents
+        </div>
+        """
+        for k, v in locations.items()
+    ])
+
+    html = f"""
+    <div style='font-family: sans-serif;'>
+        <h2 style='text-align: center;'>{country}: Attack Methods</h2>
+        <div style='display: flex; justify-content: center; gap: 10px; margin-bottom: 25px;'>
+            {method_cards}
+        </div>
+        <h2 style='text-align: center;'>Attack Contexts</h2>
+        <div style='display: flex; justify-content: center; gap: 10px; margin-bottom: 25px;'>
+            {context_cards}
+        </div>
+        <h2 style='text-align: center;'>Attack Locations</h2>
+        <div style='display: flex; justify-content: center; gap: 10px;'>
+            {location_cards}
+        </div>
+    </div>
+    """
+    return html
+
+# Create interactive tabs
+countries = list(attack_data.keys())
+children = [widgets.HTML(generate_attack_html(c)) for c in countries]
+
+tabs = widgets.Tab()
+tabs.children = children
+for i, country in enumerate(countries):
+    tabs.set_title(i, country)
+
+# Display title and legend
+title_html = """
+<h1 style='text-align: center; font-size: 2rem; font-weight: bold; font-family: sans-serif;'>
+    Top Three Attack Methods, Contexts & Locations by Country
+</h1>
+<div style='display: flex; justify-content: center; gap: 15px; margin-bottom: 20px;'>
+    <div style='background-color:#91cf60; padding: 10px; border-radius: 4px;'>0–49</div>
+    <div style='background-color:#fee08b; padding: 10px; border-radius: 4px;'>50–99</div>
+    <div style='background-color:#fc8d59; padding: 10px; border-radius: 4px;'>100–149</div>
+    <div style='background-color:#d73027; color:white; padding: 10px; border-radius: 4px;'>150+</div>
+</div>
+"""
+display(HTML(title_html))
+display(tabs)
+```
+
+Humanitarian security threats vary widely, with common attack methods including kidnappings, ambushes, shootings, and exposure to crossfire. These threats often occur during travel or in insecure compounds, highlighting the need for context-specific strategies. Ambushes require secure movement planning, crossfire zones need early warning systems and shelter, and areas prone to kidnappings or compound attacks demand staff training and physical site protection. Road travel remains especially risky, emphasizing the importance of route assessments and convoy protocols to safeguard aid workers.
+
+### Political Transitions Create Vulnerability Windows
+
+Security incidents consistently spike during political turmoil. Contributing factors identified in our analysis include:
+
+- **Peace agreements**
+- **Coups and regime changes** 
+- **Territorial control shifts** 
+
+```{=html}
+<style>
+  .countries-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin: 20px 0;
+  }
+  
+  .country-box {
+    width: 120px;
+    height: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 10px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    color: white;
+    font-weight: bold;
+    border-radius: 6px;
+    background-color: #FF5733;
+  }
+  
+  .country-box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  }
+  
+  .stat-box {
+    background-color: #f5f5f5;
+    padding: 15px;
+    border-radius: 6px;
+    margin: 20px 0;
+    text-align: center;
+    font-weight: bold;
+    color: #333;
+    border-left: 5px solid #FF5733;
+  }
+</style>
+
+<div class="stat-box">
+  Select a country below to learn more about the conflict it has faced.
+</div>
+
+<div class="countries-container">
+  <a href="https://www.cfr.org/global-conflict-tracker/conflict/conflict-syria" target="_blank" style="text-decoration: none;">
+    <div class="country-box" style="background: linear-gradient(45deg, #FF5733, #E6270B);">
+      Syria
+    </div>
+  </a>
+  
+  <a href="https://www.cfr.org/global-conflict-tracker/conflict/israeli-palestinian-conflict" target="_blank" style="text-decoration: none;">
+    <div class="country-box" style="background: linear-gradient(45deg, #FF5733, #E6270B);">
+      Occupied Palestinian Territories
+    </div>
+  </a>
+  
+  <a href="https://www.cfr.org/global-conflict-tracker/conflict/war-afghanistan" target="_blank" style="text-decoration: none;">
+    <div class="country-box" style="background: linear-gradient(45deg, #FF7833, #E94B0C);">
+      Afghanistan
+    </div>
+  </a>
+  
+  <a href="https://www.cfr.org/global-conflict-tracker/conflict/al-shabab-somalia" target="_blank" style="text-decoration: none;">
+    <div class="country-box" style="background: linear-gradient(45deg, #FF7833, #E94B0C);">
+      Somalia
+    </div>
+  </a>
+  
+  <a href="https://www.cfr.org/global-conflict-tracker/conflict/civil-war-south-sudan" target="_blank" style="text-decoration: none;">
+    <div class="country-box" style="background: linear-gradient(45deg, #FF9933, #EC6D0E);">
+      South Sudan
+    </div>
+  </a>
+  
+  <a href="https://www.cfr.org/global-conflict-tracker/conflict/power-struggle-sudan" target="_blank" style="text-decoration: none;">
+    <div class="country-box" style="background: linear-gradient(45deg, #FF9933, #EC6D0E);">
+      Sudan
+    </div>
+  </a>
+  
+  <a href="https://www.cfr.org/global-conflict-tracker/conflict/violence-democratic-republic-congo" target="_blank" style="text-decoration: none;">
+    <div class="country-box" style="background: linear-gradient(45deg, #FFAA33, #ED810F);">
+      DR Congo
+    </div>
+  </a>
+  
+  <a href="https://www.cfr.org/global-conflict-tracker/conflict/destabilization-mali" target="_blank" style="text-decoration: none;">
+    <div class="country-box" style="background: linear-gradient(45deg, #FFAA33, #ED810F);">
+      Mali
+    </div>
+  </a>
+</div>
+
+<script>
+  // Add optional animation or additional interactivity if needed
+  document.addEventListener('DOMContentLoaded', function() {
+    const countryBoxes = document.querySelectorAll('.country-box');
+    countryBoxes.forEach(box => {
+      box.addEventListener('mouseover', function() {
+        this.style.transform = 'translateY(-5px)';
+      });
+      box.addEventListener('mouseout', function() {
+        this.style.transform = 'translateY(0)';
+      });
+    });
+  });
+</script>
+```
+
+### Missing Context, Hidden Risks
+
+Missing data remains a major challenge. In several countries, over one-third of incidents lack key contextual information—limiting our ability to fully understand patterns of violence and potentially underrepresenting specific threats.
+
+```{python}
+#| include: false
+#| echo: false
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+import warnings
+import plotly.express as px
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
+
+plt.rcParams['font.size'] = 11
+plt.rcParams['axes.titlesize'] = 10
+plt.rcParams['axes.labelsize'] = 8
+
+palette = {
+    "primary": "#1D70B8",
+    "secondary": "#FFBD59",
+    "tertiary": "#F2645A",
+    "neutral": "#7A868C"
+}
+
+df = pd.read_csv("data/security_incidents_cleaned.csv")
+countries = [
+    "Occupied Palestinian Territories", "Afghanistan", "DR Congo",
+    "Syrian Arab Republic", "Somalia", "Mali", "South Sudan", "Sudan"
+]
+df_filtered = df[df['country'].isin(countries)]
+country_totals = df_filtered.groupby('country').size().to_dict()
+```
+
+```{python}
+
+#| echo: false
+
+columns_to_check = [
+    "means_of_attack", "attack_context", "location",
+    "motive", "actor_type", "actor_name"
+]
+
+df_filtered["unknown_count"] = df_filtered[columns_to_check].apply(
+    lambda row: (row == "Unknown").sum(), axis=1
+)
+
+country_stats = []
+for country in countries:
+    country_data = df_filtered[df_filtered['country'] == country]
+    total_incidents = len(country_data)
+    total_unknown = country_data['unknown_count'].sum()
+    total_possible = total_incidents * len(columns_to_check)
+    pct_unknown = (total_unknown / total_possible) * 100 if total_possible > 0 else 0
+    country_stats.append({
+        'country': country,
+        'percent_unknown': pct_unknown
+    })
+
+stats_df = pd.DataFrame(country_stats).sort_values('percent_unknown', ascending=False)
+
+```
+
+```{python}
+
+#| echo: false
+
+df_filtered["unknown_count"] = df_filtered[columns_to_check].apply(lambda row: (row == "Unknown").sum(), axis=1)
+country_unknown = df_filtered.groupby('country')['unknown_count'].sum()
+total_possible = df_filtered.groupby('country').size() * len(columns_to_check)
+unknown_pct = (country_unknown / total_possible * 100).reindex(countries)
+known_pct = 100 - unknown_pct
+
+sorted_countries = known_pct.sort_values().index
+stacked_data = pd.DataFrame({
+    'country': sorted_countries,
+    'Known': known_pct[sorted_countries].values,
+    'Unknown': unknown_pct[sorted_countries].values
+})
+
+#| echo: false
+
+plt.figure(figsize=(2.4, 1.4))  # even smaller figure
+
+# Plot stacked bars
+bar1 = plt.barh(
+    y=stacked_data['country'],  
+    width=stacked_data['Known'],
+    color='#FF5252',
+    height=0.45,  # smaller bar height
+    label='Known'
+)
+
+bar2 = plt.barh(
+    y=stacked_data['country'],
+    width=stacked_data['Unknown'],
+    left=stacked_data['Known'],
+    color='#64C1FF',
+    height=0.45,
+    label='Unknown'
+)
+
+# Add smaller percentage labels
+for i, country in enumerate(stacked_data['country']):
+    if stacked_data['Known'][i] > 15:
+        plt.text(stacked_data['Known'][i] / 2, i, f"{stacked_data['Known'][i]:.0f}%", 
+                 va='center', ha='center', color='white', fontsize=4)
+    if stacked_data['Unknown'][i] > 15:
+        plt.text(stacked_data['Known'][i] + stacked_data['Unknown'][i] / 2, i, f"{stacked_data['Unknown'][i]:.0f}%", 
+                 va='center', ha='center', color='white', fontsize=4)
+
+# Set limits and ticks
+plt.xlim(0, 100)
+plt.yticks(fontsize=4)
+plt.xticks([0, 50, 100], fontsize=4)
+
+# Title with smaller font
+plt.title("Data Completeness by Country (%)", fontsize=6)
+
+# Smaller legend, tighter to side
+plt.legend(loc='center left', bbox_to_anchor=(1.0, 0.5), frameon=False, fontsize=4)
+
+# Clean up spines
+plt.gca().spines['right'].set_visible(False)
+plt.gca().spines['top'].set_visible(False)
+
+# Optimize layout
+plt.tight_layout(pad=0.1)
+plt.subplots_adjust(left=0.32, right=0.82)
+
+plt.show()
+```
+
+Due to uneven documentation quality, we prioritized variables with higher data completeness—namely location, means of attack, and attack context—as the main points of analysis, reflecting a reporting emphasis on “what” happened rather than “who” was responsible.
+
+# Conclusions and Recommendations
+
+## Implications from Key Findings
+
+- **Security strategies must be context-specific**  
+  Patterns of violence vary widely by country—kidnappings, ambushes, aerial bombardments—making one-size-fits-all protocols ineffective.
+- **National staff face disproportionate risk**  
+  Across all regions, national personnel experience more casualties than international staff, raising urgent ethical and operational concerns.
+- **Political transitions increase risk**  
+  Security incidents often spike during leadership changes, peace deals, or shifts in territorial control, creating windows of heightened vulnerability.
+- **Lower incident counts don't always signal improvement**  
+  A decline in reported attacks may reflect aid withdrawal or underreporting, especially in high-unknown-data contexts—not necessarily increased safety.
+- **Data gaps obscure key risks**  
+  In many countries, records lack crucial context, limiting the ability to design fully informed security strategies.
+
+## Recommendations for Humanitarian Organizations
+
+### Security Planning
+
+- Develop country-specific protocols based on the dominant attack methods and risk contexts.
+- Ensure equity in protection policies, providing national staff with safety measures equivalent to those of international personnel.
+- Integrate early warning systems tied to political events and local shifts in control.
+- Improve data collection and completeness to better understand risk environments and adapt security policies in real time.
+
+### Context-Specific Security Measures
+
+- **In ambush-heavy settings** (e.g., Sudan, South Sudan, DRC, Mali): Prioritize secure transportation, journey management, and convoy procedures.
+- **In urban conflict or aerial threat zones** (e.g., Syria, Palestine): Invest in shelter infrastructure and real-time conflict tracking.
+- **In high kidnap-risk regions** (e.g., Afghanistan, Somalia, Mali): Emphasize low-profile operations, staff movement protocols, and abduction response training.
+
+## 💡 Recommendations for Future Research
+
+- Investigate differences in outcomes and risk between local and international personnel.
+- Evaluate which security practices are most effective across different conflict types.
+- Explore how climate stressors intersect with violence and impact aid operations.
+
+# 📥 Source and Access
+
+This dataset was downloaded directly from: 👉 [Aid Worker Security Database (AWSD)](https://aidworkersecurity.org) [@awsd2024].
+
+Please cite as:  
+**Humanitarian Outcomes. Aid Worker Security Database (AWSD). https://aidworkersecurity.org**
+
+# References
+
+::: {#refs}
+:::
